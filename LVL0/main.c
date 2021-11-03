@@ -25,6 +25,8 @@ int main()
 		printf("* 11-strlcpy        *                    *\n");
 		printf("* 12-strlcat        *                    *\n");
 		printf("******************************************\n");
+		printf("* 22-calloc        *  21-strdup          *\n");
+		printf("******************************************\n");
 		printf("choose a fct\n");
 		scanf("%d", &choix);
 
@@ -120,18 +122,18 @@ int main()
 		}
 		case 10:
 		{
-			//char src[100] = "\0";
+			/*char src[100] = "\0";
 			char dst1[100] = "hello world";
 			char dst2[100] = "hello world";
 			size_t size;
-			/*printf("write your string : ");
+			printf("write your string : ");
 			scanf("%s", src);
-			*/printf("write the size : ");
+			printf("write the size : ");
 			scanf("%lu", &size);
-			memmove(dst1+3, dst1, 12);
-			ft_memmove(dst2+3, dst2, 12);
-			printf("your word after memmove is : %s\n", dst1);
-			printf("your word after ft_memmove is : %s\n", dst2);
+			memmove(((void *)0), ((void *)0), 5);
+			ft_memmove(((void *)0), ((void *)0), 5);
+			*/printf("your word after memmove is : %s\n", memmove(((void *)0), ((void *)0), 5));
+			printf("your word after ft_memmove is : %s\n", ft_memmove(((void *)0), ((void *)0), 5));
 			break;
 		}
 		case 11:
@@ -263,6 +265,46 @@ int main()
 			char *str = "     \t \v   -12 34abd";
 			printf("atoi rst is : %d\n",atoi(str));
 			printf("ft_atoi rst is : %d\n",ft_atoi(str));
+			break;
+		}
+		case 22:
+		{
+			break;
+		}
+		case 23:
+		{
+			break;
+		}
+		case 24:
+		{
+			break;
+		}
+		case 25:
+		{
+			break;
+		}
+		case 26:
+		{
+			break;
+		}
+		case 27:
+		{
+			break;
+		}
+		case 28:
+		{
+			break;
+		}
+		case 29:
+		{
+			break;
+		}
+		case 30:
+		{
+			break;
+		}
+		case 31:
+		{
 			break;
 		}
 		default:

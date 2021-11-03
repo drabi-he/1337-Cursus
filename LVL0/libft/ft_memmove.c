@@ -6,7 +6,7 @@
 /*   By: hdrabi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 11:34:20 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/02 15:28:39 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/11/03 15:14:01 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 	d = dst;
 	s = (char *)src;
 	i = 0;
+	if(!dst && !src)
+		return (NULL);
 	if(d < s)
 		while(i < len)
 		{

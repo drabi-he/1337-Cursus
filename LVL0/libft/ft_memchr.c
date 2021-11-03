@@ -6,18 +6,18 @@
 /*   By: hdrabi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 11:36:51 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/03 11:50:29 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/11/03 15:18:18 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 void *ft_memchr(const void *s, int c, size_t n)
 {
-	char *rst;
+	unsigned char *rst;
 	size_t i;
 
 	i = 0;
-	rst = (char *)s;
+	rst = (unsigned char *)s;
 	while(i < n)
 	{
 		if(rst[i] == (unsigned char)c)
