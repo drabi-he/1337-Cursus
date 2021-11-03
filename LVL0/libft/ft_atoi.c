@@ -1,29 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memset.c                                        :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/01 17:31:25 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/03 10:05:36 by hdrabi           ###   ########.fr       */
+/*   Created: 2021/11/03 12:33:40 by hdrabi            #+#    #+#             */
+/*   Updated: 2021/11/03 12:47:31 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-void	*ft_memset(void *b, int c, size_t len)
+int ft_atoi(const char *str)
 {
-	size_t i;
-	unsigned char cp;
-	char *str;
+	int i;
+	int sign;
+	int rst;
 
-	str = (char *)b;
-	cp = (unsigned char) c;
 	i = 0;
-	while(i < len)
+	sign = 1;
+	rst = 0;
+	while(str[i] == ' ' || str[i] == '\n' || str[i] == '\f'
+			|| str[i] == '\v' || str[i] == '\r' || str[i] == '\t' )
+	i++;
+	if(str[i] == '-' || str[i] == '+')
 	{
-		str[i]=cp;
+		if(str[i] == '-')
+			sign *= -1;
 		i++;
 	}
-	return (b);
+	while(str[i] && str[i] >= '0' && str[i] <= '9')
+	{
+		rst = rst*10 + str[i] - '0';
+		i++;
+	}
+	return (sign * rst);
 }
