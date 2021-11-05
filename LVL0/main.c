@@ -25,7 +25,14 @@ int main()
 		printf("* 11-strlcpy        *                    *\n");
 		printf("* 12-strlcat        *                    *\n");
 		printf("******************************************\n");
-		printf("* 22-calloc        *  21-strdup          *\n");
+		printf("* 22-calloc        *  23-strdup          *\n");
+		printf("******************************************\n");
+		printf("* 24-substr        *  31-striteri        *\n");
+		printf("* 25-strjoin       *  32-putchar_fd      *\n");
+		printf("* 26-strtrim       *  33-putstr_fd       *\n");
+		printf("* 27-split         *  34-putendl_fd      *\n");
+		printf("* 29-itoa          *  35-putnbr_fd       *\n");
+		printf("* 30-strmapi       *                     *\n");
 		printf("******************************************\n");
 		printf("choose a fct\n");
 		scanf("%d", &choix);
@@ -247,9 +254,9 @@ int main()
 		}
 		case 20:
 		{
-			char s1[100] = "\0";
-			char s2[100] = "\0";
-			size_t n = 0;
+			char s1[100] = "abcd";
+			char s2[100] = "c";
+			size_t n = -1;
 			printf("write your haystack : ");
 			scanf("%s", s1);
 			printf("write your needle : ");
@@ -269,26 +276,50 @@ int main()
 		}
 		case 22:
 		{
+			int *t;
+			t=ft_calloc(5,sizeof(int));
+			for(int i=0 ; i < 5; i++)
+				printf("| %d ",t[i]);
+			printf("|\n");
 			break;
 		}
 		case 23:
 		{
+			char *p;
+			p=ft_strdup("Hello world!");
+			printf("ft_strdup rst is : %s\n",p);
 			break;
 		}
 		case 24:
 		{
+			char *p = "Hello World !!";
+			printf("ft_substr rst is : %s\n",ft_substr(p,5,6));
 			break;
 		}
 		case 25:
 		{
+			char *s1="Hello ";
+			char *s2="World !!";
+			printf("ft_strjoin rst is : %s\n",ft_strjoin(s1,s2));
 			break;
 		}
 		case 26:
 		{
+			char *src = "  \n \n \t  ";
+			char *set = " \n\t ";
+			printf("%s\n",ft_strtrim(src,set));
 			break;
 		}
 		case 27:
 		{
+			char *s = "                  olol";
+			char **rst = ft_split(s, ' ');
+			int k = 0;
+			while (rst[k])
+			{
+				printf("rst[%d] = %s\n", k + 1, rst[k]);
+				k++;
+			}
 			break;
 		}
 		case 28:
