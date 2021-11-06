@@ -6,21 +6,22 @@
 /*   By: hdrabi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 18:18:02 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/03 10:05:14 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/11/06 12:12:59 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-void ft_bzero(void *s, size_t n)
+
+void	ft_bzero(void *s, size_t n)
 {
 	size_t	i;
-	char *str;
+	char	*str;
 
 	str = (char *)s;
 	i = 0;
-	while(i < n)
+	while (i < n)
 	{
-		str[i]=0;
+		str[i] = 0;
 		i++;
 	}
 }

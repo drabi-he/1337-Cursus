@@ -305,8 +305,8 @@ int main()
 		}
 		case 26:
 		{
-			char *src = "  \n \n \t  ";
-			char *set = " \n\t ";
+			char *src = "   xxx   xxx";
+			char *set = " x";
 			printf("%s\n",ft_strtrim(src,set));
 			break;
 		}

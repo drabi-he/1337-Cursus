@@ -6,7 +6,7 @@
 /*   By: momayaz <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 15:57:44 by momayaz           #+#    #+#             */
-/*   Updated: 2021/11/05 17:57:17 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/11/06 12:25:16 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	**ft_split(char const *s, char charset)
 	int		i;
 
 	if (!s)
-		return(NULL);
+		return (NULL);
 	size = count_world(s, charset);
 	t = malloc ((size + 1) * sizeof(char *));
 	if (!t)
