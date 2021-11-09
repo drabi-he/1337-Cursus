@@ -3,6 +3,35 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <fcntl.h>
+
+t_list *all;
+
+char strmapi_add(unsigned int i,char c)
+{
+	char rst;
+	rst = c +i;
+	return (rst);
+}
+void striteri_add(unsigned int i,char *c)
+{
+	*c += i;
+}
+
+void	lst_affich(t_list	*list)
+{
+	t_list *tmp;
+	int i = 0;
+
+	tmp = list;
+	while(tmp)
+	{
+		printf("element %d = %s \n",i+1,(char *)tmp->content);
+		tmp = tmp->next;
+		i++;
+	}
+}
+
 
 int main()
 {
@@ -27,12 +56,18 @@ int main()
 		printf("******************************************\n");
 		printf("* 22-calloc        *  23-strdup          *\n");
 		printf("******************************************\n");
-		printf("* 24-substr        *  31-striteri        *\n");
-		printf("* 25-strjoin       *  32-putchar_fd      *\n");
-		printf("* 26-strtrim       *  33-putstr_fd       *\n");
-		printf("* 27-split         *  34-putendl_fd      *\n");
-		printf("* 29-itoa          *  35-putnbr_fd       *\n");
-		printf("* 30-strmapi       *                     *\n");
+		printf("* 24-substr        *  30-striteri        *\n");
+		printf("* 25-strjoin       *  31-putchar_fd      *\n");
+		printf("* 26-strtrim       *  32-putstr_fd       *\n");
+		printf("* 27-split         *  33-putendl_fd      *\n");
+		printf("* 28-itoa          *  34-putnbr_fd       *\n");
+		printf("* 29-strmapi       *                     *\n");
+		printf("******************************************\n");
+		printf("* 35-lstnew        *  39-lstdelone       *\n");
+		printf("* 36-lstadd_front  *  40-lstclear        *\n");
+		printf("* 37-lstsize       *  41-lstiter         *\n");
+		printf("* 38-lstlast       *  34-lstmap          *\n");
+		printf("* 40-lstadd_back   *                     *\n");
 		printf("******************************************\n");
 		printf("choose a fct\n");
 		scanf("%d", &choix);
@@ -63,7 +98,7 @@ int main()
 		case 4:
 		{
 			printf("dec val isascii original\n");
-			for (int i = 0; i < 128; i++)
+			for (int i = -128; i < 128; i++)
 				printf("%3d  %3c = %4d %4d\n", i, i, ft_isascii(i), isascii(i));
 			break;
 		}
@@ -324,18 +359,109 @@ int main()
 		}
 		case 28:
 		{
+			int n = -15;
+			printf("ft_itoa rst is : %s\n",ft_itoa(n));
 			break;
 		}
 		case 29:
 		{
+			char *s = "aaaaaa";
+			printf("ft_strmapi rst is : %s\n",ft_strmapi(s,&strmapi_add));
 			break;
 		}
 		case 30:
 		{
+			char s[] = "000000";
+			ft_striteri(s,&striteri_add);
+			printf("ft_striteri rst is : %s\n",s);
 			break;
 		}
 		case 31:
 		{
+			int fd = open("test_putchar.txt",O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+			ft_putchar_fd('c',fd);
+			printf("fd = %d \n",fd);
+			close(fd);
+			break;
+		}
+		case 32:
+		{
+			int fd = open("test_putstr.txt",O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+			ft_putstr_fd("Hello World!!",fd);
+			printf("fd = %d \n",fd);
+			close(fd);
+			break;
+		}
+		case 33:
+		{
+			int fd = open("test_putendl.txt",O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+			ft_putendl_fd("Skip To Next Line",fd);
+			printf("fd = %d \n",fd);
+			close(fd);
+			break;
+		}
+		case 34:
+		{
+			int fd = open("test_putnbr.txt",O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+			ft_putnbr_fd(123456789,fd);
+			printf("fd = %d \n",fd);
+			close(fd);
+			break;
+		}
+		case 35:
+		{
+			t_list *new;
+			char s[100] = "\0";
+			printf("write content : ");
+			scanf("%s",s);
+			new = ft_lstnew(s);
+			lst_affich(new);
+			break;
+		}
+		case 36:
+		{
+			t_list *new;
+			char s[100] = "\0";
+			printf("write content : ");
+			scanf("%s",s);
+			new = ft_lstnew(s);
+			ft_lstadd_front(&all,new);
+			lst_affich(all);
+			break;
+		}
+		case 37:
+		{
+			printf("list size is : %d \n",ft_lstsize(all));
+			break;
+		}
+		case 38:
+		{
+			lst_affich(ft_lstlast(all));
+			break;
+		}
+		case 39:
+		{
+
+			break;
+		}
+		case 40:
+		{
+
+			break;
+		}
+		case 41:
+		{
+
+			break;
+		}
+		case 42:
+		{
+
+			break;
+		}
+		case 43:
+		{
+
 			break;
 		}
 		default:

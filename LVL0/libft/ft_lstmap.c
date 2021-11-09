@@ -6,7 +6,7 @@
 /*   By: hdrabi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/06 19:04:53 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/06 19:56:45 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/11/08 10:56:31 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,19 @@
 
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_list	*k;
-	int		i;
-	t_list	*p;
+	t_list	*new;
+	t_list	*list;
 
-	if (!lst)
+	if (!lst || !f)
 		return (NULL);
-	i = ft_lstsize(lst);
-	while(i)
+	list = NULL;
+	while (lst)
 	{
-		p = lst->next;
-		k = ft_lstnew((*f)(lst->content));
-		i--;
-		(*del)(lst->content);
-		k = p;
+		new = ft_lstnew((*f)(lst->content));
+		if (!new)
+			ft_lstclear(&list, (*del));
+		ft_lstadd_back(&list, new);
+		lst = lst->next;
 	}
-	k->next = 0;
-	return (k);
+	return (list);
 }

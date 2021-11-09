@@ -6,7 +6,7 @@
 /*   By: hdrabi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/06 17:48:04 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/06 17:56:20 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/11/08 12:49:46 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,4 +17,3 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *))
 	(*del)(lst->content);
 	free(lst);
 }
-

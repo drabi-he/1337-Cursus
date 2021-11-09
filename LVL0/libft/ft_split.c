@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: momayaz <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: hdrabi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/02 15:57:44 by momayaz           #+#    #+#             */
-/*   Updated: 2021/11/06 12:25:16 by hdrabi           ###   ########.fr       */
+/*   Created: 2021/11/08 11:05:30 by hdrabi            #+#    #+#             */
+/*   Updated: 2021/11/08 18:21:36 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	**ft_split(char const *s, char charset)
 		n = str_len(s, charset);
 		t[i] = str_cpy(s, n);
 		if (!(t[i]))
-			return (NULL);
+			return (free(t), NULL);
 		s += n;
 	}
 	t[size] = 0;

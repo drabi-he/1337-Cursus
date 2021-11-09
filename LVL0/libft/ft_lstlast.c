@@ -6,7 +6,7 @@
 /*   By: hdrabi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/06 17:34:05 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/06 17:41:10 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/11/09 16:31:09 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 t_list	*ft_lstlast(t_list *lst)
 {
-	t_list *cp;
+	t_list	*cp;
 
-	if(!lst)
+	if (!lst)
 		return (NULL);
 	cp = lst;
-	while(cp->next)
+	while (cp->next)
 		cp = cp->next;
 	return (cp);
 }

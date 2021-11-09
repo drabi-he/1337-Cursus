@@ -6,7 +6,7 @@
 /*   By: hdrabi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 11:13:58 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/06 16:05:43 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/11/09 18:47:22 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 	if (!len)
 	{
 		rst = (char *)malloc(sizeof(char));
-		rst[0] = '\0';
+		rst[0] = 0;
 		return (rst);
 	}
 	rst = (char *)malloc((len - i + 2) * sizeof(char));
