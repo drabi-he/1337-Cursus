@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdrabi <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 15:28:23 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/11 12:50:04 by hdrabi           ###   ########.fr       */
+/*   Created: 2021/11/12 10:53:42 by hdrabi            #+#    #+#             */
+/*   Updated: 2021/11/12 12:42:39 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
+# include <stdlib.h>
+# include <fcntl.h>
+# include <unistd.h>
 
-void	*ft_calloc(size_t count, size_t size)
-{
-	int		*t;
+# ifndef BUFF_SIZE
+#define BUFF_SIZE 42
+# endif
 
-	t = (int *)malloc(count * size);
-	if (!t)
-		return (NULL);
-	ft_bzero(t, count * size);
-	return (t);
-}
+char	*get_next_line(int fd);
+
+#endif

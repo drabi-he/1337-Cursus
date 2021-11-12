@@ -6,7 +6,7 @@
 /*   By: hdrabi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 11:13:58 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/10 20:14:33 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/11/11 11:13:24 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ char	*ft_strtrim(char const *s1, char const *set)
 
 	if (!s1)
 		return (NULL);
-	if (!set)
-		return ((char *)s1);
 	i = ft_get_index(s1, set, 1, 0);
 	len = ft_get_index(s1, set, -1, ft_strlen(s1) - 1);
 	if (!len)
