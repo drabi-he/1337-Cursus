@@ -1,4 +1,4 @@
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static char	*concat_all(size_t end, int len, t_list **buffer_lists);
 static char	*read_text(t_list **buffer_lists, t_list *last, int len, int fd);
