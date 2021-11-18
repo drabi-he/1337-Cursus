@@ -1,10 +1,8 @@
 #include "get_next_line_bonus.h"
 
-static char	*concat_all(size_t end, int len, t_list **buffer_lists);
-static char	*read_text(t_list **buffer_lists, t_list *last, int len, int fd);
-static void	lts_to_str(t_list **buffer_lists, int str_len, char *res);
 
-static void	free_ptr(void **ptr)
+
+void	free_ptr(void **ptr)
 {
 	if (*ptr != NULL)
 	{
@@ -15,89 +13,86 @@ static void	free_ptr(void **ptr)
 
 char	*get_next_line(int fd)
 {
-	static t_list	*buffer_lists[MAX_FD + 1];
-	char			*resf;
+	static t_line	*list[4096];
+	char			*rst;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || fd > MAX_FD)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > 4096)
 		return (NULL);
-	if (buffer_lists[fd] == NULL)
-		buffer_lists[fd] = ft_lstnew(ft_strdup(""));
-	resf = read_text(&buffer_lists[fd], buffer_lists[fd],
-			ft_strlen(buffer_lists[fd]->content), fd);
-	return (resf);
+	if (!list[fd])
+		list[fd] = ft_lstnew(ft_strdup(""));
+	rst = get_line(&list[fd], list[fd], ft_strlen(list[fd]->portion), fd);
+	return (rst);
 }
 
-char	*read_text(t_list **buffer_lists, t_list *last, int len, int fd)
+char	*get_line(t_line **list, t_line *last, size_t len, int fd)
 {
-	char	*content;
-	ssize_t	bytes_read;
-	t_list	*end;
+	char	*leftover;
+	ssize_t	len_rd;
+	t_line	*end;
 
-	content = ft_strchr(last->content, '\n');
-	if (content != NULL)
+	leftover = ft_strchr(last->portion, '\n');
+	if (leftover)
 	{
-		bytes_read = ft_strlen(content + 1);
-		return (concat_all(bytes_read, len, &buffer_lists[0]));
+		len_rd = ft_strlen(leftover + 1);
+		return (join_list( &list[0],len_rd, len));
 	}
-	content = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (content == NULL)
+	leftover = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!leftover)
 		return (NULL);
-	bytes_read = read(fd, content, BUFFER_SIZE);
-	if (bytes_read <= 0)
+	len_rd = read(fd, leftover, BUFFER_SIZE);
+	if (len_rd <= 0)
 	{
-		free_ptr((void **)&content);
-		return (concat_all(bytes_read, len, &buffer_lists[0]));
+		free_ptr((void **)&leftover);
+		return (join_list(&list[0],len_rd, len ));
 	}
 	else
-		len += bytes_read;
-	content[bytes_read] = 0;
-	end = ft_lstnew(content);
+		len += len_rd;
+	leftover[len_rd] = 0;
+	end = ft_lstnew(leftover);
 	last->next = end;
-	return (read_text(&buffer_lists[0], end, len, fd));
+	return (get_line(&list[0], end, len, fd));
 }
 
-char	*concat_all(size_t end, int len, t_list **buffer_lists)
+char	*join_list(t_line **list,size_t len_rd, size_t len)
 {
-	int		str_len;
-	char	*res;
+	size_t		total_len;
+	char	*result;
 
-	res = NULL;
+	//result = NULL;
 	if (len <= 0)
 	{
-		free_ptr((void **)&buffer_lists[0]->content);
-		free_ptr((void **)buffer_lists);
+		free_ptr((void **)&list[0]->portion);
+		free_ptr((void **)list);
 		return (NULL);
 	}
-	str_len = len - end;
-	res = (char *)malloc(str_len + 1 * sizeof(char));
-	if (res == NULL)
+	total_len = len - len_rd;
+	result = (char *)malloc((total_len + 1) * sizeof(char));
+	if (result == NULL)
 		return (NULL);
-	res[str_len] = 0;
-	lts_to_str(buffer_lists, str_len, res);
-	return (res);
+	result[total_len] = 0;
+	convert_list(list, total_len, result);
+	return (result);
 }
 
-static void	lts_to_str(t_list **buffer_lists, int str_len, char *res)
+void	convert_list(t_line **list, size_t total_len, char *result)
 {
-	t_list	*tmp;
-	char	*content;
-	int		a;
+	t_line	*tmp;
+	char	*leftover;
+	size_t		i;
+	size_t		j;
 
-	a = 0;
-	while (a < str_len)
+	i = 0;
+	while (i < total_len)
 	{
-		tmp = buffer_lists[0];
-		content = (char *)tmp->content;
-		while (*content != 0 && a < str_len)
-		{
-			res[a] = *content;
-			content++;
-			a++;
-		}
-		if (*content != 0)
-			buffer_lists[0]->next = ft_lstnew(ft_strdup(content));
-		buffer_lists[0] = buffer_lists[0]->next;
-		free_ptr((void **)&tmp->content);
+		j = 0;
+		tmp = list[0];
+		leftover = (char *)tmp->portion;
+		while (leftover[j] && i < total_len)
+			result[i++] = leftover[j++];
+		if (leftover[j])
+			list[0]->next = ft_lstnew(ft_strdup(leftover + j));
+		list[0] = list[0]->next;
+		free_ptr((void **)&tmp->portion);
 		free_ptr((void **)&tmp);
 	}
 }
