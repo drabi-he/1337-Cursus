@@ -1,6 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hdrabi <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/19 11:20:23 by hdrabi            #+#    #+#             */
+/*   Updated: 2021/11/19 11:28:43 by hdrabi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
-
-
 
 void	free_ptr(void **ptr)
 {
@@ -34,7 +44,7 @@ char	*get_line(t_line **list, t_line *last, size_t len, int fd)
 	if (leftover)
 	{
 		len_rd = ft_strlen(leftover + 1);
-		return (join_list( &list[0],len_rd, len));
+		return (join_list(&list[0], len_rd, len));
 	}
 	leftover = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!leftover)
@@ -43,7 +53,7 @@ char	*get_line(t_line **list, t_line *last, size_t len, int fd)
 	if (len_rd <= 0)
 	{
 		free_ptr((void **)&leftover);
-		return (join_list(&list[0],len_rd, len ));
+		return (join_list(&list[0], len_rd, len));
 	}
 	else
 		len += len_rd;
@@ -53,24 +63,23 @@ char	*get_line(t_line **list, t_line *last, size_t len, int fd)
 	return (get_line(&list[0], end, len, fd));
 }
 
-char	*join_list(t_line **list,size_t len_rd, size_t len)
+char	*join_list(t_line **list, size_t len_rd, size_t len)
 {
 	size_t		total_len;
-	char	*result;
+	char		*result;
 
-	//result = NULL;
 	if (len <= 0)
 	{
 		free_ptr((void **)&list[0]->portion);
-		free_ptr((void **)list);
+		free_ptr((void **)&list[0]);
 		return (NULL);
 	}
 	total_len = len - len_rd;
 	result = (char *)malloc((total_len + 1) * sizeof(char));
-	if (result == NULL)
+	if (!result)
 		return (NULL);
 	result[total_len] = 0;
-	convert_list(list, total_len, result);
+	convert_list(&list[0], total_len, result);
 	return (result);
 }
 
@@ -78,8 +87,8 @@ void	convert_list(t_line **list, size_t total_len, char *result)
 {
 	t_line	*tmp;
 	char	*leftover;
-	size_t		i;
-	size_t		j;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
 	while (i < total_len)

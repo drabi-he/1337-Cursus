@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hdrabi <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/19 11:23:08 by hdrabi            #+#    #+#             */
+/*   Updated: 2021/11/19 11:28:35 by hdrabi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
@@ -24,7 +36,7 @@ char	*ft_strchr(const char *str, int n);
 t_line	*ft_lstnew(void *content);
 char	*get_next_line(int fd);
 char	*get_line(t_line **list, t_line *last, size_t len, int fd);
-char	*join_list(t_line **list ,size_t len_rd, size_t len);
+char	*join_list(t_line **list, size_t len_rd, size_t len);
 void	convert_list(t_line **list, size_t total_len, char *result);
 
 #endif
