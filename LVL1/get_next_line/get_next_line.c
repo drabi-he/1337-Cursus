@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdrabi <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 11:20:23 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/19 11:28:43 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/11/23 18:52:16 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	free_ptr(void **ptr)
 
 char	*get_next_line(int fd)
 {
-	static t_line	*list[4096];
+	static t_line	*list[65536];
 	char			*rst;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || fd > 4096)
