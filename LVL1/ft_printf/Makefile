@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/23 13:16:41 by hdrabi            #+#    #+#              #
-#    Updated: 2021/11/23 14:09:01 by hdrabi           ###   ########.fr        #
+#    Updated: 2021/11/27 11:24:02 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,20 +20,25 @@ CFLAGS = -Wall -Wextra -Werror -I.
 
 NAME = libftprintf.a
 
-$(NAME): EXTRA1 $(OBJS) ft_printf.h
-	ar cr $(NAME) $(OBJS) libft/libft.a
+$(NAME): EXTRA1 EXTRA2 $(OBJS) ft_printf.h
+	ar cr $(NAME) $(OBJS) libft/*.o flags/*.o
+	ranlib $(NAME)
 
 all : $(NAME)
 
 clean :
 	rm -rf $(OBJS)
 	cd libft && make clean
+	cd flags && make clean
 
 fclean : clean
 	rm -rf $(NAME)
 	cd libft && make fclean
+	cd flags && make fclean
 
 re :fclean all
+
+bonus : all
 
 EXTRA1 :
 	cd libft && $(MAKE) bonus

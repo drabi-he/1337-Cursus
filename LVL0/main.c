@@ -18,6 +18,10 @@ void striteri_add(unsigned int i,char *c)
 	*c += i;
 }
 
+void lstiter_add(void *c)
+{
+	(char)*c += 1;
+}
 void	lst_affich(t_list	*list)
 {
 	t_list *tmp;
@@ -451,7 +455,7 @@ int main()
 		}
 		case 41:
 		{
-
+			
 			break;
 		}
 		case 42:

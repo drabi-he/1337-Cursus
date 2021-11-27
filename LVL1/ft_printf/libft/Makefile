@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/01 14:24:02 by hdrabi            #+#    #+#              #
-#    Updated: 2021/11/10 17:40:46 by hdrabi           ###   ########.fr        #
+#    Updated: 2021/11/24 17:14:07 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ ft_strtrim.c \
 ft_substr.c \
 ft_tolower.c \
 ft_toupper.c
-OBJM = $(SRCM:.c=.o) 
+OBJM = $(SRCM:.c=.o)
 SRCB = ft_lstnew.c \
 ft_lstadd_front.c \
 ft_lstsize.c \
@@ -61,11 +61,13 @@ NAME = libft.a
 
 $(NAME):$(OBJM) libft.h
 	ar cr $(NAME) $^
+	ranlib $(NAME)
 
 all:$(NAME)
 
 bonus :$(OBJM) $(OBJB) libft.h
 	ar cr $(NAME) $^
+	ranlib $(NAME)
 
 clean:
 	rm -rf $(OBJM) $(OBJB)
