@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/01 14:24:02 by hdrabi            #+#    #+#              #
-#    Updated: 2021/11/24 17:14:07 by hdrabi           ###   ########.fr        #
+#    Updated: 2021/11/30 11:28:36 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,19 +55,22 @@ ft_lstclear.c \
 ft_lstiter.c \
 ft_lstmap.c
 OBJB = $(SRCB:.c=.o)
-CFLAGS = -Wall -Wextra -Werror -I.
+CFLAGS = -Wall -Wextra -Werror -I. -c
 NAME = libft.a
 
 
-$(NAME):$(OBJM) libft.h
+$(NAME):$(OBJM)
 	ar cr $(NAME) $^
 	ranlib $(NAME)
 
 all:$(NAME)
 
-bonus :$(OBJM) $(OBJB) libft.h
+bonus :$(OBJM) $(OBJB)
 	ar cr $(NAME) $^
 	ranlib $(NAME)
+
+%.o : %.c libft.h
+	$(CC) $(CFLAGS) $^
 
 clean:
 	rm -rf $(OBJM) $(OBJB)

@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include "ft_printf/ft_printf.h"
-
+#include <limits.h>
 
 int main()
 {
-	 printf("%d\n",ft_printf(" %2p |\n", -1));
-	 printf("%d\n",printf(" %2p |\n", -1 ));
+	printf("************ test 68 ***************\n");
+	printf("%d\n",ft_printf(" %04x |\n", 16 ));
+	printf("%d\n",printf(" %04x |\n", 16 ));
+
 }
 
 
@@ -40,13 +42,8 @@ int main()
 /*TODO:				+ 				*/
 // +	: works with d & i
 
+//TODO: d & i	= - & 0 & . & sp & +
+//TODO: u		= - & 0 & . &
+//TODO: x & X	= - & 0 & . & #
 
-//TODO: for p
-// check if - exist
-// work backwards
-// check if precision exist
-// if exist check precision if percision > 12 pad the diffrence with 0s in front
-// if width > precision + 2 pad the diffrence with space
 
-//14 + (precision - 14)
-//14 + (width - 14) + (precision - 12)

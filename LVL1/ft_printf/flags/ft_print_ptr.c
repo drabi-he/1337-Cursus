@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 12:30:02 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/27 17:52:50 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/11/30 16:31:06 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,7 @@ void ft_print_add_with_p(int width,int precision,size_t addr,int *len)
 	int len_print;
 
 	len_print = 0;
-	if (precision > 12)
-		space_count = width - precision - 2;
-	else
-		space_count = width - 14 ;
+	space_count = ft_ptr_null(precision,width,addr);
 	i = -1;
 	while (++i < space_count)
 	{
@@ -78,11 +75,12 @@ void ft_print_add_with_p(int width,int precision,size_t addr,int *len)
 	}
 	i = -1;
 	ft_putstr_fd("0x",1);
-	while (++i < precision -12)
+	while (++i < precision - 12)
 	{
 		ft_putchar_fd('0',1);
 		(*len)++;
 	}
+	if (addr != 0)
 	ft_putnbr_base(addr,0,&len_print);
 	(*len) += len_print + 2;
 }

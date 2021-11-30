@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 15:36:50 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/27 17:21:52 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/11/30 18:26:14 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,12 @@ void ft_get_results(t_print *lst, va_list args, int *len)
 			ft_print_str(tmp->flags,tmp->is_p,tmp->precision,tmp->width,va_arg(args,char *),len);
 		if (tmp->conversion == 'p')
 			ft_print_ptr(tmp->flags,tmp->is_p,tmp->precision,tmp->width,va_arg(args,size_t),len);
+		if (tmp->conversion == 'd' || tmp->conversion == 'i')
+			ft_print_dec(tmp->flags,tmp->is_p,tmp->precision,tmp->width,va_arg(args,int),len);
+		if (tmp->conversion == 'u' )
+			ft_print_un(tmp->flags,tmp->is_p,tmp->precision,tmp->width,va_arg(args,unsigned),len);
+		if (tmp->conversion == 'x' || tmp->conversion == 'X')
+			ft_print_hex(tmp->conversion,tmp->flags,tmp->is_p,tmp->precision,tmp->width,va_arg(args,unsigned),len);
 		free_all(tmp);
 		tmp = tmp->next;
 	}

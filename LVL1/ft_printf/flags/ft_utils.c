@@ -6,11 +6,26 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 13:14:10 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/26 19:05:29 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/11/30 17:01:10 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <../ft_printf.h>
+
+int ft_nbr_len(long long nb)
+{
+	int i;
+
+	i = 0;
+	if (nb <= 0)
+		i++;
+	while (nb != 0)
+	{
+		i++;
+		nb /= 10;
+	}
+	return (i);
+}
 
 int ft_check_flags(char c)
 {

@@ -6,11 +6,42 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 12:56:42 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/27 13:17:28 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/11/30 18:56:14 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../ft_printf.h"
+
+int ft_convert_len(size_t nb)
+{
+	int i;
+
+	i = 0;
+	if (nb == 0)
+		i++;
+	while (nb)
+	{
+		nb /=16;
+		i++;
+	}
+	return (i);
+}
+
+int	ft_ptr_null(int precision, int width, size_t addr)
+{
+	int i;
+
+	if (precision > 12)
+		i = width - precision - 2;
+	else
+	{
+		if (addr == 0)
+			i = width - 2;
+		else
+			i = width - 14;
+	}
+	return (i);
+}
 
 int	ft_strcmp(char *s1, char *s2)
 {
@@ -24,12 +55,20 @@ int	ft_strcmp(char *s1, char *s2)
 
 int	ft_check_flags_error(char *flag, char c)
 {
-	if (!ft_strcmp(flag, "") || !ft_strcmp(flag, "-")
+	if ( c == '%' || !ft_strcmp(flag, "") || !ft_strcmp(flag, "-")
 		|| (!ft_strcmp(flag, "-0") && (c == 's'))
+		|| (!ft_strcmp(flag, "-+") && (c == 'd' || c == 'i'))
+		|| (!ft_strcmp(flag, "- ") && (c == 'd' || c == 'i'))
+		|| (!ft_strcmp(flag, "+-") && (c == 'd' || c == 'i'))
+		|| (!ft_strcmp(flag, " -") && (c == 'd' || c == 'i'))
+		|| (!ft_strcmp(flag, "0+") && (c == 'd' || c == 'i'))
+		|| (!ft_strcmp(flag, "0 ") && (c == 'd' || c == 'i'))
+		|| (!ft_strcmp(flag, "+0") && (c == 'd' || c == 'i'))
+		|| (!ft_strcmp(flag, " 0") && (c == 'd' || c == 'i'))
 		|| (!ft_strcmp(flag, "0") && c != 'c' && c != 's' && c != 'p')
 		|| (!ft_strcmp(flag, "#") && (c == 'X' || c == 'x' || c == '%'))
-		|| (!ft_strcmp(flag, " ") && (c == 'd' || c == 'i' || c == '%' || c == 's'))
-		|| (!ft_strcmp(flag, "+") && (c == 'd' || c == 'i' || c == '%')))
+		|| (!ft_strcmp(flag, " ") && (c == 'd' || c == 'i' || c == 's'))
+		|| (!ft_strcmp(flag, "+") && (c == 'd' || c == 'i' )))
 		return (1);
 	return (0);
 }

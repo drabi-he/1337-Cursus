@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 13:29:04 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/27 17:28:11 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/11/30 18:46:46 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ void	ft_print(size_t n, size_t size , int form,int *l)
 		n %= size;
 	}
 	(*l)++;
+	if (n > 9)
 	ft_putchar(BASE[n] - form);
+	else
+	ft_putchar(BASE[n]);
 }
 
 void	ft_putnbr_base(size_t nbr, int form, int *l)
@@ -39,7 +42,7 @@ void	ft_putnbr_base(size_t nbr, int form, int *l)
 		ft_putchar('-');
 	}
 	else
-		n = nbr;
+	n = nbr;
 	size = ft_strlen(BASE);
 	ft_print(n, size,form,l);
 }
