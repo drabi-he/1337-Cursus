@@ -5,26 +5,27 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/26 17:37:09 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/27 11:27:53 by hdrabi           ###   ########.fr       */
+/*   Created: 2021/12/02 10:46:43 by hdrabi            #+#    #+#             */
+/*   Updated: 2021/12/02 21:14:35 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../ft_printf.h"
 
-void ft_print_s_with_p_minus(int width,int precision,char *c,int *len)
+static void	ft_print_s_with_p_minus(int width, int precision,
+			char *str, int *len)
 {
 	int	i;
 	int	len_print;
 
 	i = 0;
-	if (precision > (int)ft_strlen(c))
-		len_print = ft_strlen(c);
+	if (precision > (int)ft_strlen(str))
+		len_print = ft_strlen(str);
 	else
 		len_print = precision;
 	while (i < len_print)
 	{
-		ft_putchar_fd(c[i], 1);
+		ft_putchar_fd(str[i], 1);
 		i++;
 	}
 	while (i < width)
@@ -38,33 +39,33 @@ void ft_print_s_with_p_minus(int width,int precision,char *c,int *len)
 		(*len) += width;
 }
 
-void ft_print_s_with_minus(int width,char *c,int *len)
+static void	ft_print_s_with_minus(int width, char *str, int *len)
 {
 	int	i;
-	int	c_len;
+	int	str_len;
 
 	i = 0;
-	c_len = ft_strlen(c);
-	ft_putstr_fd(c,1);
-	while (i < width - c_len)
+	str_len = ft_strlen(str);
+	ft_putstr_fd(str, 1);
+	while (i < width - str_len)
 	{
-		ft_putchar_fd(' ',1);
+		ft_putchar_fd(' ', 1);
 		i++;
 	}
-	if (width > c_len)
+	if (width > str_len)
 		(*len) += width;
 	else
-		(*len) += c_len;
+		(*len) += str_len;
 }
 
-void ft_print_s_with_p(int width,int precision,char *c,int *len)
+static void	ft_print_s_with_p(int width, int precision, char *str, int *len)
 {
 	int	i;
 	int	len_print;
 
 	i = 0;
-	if (precision > (int)ft_strlen(c))
-		len_print = ft_strlen(c);
+	if (precision > (int)ft_strlen(str))
+		len_print = ft_strlen(str);
 	else
 		len_print = precision;
 	while (i < width - len_print)
@@ -75,7 +76,7 @@ void ft_print_s_with_p(int width,int precision,char *c,int *len)
 	i = 0;
 	while (i < len_print)
 	{
-		ft_putchar_fd(c[i], 1);
+		ft_putchar_fd(str[i], 1);
 		i++;
 	}
 	if (len_print > width)
@@ -84,45 +85,39 @@ void ft_print_s_with_p(int width,int precision,char *c,int *len)
 		(*len) += width;
 }
 
-void ft_print_s(int width,char *c,int *len)
+static void	ft_print_s(int width, char *str, int *len)
 {
 	int	i;
-	int	c_len;
+	int	str_len;
 
 	i = 0;
-	c_len = ft_strlen(c);
-	while (i < width - c_len)
+	str_len = ft_strlen(str);
+	while (i < width - str_len)
 	{
-		ft_putchar_fd(' ',1);
+		ft_putchar_fd(' ', 1);
 		i++;
 	}
-	ft_putstr_fd(c,1);
-	if (width > c_len)
+	ft_putstr_fd(str, 1);
+	if (width > str_len)
 		(*len) += width;
 	else
-		(*len) += c_len;
+		(*len) += str_len;
 }
 
-void	ft_print_str(char *flag,int is_p,int precision, int width, char *c, int *len)
+void	ft_print_str(t_print *lst, char *str, int *len)
 {
-	if (!c)
-		c = ft_strdup("(null)");
-	else
-		c = ft_strdup(c);
-	if (!ft_strcmp(flag,"-") || !ft_strcmp(flag,"-0"))
+	if (ft_search_flag(lst->flags, '-'))
 	{
-		if (is_p)
-			ft_print_s_with_p_minus(width,precision,c,len);
+		if (lst->is_p)
+			ft_print_s_with_p_minus(lst->width, lst->precision, str, len);
 		else
-			ft_print_s_with_minus(width,c,len);
+			ft_print_s_with_minus(lst->width, str, len);
 	}
 	else
 	{
-		if (is_p)
-			ft_print_s_with_p(width,precision,c,len);
+		if (lst->is_p)
+			ft_print_s_with_p(lst->width, lst->precision, str, len);
 		else
-			ft_print_s(width,c,len);
+			ft_print_s(lst->width, str, len);
 	}
-	free(c);
-	c = NULL;
 }

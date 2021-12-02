@@ -5,8 +5,8 @@
 int main()
 {
 	printf("************ test 68 ***************\n");
-	printf("%d\n",ft_printf(" %04x |\n", 16 ));
-	printf("%d\n",printf(" %04x |\n", 16 ));
+	printf("%d\n",ft_printf("%15p\n","hello"));
+	printf("%d\n",printf("%15p\n","hello"));
 
 }
 

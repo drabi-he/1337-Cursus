@@ -5,56 +5,50 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/30 18:12:15 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/30 19:03:14 by hdrabi           ###   ########.fr       */
+/*   Created: 2021/12/02 16:49:54 by hdrabi            #+#    #+#             */
+/*   Updated: 2021/12/02 17:43:58 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../ft_printf.h"
 
-static void ft_print_add_with_p_minus(int width,int precision,size_t hex,int *len,char conversion)
+static void	ft_print_add_with_p_minus(t_print *lst, size_t hex, int *len)
 {
-	int i;
-	int space_count;
-	int len_print;
+	int	i;
+	int	space_count;
+	int	len_print;
 
 	len_print = 0;
 	i = -1;
-	while (++i < precision -12)
+	while (++i < lst->precision - ft_convert_len(hex))
 	{
-		ft_putchar_fd('0',1);
+		ft_putchar_fd('0', 1);
 		(*len)++;
 	}
-	if (conversion == 'x')
-		ft_putnbr_base((unsigned)hex,0,&len_print);
+	ft_hex_check(lst, hex, &len_print);
+	if (lst->precision >= ft_convert_len(hex))
+		space_count = lst->width - lst->precision;
 	else
-		ft_putnbr_base((unsigned)hex,32,&len_print);
-	if (precision > 12)
-		space_count = width - precision;
-	else
-		space_count = width - 14 ;
+		space_count = lst->width - ft_convert_len(hex);
 	i = -1;
 	while (++i < space_count)
 	{
-		ft_putchar_fd(' ',1);
+		ft_putchar_fd(' ', 1);
 		(*len)++;
 	}
 	(*len) += len_print;
 }
 
-static void ft_print_add_with_minus(int width,size_t hex,int *len,char conversion)
+static void	ft_print_add_with_minus(t_print *lst, size_t hex, int *len)
 {
-	int i;
-	int len_print;
-	int space_count;
+	int	i;
+	int	len_print;
+	int	space_count;
 
 	i = -1;
 	len_print = 0;
-	if (conversion == 'x')
-		ft_putnbr_base((unsigned)hex,0,&len_print);
-	else
-		ft_putnbr_base((unsigned)hex,32,&len_print);
-	space_count = width - len_print;
+	ft_hex_check(lst, hex, &len_print);
+	space_count = lst->width - len_print;
 	while (++i < space_count)
 		ft_putchar_fd(' ', 1);
 	if (space_count >= 0)
@@ -62,71 +56,68 @@ static void ft_print_add_with_minus(int width,size_t hex,int *len,char conversio
 	(*len) += len_print;
 }
 
-static void ft_print_add_with_p(int width,int precision,size_t hex,int *len,char conversion)
+static void	ft_print_add_with_p(t_print *lst, size_t hex, int *len)
 {
-	int i;
-	int space_count;
-	int len_print;
+	int	i;
+	int	space_count;
+	int	len_print;
 
 	len_print = 0;
-	space_count = ft_ptr_null(precision,width,hex);
+	if (lst->precision >= ft_convert_len(hex))
+		space_count = lst->width - lst->precision;
+	else
+		space_count = lst->width - ft_convert_len(hex);
 	i = -1;
 	while (++i < space_count)
 	{
-		ft_putchar_fd(' ',1);
+		ft_putchar_fd(' ', 1);
 		(*len)++;
 	}
 	i = -1;
-	while (++i < precision - ft_convert_len(hex))
+	while (++i < lst->precision - ft_convert_len(hex))
 	{
-		ft_putchar_fd('0',1);
+		ft_putchar_fd('0', 1);
 		(*len)++;
 	}
-	if (conversion == 'x')
-		ft_putnbr_base((unsigned)hex,0,&len_print);
-	else
-		ft_putnbr_base((unsigned)hex,32,&len_print);
+	ft_hex_check(lst, hex, &len_print);
 	(*len) += len_print ;
 }
 
-static void ft_print_hexa(char *flag,int width,size_t hex,int *len,char conversion)
+static void	ft_print_hexa(t_print *lst, size_t hex, int *len)
 {
-	int i;
-	int len_print;
-	int space_count;
+	int	i;
+	int	len_print;
+	int	space_count;
 
 	i = -1;
 	len_print = 0;
-	space_count = width - ft_convert_len(hex);
-	if (flag[0] == '0' || flag[1] == '0')
-	while (++i < space_count)
-		ft_putchar_fd('0', 1);
+	space_count = lst->width - ft_convert_len(hex);
+	if (ft_search_flag(lst->flags, '0'))
+		while (++i < space_count)
+			ft_putchar_fd('0', 1);
 	else
-	while (++i < space_count)
-		ft_putchar_fd(' ', 1);
-	if (conversion == 'x')
-		ft_putnbr_base((unsigned)hex,0,&len_print);
-	else
-		ft_putnbr_base((unsigned)hex,32,&len_print);
+		while (++i < space_count)
+			ft_putchar_fd(' ', 1);
+	ft_hex_check(lst, hex, &len_print);
 	if (space_count >= 0)
 		len_print += space_count;
 	(*len) += len_print;
 }
 
-void	ft_print_hex(char conversion,char *flag,int is_p,int precision, int width, size_t hex, int *len)
+void	ft_print_hex(t_print *lst, size_t hex, int *len)
 {
-	if (!ft_strcmp(flag,"-"))
+	if (ft_search_flag(lst->flags, '-'))
 	{
-		if (is_p)
-			ft_print_add_with_p_minus(width,precision,hex,len,conversion);
+		if (lst->is_p)
+			ft_print_add_with_p_minus(lst, hex, len);
 		else
-			ft_print_add_with_minus(width,hex,len,conversion);
+			ft_print_add_with_minus(lst, hex, len);
 	}
 	else
 	{
-		if (is_p)
-			ft_print_add_with_p(width,precision,hex,len,conversion);
+		if (lst->is_p)
+			ft_print_add_with_p(lst, hex, len);
 		else
-			ft_print_hexa(flag,width,hex,len,conversion);
+			ft_print_hexa(lst, hex, len);
 	}
 }

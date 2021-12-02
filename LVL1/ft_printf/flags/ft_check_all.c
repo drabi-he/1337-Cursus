@@ -1,48 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_utils.c                                         :+:      :+:    :+:   */
+/*   ft_check_all.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/25 13:14:10 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/30 17:01:10 by hdrabi           ###   ########.fr       */
+/*   Created: 2021/12/01 17:13:46 by hdrabi            #+#    #+#             */
+/*   Updated: 2021/12/01 18:04:10 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <../ft_printf.h>
+#include "../ft_printf.h"
 
-int ft_nbr_len(long long nb)
+static t_print	*ft_alloc_list(void)
 {
-	int i;
+	t_print	*new;
 
-	i = 0;
-	if (nb <= 0)
-		i++;
-	while (nb != 0)
-	{
-		i++;
-		nb /= 10;
-	}
-	return (i);
+	new = (t_print *)malloc(sizeof(t_print));
+	if (!new)
+		return (NULL);
+	return (new);
 }
 
-int ft_check_flags(char c)
+static int	ft_check_flags(char c)
 {
 	return (c == '0' || c == '-' || c == '#' || c == ' ' || c == '+');
 }
 
-int ft_check_conversion(char c)
+static int	ft_check_conversion(char c)
 {
 	return (c == 'c' || c == 's' || c == 'p'
 		|| c == 'd' || c == 'i' || c == 'u' || c == 'x'
 		|| c == 'X' || c == '%');
 }
 
-int	ft_check_precision(const char *str,int *n,int *is_p)
+static int	ft_check_precision(const char *str, int *n, int *is_p)
 {
-	int i;
-	int rst;
+	int	i;
+	int	rst;
 
 	i = 0;
 	if (str[i] == '.')
@@ -57,27 +52,30 @@ int	ft_check_precision(const char *str,int *n,int *is_p)
 	return (rst);
 }
 
-t_print	*ft_check_all(const char *str, int *start, char *portion, int is_p)
+t_print	*ft_check_all(const char *str, int *start, char *portion)
 {
+	t_print	*new;
 	int		i;
-	int		width;
-	char	conversion;
-	char	*flags;
-	int		precision;
 
+	new = ft_alloc_list();
+	new->portion = portion;
+	new->is_p = 0;
+	new->next = NULL;
 	i = 0;
-	conversion = '\0';
 	while (str[i] && ft_check_flags(str[i]))
 		i++;
-	flags = ft_substr(str,0,i);
-	width = ft_atoi(str + i);
+	new->flags = ft_substr(str, 0, i);
+	new->width = ft_atoi(str + i);
 	while (str[i] && ft_isdigit(str[i]))
 		i++;
-	precision = ft_check_precision(str + i,&i,&is_p);
+	new->precision = ft_check_precision(str + i, &i, &new->is_p);
 	if (ft_check_conversion(str[i]))
-		conversion = str[i];
+		new->conversion = str[i];
 	else
-		return (ft_new_node(portion,flags,width,'\0',is_p,precision));
+	{
+		new->conversion = '\0';
+		return (new);
+	}
 	*start = *start + i + 1;
-	return (ft_new_node(portion,flags,width,conversion,is_p,precision));
+	return (new);
 }

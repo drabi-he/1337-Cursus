@@ -5,51 +5,43 @@
 #                                                     +:+ +:+         +:+      #
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/11/23 13:16:41 by hdrabi            #+#    #+#              #
-#    Updated: 2021/11/30 17:04:03 by hdrabi           ###   ########.fr        #
+#    Created: 2021/12/01 16:13:55 by hdrabi            #+#    #+#              #
+#    Updated: 2021/12/01 18:46:22 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS = ft_printf.c
 
-OBJS = $(SRCS:.c=.o)
+OBJS = ${SRCS:.c=.o}
 
-MAKE = make
-
-CFLAGS = -Wall -Wextra -Werror -I. -c
+CFLAGS = -Wall -Wextra -Werror -c
 
 NAME = libftprintf.a
 
-$(NAME): EXTRA1 EXTRA2 $(OBJS)
-	ar cr $(NAME) $(OBJS) libft/*.o flags/*.o
-	ranlib $(NAME)
+${NAME}: EXTRA1 ${OBJS}
+	ar rc $@ ${OBJS} flags/*.o
 
-all : $(NAME)
+all : ${NAME}
 
 %.o : %.c ft_printf.h
 	$(CC) $(CFLAGS) $^
 
 clean :
-	rm -rf $(OBJS)
-	cd libft && make clean
 	cd flags && make clean
+	rm -rf ${OBJS} *.gch
 
 fclean : clean
-	rm -rf $(NAME)
-	cd libft && make fclean
 	cd flags && make fclean
+	rm -rf ${NAME}
 
-re :fclean all
+EXTRA1:
+	cd flags && make
 
 bonus : all
 
-EXTRA1 :
-	cd libft && $(MAKE) bonus
+re : fclean all
 
-EXTRA2 :
-	cd flags && $(MAKE)
-
-############# test ###############
 test: all
-	cd .. && gcc  main.c ft_printf/libftprintf.a
-	cd .. && clear && ./a.out
+	gcc main.c $(NAME)
+	clear && ./a.out
+

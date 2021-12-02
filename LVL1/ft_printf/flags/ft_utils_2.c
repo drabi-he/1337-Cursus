@@ -1,32 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memset.c                                        :+:      :+:    :+:   */
+/*   ft_utils_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/01 17:31:25 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/22 11:59:13 by hdrabi           ###   ########.fr       */
+/*   Created: 2021/12/02 13:54:22 by hdrabi            #+#    #+#             */
+/*   Updated: 2021/12/02 15:13:47 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../ft_printf.h"
 
-void	*ft_memset(void *b, int c, size_t len)
+int	ft_get_sp_count(int width, int precision, int nb_len, int nb)
 {
-	size_t			i;
-	unsigned char	cp;
-	char			*str;
+	int	count;
 
-	if (!b)
-		return (NULL);
-	str = (char *)b;
-	cp = (unsigned char) c;
-	i = 0;
-	while (i < len)
+	if (nb >= 0)
 	{
-		str[i] = cp;
-		i++;
+		if (precision >= nb_len)
+			count = width - precision;
+		else
+			count = width - nb_len;
 	}
-	return (b);
+	else
+	{
+		if (precision >= nb_len)
+			count = width - precision - 1;
+		else
+			count = width - nb_len ;
+	}
+	return (count);
 }
