@@ -23,7 +23,7 @@ void	free_ptr(void **ptr)
 
 char	*get_next_line(int fd)
 {
-	static t_line	*list[65536];
+	static t_line	*list[4096];
 	char			*rst;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || fd > 4096)
