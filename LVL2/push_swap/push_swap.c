@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 15:09:01 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/11 18:51:03 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/13 15:51:03 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,21 @@ t_stack	*ft_newnode(int value)
 	return (new);
 }
 
+int	ft_lst_count(t_stack *lst)
+{
+	t_stack	*tmp;
+	int		i;
+
+	i = 0;
+	tmp = lst;
+	while (tmp)
+	{
+		i++;
+		tmp = tmp->next;
+	}
+	return (i);
+}
+
 void	ft_lstadd_back(t_stack **lst, t_stack *new)
 {
 	t_stack	*tmp;
@@ -91,6 +106,14 @@ void	ft_lstadd_back(t_stack **lst, t_stack *new)
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new;
+}
+
+void	ft_lstadd_front(t_stack **lst, t_stack *new)
+{
+	if (!new)
+		return;
+	new->next = lst[0];
+	lst[0] = new;
 }
 
 // check valid input (only integers)
@@ -160,6 +183,46 @@ t_stack	*ft_fill_lst(char **args)
 	return (list);
 }
 
+//swap functions
+void	ft_swap_top(t_stack *lst)
+{
+	int	tmp;
+
+	if (ft_lst_count(lst) < 2)
+		return ;
+	tmp = lst->value;
+	lst->value = lst->next->value;
+	lst->next->value = tmp;
+}
+
+void	ft_push_top(t_stack **lst1, t_stack **lst2)
+{
+
+	if (!ft_lst_count(lst1[0]))
+		return ;
+	ft_lstadd_front(lst2, ft_newnode(lst1[0]->value));
+	free(lst1[0]);
+	lst1[0] = lst1[0]->next;
+}
+
+void	ft_rotate_stack(t_stack **lst)
+{
+	ft_lstadd_back(lst, ft_newnode(lst[0]->value));
+	free(lst[0]);
+	lst[0] = lst[0]->next;
+}
+
+void	ft_reverse_rotate(t_stack **lst)
+{
+	t_stack	*tmp;
+
+	tmp = lst[0];
+	while(tmp->next->next)
+		tmp = tmp->next;
+	ft_lstadd_front(lst, ft_newnode(tmp->next->value));
+	free(tmp->next);
+	tmp->next = NULL;
+}
 
 t_stack	*ft_devide_args(char **args)
 {
@@ -171,13 +234,13 @@ t_stack	*ft_devide_args(char **args)
 int	main(int ac, char *av[])
 {
 	t_stack	*rst;
+	t_stack	*test;
 
 	rst = ft_devide_args(av);
 	while(rst)
 	{
-		printf(" %d |",rst->value);
+		printf(" %5d |\n",rst->value);
 		rst = rst->next;
 	}
-	write(1, "\n\n", 2);
 	return (ac);
 }
