@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 15:09:01 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/14 17:53:25 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/15 18:58:00 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@ typedef struct	s_stack
 int	ft_isdigit(char c)
 {
 	return ((c >= '0' && c <= '9') || c == '-');
+}
+
+int	ft_abs(int n)
+{
+	if (n < 0)
+		return (-n);
+	return (n);
 }
 
 int	ft_strcmp(char *s1, char *s2)
@@ -337,6 +344,12 @@ t_stack	*ft_devide_args(char **args)
 	return (ft_fill_stack(args));
 }
 
+//TODO: get min abs to compare 
+int	get_min_abs(int n, t_stack *b)
+{
+
+}
+
 // swap functions
 void ft_swap_a(t_stack **a)
 {
@@ -352,6 +365,8 @@ void ft_swap_a(t_stack **a)
 	tmp1->prev = tmp2;
 	tmp1->next = tmp2->next;
 	tmp2->next = tmp1;
+	if (ft_lstcount(a[0]) > 2)
+		tmp1->next->prev = tmp1;
 	a[0] = tmp2;
 	write(1, "sa\n", 3);
 }
@@ -370,6 +385,8 @@ void ft_swap_b(t_stack **b)
 	tmp1->prev = tmp2;
 	tmp1->next = tmp2->next;
 	tmp2->next = tmp1;
+	if (ft_lstcount(b[0]) > 2)
+		tmp1->next->prev = tmp1;
 	b[0] = tmp2;
 	write(1, "sb\n",3);
 }
@@ -378,9 +395,12 @@ void ft_push_a(t_stack **b, t_stack **a)
 {
 	t_stack	*tmp1;
 
+	if (!b[0])
+		return ;
 	tmp1 = b[0]->next;
 	ft_lstadd_front(a,b[0]);
-	tmp1->prev = NULL;
+	if (tmp1)
+		tmp1->prev = NULL;
 	b[0] = tmp1;
 	write(1, "pa\n", 3);
 }
@@ -389,11 +409,14 @@ void ft_push_b(t_stack **a, t_stack **b)
 {
 	t_stack	*tmp1;
 
+	if (!a[0])
+		return ;
 	tmp1 = a[0]->next;
 	ft_lstadd_front(b,a[0]);
-	tmp1->prev = NULL;
+	if (tmp1)
+		tmp1->prev = NULL;
 	a[0] = tmp1;
-	write(1, "pb\n", 1);
+	write(1, "pb\n", 3);
 }
 
 void ft_rotate_a(t_stack **a)
@@ -401,6 +424,8 @@ void ft_rotate_a(t_stack **a)
 	t_stack	*tmp1;
 	t_stack	*tmp2;
 
+	if (ft_lstcount(a[0]) < 2)
+		return ;
 	tmp1 = a[0];
 	tmp2 = a[0]->next;
 	tmp2->prev = tmp1->prev;
@@ -416,6 +441,7 @@ void ft_rotate_b(t_stack **b)
 	t_stack	*tmp1;
 	t_stack	*tmp2;
 
+	if (ft_lstcount(b[0]) < 2)
 	tmp1 = b[0];
 	tmp2 = b[0]->next;
 	tmp2->prev = tmp1->prev;
@@ -431,6 +457,8 @@ void ft_reverse_rotate_a(t_stack **a)
 	t_stack	*tmp1;
 	t_stack	*tmp2;
 
+	if (ft_lstcount(a[0]) < 2)
+		return ;
 	tmp1 = ft_lstlast(a[0]);
 	tmp2 = a[0];
 	tmp1->prev->next = NULL;
@@ -446,6 +474,8 @@ void ft_reverse_rotate_b(t_stack **b)
 	t_stack	*tmp1;
 	t_stack	*tmp2;
 
+	if (ft_lstcount(b[0]) < 2)
+		return ;
 	tmp1 = ft_lstlast(b[0]);
 	tmp2 = b[0];
 	tmp1->prev->next = NULL;
@@ -457,8 +487,129 @@ void ft_reverse_rotate_b(t_stack **b)
 }
 
 //sorting algos
+int	ft_check_sort(t_stack *a)
+{
+	while (a->next)
+	{
+		if(a->value > a->next->value)
+			return (0);
+		a = a->next;
+	}
+	return (1);
+}
 
-void	ft
+void	ft_sort_duo(t_stack *stack)
+{
+	if (stack->value < stack->next->value)
+		return ;
+	ft_swap_a(&stack);
+}
+
+void	ft_sort_tri(t_stack **stack)
+{
+	if ((stack[0]->value > stack[0]->next->value
+		&& stack[0]->next->value < stack[0]->next->next->value
+		&& stack[0]->value < stack[0]->next->next->value)
+		|| (stack[0]->value > stack[0]->next->value
+		&& stack[0]->next->value > stack[0]->next->next->value
+		&& stack[0]->value > stack[0]->next->next->value)
+		|| (stack[0]->value < stack[0]->next->value
+		&& stack[0]->next->value > stack[0]->next->next->value
+		&& stack[0]->value < stack[0]->next->next->value))
+			ft_swap_a(stack);
+	if ((stack[0]->value < stack[0]->next->value
+		&& stack[0]->next->value > stack[0]->next->next->value
+		&& stack[0]->value > stack[0]->next->next->value))
+			ft_reverse_rotate_a(stack);
+		if (stack[0]->value > stack[0]->next->value
+		&& stack[0]->next->value < stack[0]->next->next->value
+		&& stack[0]->value > stack[0]->next->next->value)
+			ft_rotate_a(stack);
+}
+
+void	ft_sort_penta_mini1(t_stack **a, t_stack **b)
+{
+	if(b[0] && (a[0]->value > b[0]->value || ft_lstlast(a[0])->value < b[0]->value))
+		ft_push_a(b, a);
+	if(b[0] && a[0]->value < b[0]->value && a[0]->next->value > b[0]->value)
+	{
+		ft_push_a(b, a);
+		ft_swap_a(a);
+	}
+	if (b[0] && ft_lstlast(a[0])->value < b[0]->value)
+		ft_rotate_a(a);
+}
+
+void	ft_sort_penta_mini2(t_stack **a, t_stack **b)
+{
+	if (b[0] && ft_lstlast(a[0])->prev->value > b[0]->value && a[0]->next->value < b[0]->value)
+	{
+		ft_rotate_a(a);
+		ft_rotate_a(a);
+		ft_push_a(b, a);
+		ft_reverse_rotate_a(a);
+		ft_reverse_rotate_a(a);
+	}
+	if (b[0] && ft_lstlast(a[0])->prev->value < b[0]->value && ft_lstlast(a[0])->value > b[0]->value)
+	{
+		ft_reverse_rotate_a(a);
+		ft_push_a(b, a);
+		ft_rotate_a(a);
+		ft_rotate_a(a);
+	}
+}
+
+void	ft_sort_penta(t_stack **a, t_stack **b)
+{
+	ft_push_b(a, b);
+	if (ft_lstcount(a[0]) == 4)
+		ft_push_b(a, b);
+	if (ft_lstcount(b[0]) == 2 && b[0]->value < b[0]->next->value)
+		ft_swap_b(b);
+	ft_sort_tri(a);
+	while (b[0])
+	{
+		ft_sort_penta_mini1(a, b);
+		ft_sort_penta_mini2(a, b);
+	}
+}
+
+void	ft_sort_small(t_stack **a, t_stack **b)
+{
+	if (ft_lstcount(a[0]) == 2)
+		ft_sort_duo(a[0]);
+	else if (ft_lstcount(a[0]) == 3)
+		ft_sort_tri(a);
+	else
+		ft_sort_penta(a, b);
+}
+
+void	ft_sort_complexe(t_stack **a, t_stack **b)
+{
+	ft_push_b(a, b);
+	ft_push_b(a, b);
+	if (a[0]->value > b[0]->value && a[0]->value < ft_lstlast(b[0])->value)
+		ft_push_b(a, b);
+	if (ft_lstlast(a[0])->value > b[0])
+	{
+		ft_reverse_rotate_a(a);
+		ft_push_b(a, b);
+	}
+	if (a[0]->value > ft_lstlast(b[0])->value)
+	{
+		ft_reverse_rotate_b(b);
+		ft_push_b(a, b);
+	}
+
+}
+void	ft_sort(t_stack **a, t_stack **b)
+{
+	if (ft_lstcount(a[0]) < 6)
+		ft_sort_small(a, b);
+	else
+		printf("GFY we are working on it!!\n");
+}
+
 int	main(int ac, char *av[])
 {
 	t_stack	*a;
@@ -469,15 +620,18 @@ int	main(int ac, char *av[])
 	//started strjoin from 1 to avoid a.out
 	str = ft_split(ft_strjoin(ac, av, " "), ' ');
 	a = ft_devide_args(str);
+	if (ft_check_sort(a))
+		exit(0);
+	ft_sort(&a, &b);
 	while (a)
 	{
-		printf("prev = %14p | %5d | next = %14p\n",a->prev, a->value, a->next);
+		printf("prev = %14p | %5d | next = %14p | a = %p\n",a->prev, a->value, a->next, a);
 		a = a->next;
 	}
 	printf ("**********************\n");
 	while (b)
 	{
-		printf("prev = %14p | %5d | next = %14p\n",b->prev, b->value, b->next);
+		printf("prev = %14p | %5d | next = %14p | b = %p\n",b->prev, b->value, b->next, b);
 		b = b->next;
 	}
 	return (ac);
