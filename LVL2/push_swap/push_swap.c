@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/11 15:09:01 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/15 18:58:00 by hdrabi           ###   ########.fr       */
+/*   Created: 2021/12/16 16:18:05 by hdrabi            #+#    #+#             */
+/*   Updated: 2021/12/16 17:22:35 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-typedef struct	s_stack
+typedef struct s_stack
 {
 	struct s_stack	*prev;
 	int				value;
@@ -72,10 +72,50 @@ int	ft_atoi(char *str)
 	return (sign * rst);
 }
 
-// strjoin to convert **av to 1d str
-int ft_strlen(char *str)
+int	get_min(t_stack *lst)
 {
-	int i;
+	int	min;
+
+	min = lst->value;
+	while (lst)
+	{
+		if (min > lst->value)
+			min = lst->value;
+		lst = lst->next;
+	}
+	return (min);
+}
+
+int	get_max(t_stack *lst)
+{
+	int	max;
+
+	max = lst->value;
+	while (lst)
+	{
+		if (max < lst->value)
+			max = lst->value;
+		lst = lst->next;
+	}
+	return (max);
+}
+
+void	ft_affiche(t_stack *lst)
+{
+	if (!lst)
+		return ;
+	while (lst)
+	{
+		printf("| %5d |\n", lst->value);
+		lst = lst->next;
+	}
+	printf("--------------------------\n");
+}
+
+// strjoin to convert **av to 1d str
+int	ft_strlen(char *str)
+{
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -83,10 +123,10 @@ int ft_strlen(char *str)
 	return (i);
 }
 
-void ft_concta(char *dest, char *src)
+void	ft_concta(char *dest, char *src)
 {
-	int i;
-	int dest_size;
+	int	i;
+	int	dest_size;
 
 	i = 0;
 	dest_size = 0;
@@ -100,11 +140,11 @@ void ft_concta(char *dest, char *src)
 	dest[dest_size + i] = '\0';
 }
 
-char *ft_strjoin(int size, char **strs, char *sep)
+char	*ft_strjoin(int size, char **strs, char *sep)
 {
-	int lenght;
-	int i;
-	char *concat;
+	int		lenght;
+	int		i;
+	char	*concat;
 
 	if (size > 0)
 		lenght = ft_strlen(sep) * (size - 1);
@@ -247,7 +287,7 @@ t_stack	*ft_lstlast(t_stack *lst)
 	return (lst);
 }
 
-void ft_lstadd_front(t_stack **lst, t_stack *new)
+void	ft_lstadd_front(t_stack **lst, t_stack *new)
 {
 	if (!new)
 		return ;
@@ -257,7 +297,7 @@ void ft_lstadd_front(t_stack **lst, t_stack *new)
 	lst[0] = new;
 }
 
-void ft_lstadd_back(t_stack **lst, t_stack *new)
+void	ft_lstadd_back(t_stack **lst, t_stack *new)
 {
 	t_stack	*tmp;
 
@@ -285,9 +325,10 @@ void	ft_check_input_type(char **args)
 		j = 0;
 		while (args[i][j])
 		{
-			if (!ft_isdigit(args[i][j]) || (args[i][j] == '-' && (j != 0 || !ft_isdigit(args[i][j + 1]))))
+			if (!ft_isdigit(args[i][j]) || (args[i][j] == '-' && (j != 0
+				|| !ft_isdigit(args[i][j + 1]))))
 			{
-				write(1, "Error\n",6);
+				write(1, "Error\n", 6);
 				exit(0);
 			}
 			j++;
@@ -309,7 +350,7 @@ void	ft_check_double(char **args)
 		{
 			if (!ft_strcmp(args[i], args[j]))
 			{
-				write(1, "Error\n",6);
+				write(1, "Error\n", 6);
 				exit(0);
 			}
 			j++;
@@ -344,14 +385,34 @@ t_stack	*ft_devide_args(char **args)
 	return (ft_fill_stack(args));
 }
 
-//TODO: get min abs to compare 
-int	get_min_abs(int n, t_stack *b)
+int	ft_check_sort_asc(t_stack *lst)
 {
+	if (!lst)
+		return (1);
+	while (lst->next)
+	{
+		if (lst->value > lst->next->value)
+			return (0);
+		lst = lst->next;
+	}
+	return (1);
+}
 
+int	ft_check_sort_des(t_stack *lst)
+{
+	if (!lst)
+		return (1);
+	while (lst->next)
+	{
+		if (lst->value < lst->next->value)
+			return (0);
+		lst = lst->next;
+	}
+	return (1);
 }
 
 // swap functions
-void ft_swap_a(t_stack **a)
+void	ft_swap_a(t_stack **a)
 {
 	t_stack	*tmp1;
 	t_stack	*tmp2;
@@ -360,18 +421,18 @@ void ft_swap_a(t_stack **a)
 		return ;
 	tmp1 = a[0];
 	tmp2 = a[0]->next;
-
 	tmp2->prev = tmp1->prev;
 	tmp1->prev = tmp2;
 	tmp1->next = tmp2->next;
 	tmp2->next = tmp1;
-	if (ft_lstcount(a[0]) > 2)
-		tmp1->next->prev = tmp1;
 	a[0] = tmp2;
+	if (tmp1->next)
+		tmp1->next->prev = tmp1;
 	write(1, "sa\n", 3);
+	ft_affiche(a[0]);
 }
 
-void ft_swap_b(t_stack **b)
+void	ft_swap_b(t_stack **b)
 {
 	t_stack	*tmp1;
 	t_stack	*tmp2;
@@ -380,46 +441,50 @@ void ft_swap_b(t_stack **b)
 		return ;
 	tmp1 = b[0];
 	tmp2 = b[0]->next;
-
 	tmp2->prev = tmp1->prev;
 	tmp1->prev = tmp2;
 	tmp1->next = tmp2->next;
 	tmp2->next = tmp1;
-	if (ft_lstcount(b[0]) > 2)
+	if (tmp1->next)
 		tmp1->next->prev = tmp1;
 	b[0] = tmp2;
-	write(1, "sb\n",3);
+	write(1, "sb\n", 3);
+	ft_affiche(b[0]);
 }
 
-void ft_push_a(t_stack **b, t_stack **a)
+void	ft_push_a(t_stack **b, t_stack **a)
 {
 	t_stack	*tmp1;
 
 	if (!b[0])
 		return ;
 	tmp1 = b[0]->next;
-	ft_lstadd_front(a,b[0]);
+	ft_lstadd_front(a, b[0]);
 	if (tmp1)
 		tmp1->prev = NULL;
 	b[0] = tmp1;
 	write(1, "pa\n", 3);
+	ft_affiche(a[0]);
+	ft_affiche(b[0]);
 }
 
-void ft_push_b(t_stack **a, t_stack **b)
+void	ft_push_b(t_stack **a, t_stack **b)
 {
 	t_stack	*tmp1;
 
 	if (!a[0])
 		return ;
 	tmp1 = a[0]->next;
-	ft_lstadd_front(b,a[0]);
+	ft_lstadd_front(b, a[0]);
 	if (tmp1)
 		tmp1->prev = NULL;
 	a[0] = tmp1;
 	write(1, "pb\n", 3);
+	ft_affiche(a[0]);
+	ft_affiche(b[0]);
 }
 
-void ft_rotate_a(t_stack **a)
+void	ft_rotate_a(t_stack **a, int print)
 {
 	t_stack	*tmp1;
 	t_stack	*tmp2;
@@ -433,15 +498,18 @@ void ft_rotate_a(t_stack **a)
 	ft_lstlast(a[0])->next = tmp1;
 	tmp1->next = NULL;
 	a[0] = tmp2;
-	write(1, "ra\n", 3);
+	if (print)
+		write(1, "ra\n", 3);
+	ft_affiche(a[0]);
 }
 
-void ft_rotate_b(t_stack **b)
+void	ft_rotate_b(t_stack **b, int print)
 {
 	t_stack	*tmp1;
 	t_stack	*tmp2;
 
 	if (ft_lstcount(b[0]) < 2)
+		return ;
 	tmp1 = b[0];
 	tmp2 = b[0]->next;
 	tmp2->prev = tmp1->prev;
@@ -449,10 +517,12 @@ void ft_rotate_b(t_stack **b)
 	ft_lstlast(b[0])->next = tmp1;
 	tmp1->next = NULL;
 	b[0] = tmp2;
-	write(1, "rb\n", 3);
+	if (print)
+		write(1, "rb\n", 3);
+	ft_affiche(b[0]);
 }
 
-void ft_reverse_rotate_a(t_stack **a)
+void	ft_reverse_rotate_a(t_stack **a, int print)
 {
 	t_stack	*tmp1;
 	t_stack	*tmp2;
@@ -466,10 +536,12 @@ void ft_reverse_rotate_a(t_stack **a)
 	tmp2->prev = tmp1;
 	tmp1->next = tmp2;
 	a[0] = tmp1;
-	write(1, "rra\n", 4);
+	if (print)
+		write(1, "rra\n", 4);
+	ft_affiche(a[0]);
 }
 
-void ft_reverse_rotate_b(t_stack **b)
+void	ft_reverse_rotate_b(t_stack **b, int print)
 {
 	t_stack	*tmp1;
 	t_stack	*tmp2;
@@ -483,129 +555,31 @@ void ft_reverse_rotate_b(t_stack **b)
 	tmp2->prev = tmp1;
 	tmp1->next = tmp2;
 	b[0] = tmp1;
-	write(1, "rra\n", 4);
+	if (print)
+		write(1, "rrb\n", 4);
+	ft_affiche(b[0]);
+}
+
+void	ft_rr(t_stack **a, t_stack **b)
+{
+	ft_rotate_a(a, 0);
+	ft_rotate_b(b, 0);
+	write(1, "rr\n", 3);
+}
+
+void	ft_rrr(t_stack **a, t_stack **b)
+{
+	ft_reverse_rotate_a(a, 0);
+	ft_reverse_rotate_b(b, 0);
+	write(1, "rrr\n", 4);
 }
 
 //sorting algos
-int	ft_check_sort(t_stack *a)
-{
-	while (a->next)
-	{
-		if(a->value > a->next->value)
-			return (0);
-		a = a->next;
-	}
-	return (1);
-}
 
-void	ft_sort_duo(t_stack *stack)
-{
-	if (stack->value < stack->next->value)
-		return ;
-	ft_swap_a(&stack);
-}
-
-void	ft_sort_tri(t_stack **stack)
-{
-	if ((stack[0]->value > stack[0]->next->value
-		&& stack[0]->next->value < stack[0]->next->next->value
-		&& stack[0]->value < stack[0]->next->next->value)
-		|| (stack[0]->value > stack[0]->next->value
-		&& stack[0]->next->value > stack[0]->next->next->value
-		&& stack[0]->value > stack[0]->next->next->value)
-		|| (stack[0]->value < stack[0]->next->value
-		&& stack[0]->next->value > stack[0]->next->next->value
-		&& stack[0]->value < stack[0]->next->next->value))
-			ft_swap_a(stack);
-	if ((stack[0]->value < stack[0]->next->value
-		&& stack[0]->next->value > stack[0]->next->next->value
-		&& stack[0]->value > stack[0]->next->next->value))
-			ft_reverse_rotate_a(stack);
-		if (stack[0]->value > stack[0]->next->value
-		&& stack[0]->next->value < stack[0]->next->next->value
-		&& stack[0]->value > stack[0]->next->next->value)
-			ft_rotate_a(stack);
-}
-
-void	ft_sort_penta_mini1(t_stack **a, t_stack **b)
-{
-	if(b[0] && (a[0]->value > b[0]->value || ft_lstlast(a[0])->value < b[0]->value))
-		ft_push_a(b, a);
-	if(b[0] && a[0]->value < b[0]->value && a[0]->next->value > b[0]->value)
-	{
-		ft_push_a(b, a);
-		ft_swap_a(a);
-	}
-	if (b[0] && ft_lstlast(a[0])->value < b[0]->value)
-		ft_rotate_a(a);
-}
-
-void	ft_sort_penta_mini2(t_stack **a, t_stack **b)
-{
-	if (b[0] && ft_lstlast(a[0])->prev->value > b[0]->value && a[0]->next->value < b[0]->value)
-	{
-		ft_rotate_a(a);
-		ft_rotate_a(a);
-		ft_push_a(b, a);
-		ft_reverse_rotate_a(a);
-		ft_reverse_rotate_a(a);
-	}
-	if (b[0] && ft_lstlast(a[0])->prev->value < b[0]->value && ft_lstlast(a[0])->value > b[0]->value)
-	{
-		ft_reverse_rotate_a(a);
-		ft_push_a(b, a);
-		ft_rotate_a(a);
-		ft_rotate_a(a);
-	}
-}
-
-void	ft_sort_penta(t_stack **a, t_stack **b)
-{
-	ft_push_b(a, b);
-	if (ft_lstcount(a[0]) == 4)
-		ft_push_b(a, b);
-	if (ft_lstcount(b[0]) == 2 && b[0]->value < b[0]->next->value)
-		ft_swap_b(b);
-	ft_sort_tri(a);
-	while (b[0])
-	{
-		ft_sort_penta_mini1(a, b);
-		ft_sort_penta_mini2(a, b);
-	}
-}
-
-void	ft_sort_small(t_stack **a, t_stack **b)
-{
-	if (ft_lstcount(a[0]) == 2)
-		ft_sort_duo(a[0]);
-	else if (ft_lstcount(a[0]) == 3)
-		ft_sort_tri(a);
-	else
-		ft_sort_penta(a, b);
-}
-
-void	ft_sort_complexe(t_stack **a, t_stack **b)
-{
-	ft_push_b(a, b);
-	ft_push_b(a, b);
-	if (a[0]->value > b[0]->value && a[0]->value < ft_lstlast(b[0])->value)
-		ft_push_b(a, b);
-	if (ft_lstlast(a[0])->value > b[0])
-	{
-		ft_reverse_rotate_a(a);
-		ft_push_b(a, b);
-	}
-	if (a[0]->value > ft_lstlast(b[0])->value)
-	{
-		ft_reverse_rotate_b(b);
-		ft_push_b(a, b);
-	}
-
-}
 void	ft_sort(t_stack **a, t_stack **b)
 {
 	if (ft_lstcount(a[0]) < 6)
-		ft_sort_small(a, b);
+		printf("GFY we are working on it!!\n");
 	else
 		printf("GFY we are working on it!!\n");
 }
@@ -615,24 +589,15 @@ int	main(int ac, char *av[])
 	t_stack	*a;
 	t_stack	*b;
 	char	**str;
-	int		i = 0;
 
 	//started strjoin from 1 to avoid a.out
 	str = ft_split(ft_strjoin(ac, av, " "), ' ');
 	a = ft_devide_args(str);
-	if (ft_check_sort(a))
+	if (ft_check_sort_asc(a))
 		exit(0);
 	ft_sort(&a, &b);
-	while (a)
-	{
-		printf("prev = %14p | %5d | next = %14p | a = %p\n",a->prev, a->value, a->next, a);
-		a = a->next;
-	}
-	printf ("**********************\n");
-	while (b)
-	{
-		printf("prev = %14p | %5d | next = %14p | b = %p\n",b->prev, b->value, b->next, b);
-		b = b->next;
-	}
+
+	ft_affiche(a);
+	ft_affiche(b);
 	return (ac);
 }
