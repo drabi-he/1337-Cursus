@@ -6,13 +6,13 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 10:49:38 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 11:24:42 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/21 14:43:11 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	ft_swap_a(t_stack **a)
+void	ft_swap_a(t_stack **a, int print)
 {
 	t_stack	*tmp1;
 	t_stack	*tmp2;
@@ -29,10 +29,11 @@ void	ft_swap_a(t_stack **a)
 	a[0] = tmp2;
 	if (tmp1->next)
 		tmp1->next->prev = tmp1;
-	write(1, "sa\n", 3);
+	if (print)
+		write(1, "sa\n", 3);
 }
 
-void	ft_swap_b(t_stack **b)
+void	ft_swap_b(t_stack **b, int print)
 {
 	t_stack	*tmp1;
 	t_stack	*tmp2;
@@ -49,10 +50,11 @@ void	ft_swap_b(t_stack **b)
 	if (tmp1->next)
 		tmp1->next->prev = tmp1;
 	b[0] = tmp2;
-	write(1, "sb\n", 3);
+	if (print)
+		write(1, "sb\n", 3);
 }
 
-void	ft_push_a(t_stack **b, t_stack **a)
+void	ft_push_a(t_stack **b, t_stack **a, int print)
 {
 	t_stack	*tmp1;
 
@@ -65,10 +67,11 @@ void	ft_push_a(t_stack **b, t_stack **a)
 	if (tmp1)
 		tmp1->prev = NULL;
 	b[0] = tmp1;
-	write(1, "pa\n", 3);
+	if (print)
+		write(1, "pa\n", 3);
 }
 
-void	ft_push_b(t_stack **a, t_stack **b)
+void	ft_push_b(t_stack **a, t_stack **b, int print)
 {
 	t_stack	*tmp1;
 
@@ -81,5 +84,14 @@ void	ft_push_b(t_stack **a, t_stack **b)
 	if (tmp1)
 		tmp1->prev = NULL;
 	a[0] = tmp1;
-	write(1, "pb\n", 3);
+	if (print)
+		write(1, "pb\n", 3);
+}
+
+void	ft_ss(t_stack **a, t_stack **b, int print)
+{
+	ft_swap_a(a, 0);
+	ft_swap_b(b, 0);
+	if (print)
+		write(1, "ss\n", 3);
 }

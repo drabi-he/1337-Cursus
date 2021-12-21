@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 11:34:54 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 13:25:35 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/21 14:44:20 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	ft_last_step(t_stack **a, t_stack **b, t_utils *u)
 	{
 		ft_prepare_b(b, a, u, 1000);
 		ft_rotator(a, b, u->rot_a, u->rot_b);
-		ft_push_a(b, a);
+		ft_push_a(b, a, 1);
 		u->lst_size++;
 	}
 	ft_rotator(a, b, ft_dist_to_top(a[0], 0), 0);

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 11:27:54 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 13:47:01 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/21 14:44:47 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,16 +124,16 @@ void	ft_prepare_a(t_stack **a, t_stack **b, t_utils *u, int cur_gp)
 		tmp_dist = ft_dist_to_top(a[0], tmp->index);
 		if (a && ft_can_swap(a[0]))
 		{
-			ft_swap_a(a);
+			ft_swap_a(a, 1);
 			u->max_loop = ft_get_max_loop(a[0], 1);
 		}
 		else if (a && !a[0]->keep && tmp_dist == 0)
 		{
-			ft_push_b(a, b);
+			ft_push_b(a, b, 1);
 			u->lst_size--;
 		}
 		else if (u->group_cp == 1)
-			ft_rr(a, b);
+			ft_rr(a, b, 1);
 		else
 			ft_rotator(a, b, ft_min_val(1, ft_max_val(-1, tmp_dist)), 0);
 	}

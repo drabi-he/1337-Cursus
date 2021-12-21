@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 18:37:18 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 13:48:51 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/21 14:41:41 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,17 @@ void	ft_lstadd_front(t_stack **lst, t_stack *new);
 void	ft_lstadd_back(t_stack **lst, t_stack *new);
 
 //actions
-void	ft_swap_a(t_stack **a);
-void	ft_swap_b(t_stack **b);
-void	ft_push_a(t_stack **b, t_stack **a);
-void	ft_push_b(t_stack **a, t_stack **b);
+void	ft_swap_a(t_stack **a, int print);
+void	ft_swap_b(t_stack **b, int print);
+void	ft_push_a(t_stack **b, t_stack **a, int print);
+void	ft_push_b(t_stack **a, t_stack **b, int print);
 void	ft_rotate_a(t_stack **a, int print);
 void	ft_rotate_b(t_stack **b, int print);
 void	ft_reverse_rotate_a(t_stack **a, int print);
 void	ft_reverse_rotate_b(t_stack **b, int print);
-void	ft_rr(t_stack **a, t_stack **b);
-void	ft_rrr(t_stack **a, t_stack **b);
+void	ft_rr(t_stack **a, t_stack **b, int print);
+void	ft_rrr(t_stack **a, t_stack **b, int print);
+void	ft_ss(t_stack **a, t_stack **b, int print);
 void	ft_double_rotate(t_stack **a, t_stack **b, int *rot_a, int *rot_b);
 void	ft_rotator(t_stack **a, t_stack **b, int rot_a, int rot_b);
 
