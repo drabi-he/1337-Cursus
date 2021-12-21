@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 11:23:21 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 11:34:16 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/21 13:43:54 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	ft_abs(int n)
 	return (n);
 }
 
-
 void	ft_affiche(t_stack *lst)
 {
 	return ;
@@ -27,7 +26,7 @@ void	ft_affiche(t_stack *lst)
 		return ;
 	while (lst)
 	{
-		printf("| %3d | %5d | %d |\n",lst->index,lst->value,lst->keep);
+		printf("| %3d | %5d | %d |\n", lst->index, lst->value, lst->keep);
 		lst = lst->next;
 	}
 	printf("--------------------------\n");
@@ -56,7 +55,7 @@ int	ft_dist_to_top(t_stack *a, int index)
 	while (a)
 	{
 		if (a->index == index)
-			break;
+			break ;
 		i++;
 		a = a->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 11:25:23 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 11:50:48 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/21 12:13:43 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	ft_double_rot(t_stack **a, t_stack **b, int *rot_a, int *rot_b)
 		(*rot_b)++;
 		ft_rrr(a, b);
 	}
-
 }
 
 void	ft_rotator(t_stack **a, t_stack **b, int rot_a, int rot_b)
@@ -66,5 +65,4 @@ void	ft_rotator(t_stack **a, t_stack **b, int rot_a, int rot_b)
 		rot_b++;
 		ft_reverse_rotate_b(b, 1);
 	}
-
 }

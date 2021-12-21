@@ -6,16 +6,16 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 18:37:18 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 11:40:48 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/21 13:48:51 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP
-# define PUSH_SWAP
+#ifndef PUSH_SWAP_H
+# define PUSH_SWAP_H
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <stdlib.h>
 
 typedef struct s_stack
 {
@@ -70,19 +70,19 @@ void	ft_double_rotate(t_stack **a, t_stack **b, int *rot_a, int *rot_b);
 void	ft_rotator(t_stack **a, t_stack **b, int rot_a, int rot_b);
 
 //prepare stack a
-int	ft_get_max_loop(t_stack *a, int active);
+int		ft_get_max_loop(t_stack *a, int active);
 void	ft_prepare_a(t_stack **a, t_stack **b, t_utils *u, int cur_gp);
 
 //last step
 void	ft_last_step(t_stack **a, t_stack **b, t_utils *u);
 
 //others
-int	ft_dist_to_top(t_stack *a, int index);
+int		ft_dist_to_top(t_stack *a, int index);
 
 //main functions
 t_stack	*ft_devide_args(char **args);
 int		ft_check_sort(t_stack *lst);
-void 	ft_index_stack(t_stack *a);
+void	ft_index_stack(t_stack *a);
 void	ft_sort(t_stack **a, t_stack **b);
 
 #endif

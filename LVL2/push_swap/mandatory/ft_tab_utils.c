@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 10:55:49 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 11:18:03 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/21 13:47:39 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	ft_sort_tab(int *tab, int size)
 	}
 }
 
-void ft_index_stack(t_stack *a)
+void	ft_index_stack(t_stack *a)
 {
 	int	*tab;
 	int	size;
@@ -62,13 +62,13 @@ void ft_index_stack(t_stack *a)
 
 	size = ft_lstcount(a);
 	tab = ft_alloc_tab(a, size);
-	ft_sort_tab(tab , size);
+	ft_sort_tab(tab, size);
 	while (a)
 	{
 		i = 0;
 		while (i < size)
 		{
-			if(a->value == tab[i])
+			if (a->value == tab[i])
 			{
 				a->index = i;
 				break ;

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 11:39:18 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 12:00:11 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/21 13:44:21 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ void	ft_utils_init(t_stack *a, t_utils *u)
 
 void	ft_sort(t_stack **a, t_stack **b)
 {
-	t_utils u;
-	int current_group;
+	t_utils	u;
+	int		current_group;
 
 	ft_utils_init(a[0], &u);
 	current_group = 1;
