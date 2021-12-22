@@ -11,6 +11,7 @@
 
 ### COMMON CORE
 (***! to see the subjects click on the status***)
+
 (***! some projects can't be uploaded due to there size***)
 | CIRCLE  | NAME | FIELD | EXPECTED DURATION | EXP | STATUS | LVL |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
