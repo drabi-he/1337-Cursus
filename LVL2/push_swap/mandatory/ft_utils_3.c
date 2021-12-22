@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 11:39:18 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 13:44:21 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/22 14:13:55 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,14 @@ void	ft_sort(t_stack **a, t_stack **b)
 	current_group = 1;
 	ft_prepare_a(a, b, &u, current_group);
 	ft_last_step(a, b, &u);
+}
+
+void	free_list(t_stack *a)
+{
+	while (a)
+	{
+		if (a)
+			free(a);
+		a = a->next;
+	}
 }

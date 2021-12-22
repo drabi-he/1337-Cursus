@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 18:37:18 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 14:41:41 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/22 14:13:10 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		ft_min_val(int a, int b);
 int		ft_abs(int n);
 int		ft_atoi(char *str);
 char	*ft_strjoin(int size, char **strs, char *sep);
-char	**ft_split(char const *s, char c);
+char	**ft_split(char *s, char c);
 void	ft_affiche(t_stack *lst);
 
 //lists utils
@@ -85,5 +85,6 @@ t_stack	*ft_devide_args(char **args);
 int		ft_check_sort(t_stack *lst);
 void	ft_index_stack(t_stack *a);
 void	ft_sort(t_stack **a, t_stack **b);
+void	free_list(t_stack *a);
 
 #endif

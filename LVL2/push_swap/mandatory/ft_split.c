@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 10:52:36 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 10:53:17 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/22 14:08:32 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static char	*str_cpy(const char *s, int size)
 	return (t);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char *s, char c)
 {
 	char	**t;
 	int		size;

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 13:52:39 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 15:07:02 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/22 14:15:22 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,6 @@ int	main(int ac, char *av[])
 		write(1, "OK\n", 3);
 	else
 		write(1, "KO\n", 3);
+	free_list(a);
 	return (ac);
 }
