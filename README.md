@@ -11,7 +11,7 @@
 
 #### CERCLE 0
 
-| First Header  | Second Header |
+| INDEX  | NAME |
 | ------------- | ------------- |
 | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  |
