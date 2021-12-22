@@ -11,4 +11,4 @@
 
 | LVL  | NAME | FIELD | EXPECTED DURATION | EXP | STATUS | LVL |
 | --- | --- | --- | --- | --- | --- | --- |
-| [0](./LVL0/libft.pdf) | [libft](./LVL0/libft) | C | 70 hours | 462 | ![hdrabi's 42 Libft Score](https://badge42.herokuapp.com/api/project/hdrabi/Libft) | 1.05 |
+| 0 | [libft](./LVL0/libft) | C | 70 hours | 462 | [![hdrabi's 42 Libft Score](https://badge42.herokuapp.com/api/project/hdrabi/Libft)](./LVL0/libft.pdf) | 1.05 |
