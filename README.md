@@ -5,7 +5,7 @@
 
 [![hdrabi's 42 stats](https://badge42.herokuapp.com/api/stats/hdrabi)](https://github.com/chaosreaper)
 
-## PROJECTS
+## PROJECTS (***! to see the subjects click on the status***)
 
 ### COMMON CORE
 
