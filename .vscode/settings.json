@@ -1,6 +1,10 @@
 {
 	"files.associations": {
 		"sstream": "c",
-		"random": "c"
+		"random": "c",
+		"array": "c",
+		"string_view": "c",
+		"initializer_list": "c",
+		"utility": "c"
 	}
 }

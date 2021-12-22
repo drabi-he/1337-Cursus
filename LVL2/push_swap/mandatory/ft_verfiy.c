@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 10:58:25 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 11:00:35 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/22 17:35:30 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,22 @@ static t_stack	*ft_fill_stack(char **args)
 	return (list);
 }
 
+static void	ft_issam_fih_sda3(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		ft_atoi(str[i]);
+		i++;
+	}
+}
+
 t_stack	*ft_devide_args(char **args)
 {
 	ft_check_input_type(args);
 	ft_check_double(args);
+	ft_issam_fih_sda3(args);
 	return (ft_fill_stack(args));
 }

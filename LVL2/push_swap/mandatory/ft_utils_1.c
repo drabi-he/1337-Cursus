@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 11:21:52 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 11:22:49 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/22 17:48:26 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,22 @@ int	ft_max_val(int a, int b)
 	return (b);
 }
 
-int	ft_strcmp(char *s1, char *s2)
+static void	ft_check_interval(long nb, int sign)
 {
-	int	i;
-
-	i = 0;
-	while (s1[i] && s2[i] && s1[i] == s2[i])
+	if (nb > 2147483647)
 	{
-		i++;
+		if (nb == 2147483648 && sign == -1)
+			return ;
+		write(1, "Error\n", 6);
+		exit(0);
 	}
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-int	ft_atoi(char *str)
+long	ft_atoi(char *str)
 {
-	int	i;
-	int	sign;
-	int	rst;
+	int		i;
+	int		sign;
+	long	rst;
 
 	i = 0;
 	sign = 1;
@@ -64,6 +63,7 @@ int	ft_atoi(char *str)
 	while (str[i] && str[i] >= '0' && str[i] <= '9')
 	{
 		rst = rst * 10 + str[i] - '0';
+		ft_check_interval(rst, sign);
 		i++;
 	}
 	return (sign * rst);

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 18:37:18 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/22 14:13:10 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/22 17:48:41 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int		ft_strcmp(char *s1, char *s2);
 int		ft_max_val(int a, int b);
 int		ft_min_val(int a, int b);
 int		ft_abs(int n);
-int		ft_atoi(char *str);
+long	ft_atoi(char *str);
 char	*ft_strjoin(int size, char **strs, char *sep);
 char	**ft_split(char *s, char c);
 void	ft_affiche(t_stack *lst);
