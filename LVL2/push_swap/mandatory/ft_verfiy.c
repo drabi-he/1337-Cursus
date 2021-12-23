@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 10:58:25 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/22 17:35:30 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/22 19:05:55 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ static t_stack	*ft_fill_stack(char **args)
 	{
 		tmp = ft_new_node(ft_atoi(args[i]));
 		if (!tmp)
+		{
+			free_list(list);
 			return (NULL);
+		}
 		ft_lstadd_back(&list, tmp);
 		i++;
 	}
