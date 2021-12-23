@@ -17,16 +17,18 @@ int	main(int ac, char *av[])
 	t_stack	*a;
 	t_stack	*b;
 	char	**str;
+	char	*join;
 
-	str = ft_split(ft_strjoin(ac, av, " "), ' ');
+	join = ft_strjoin(ac, av, " ");
+	str = ft_split(join, ' ');
+	free(join);
 	a = ft_devide_args(str);
 	if (ft_check_sort(a))
 		exit(0);
 	ft_index_stack(a);
 	ft_sort(&a, &b);
-	free_list(a);
 	ft_affiche(a);
 	ft_affiche(b);
+	free_list(a);
 	return (ac);
 }
-

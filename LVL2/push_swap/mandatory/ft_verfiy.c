@@ -76,7 +76,7 @@ static t_stack	*ft_fill_stack(char **args)
 		ft_lstadd_back(&list, tmp);
 		i++;
 	}
-	free (args);
+	free_tab(args);
 	return (list);
 }
 

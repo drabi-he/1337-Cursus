@@ -22,7 +22,7 @@ static int	str_len(const char *s, char c)
 	return (i);
 }
 
-static void	free_tab(char **t)
+void	free_tab(char **t)
 {
 	int	i;
 
