@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 10:51:30 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 10:52:28 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/27 13:41:32 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,19 @@ static void	ft_concta(char *dest, char *src)
 
 char	*ft_strjoin(int size, char **strs, char *sep)
 {
-	int		lenght;
+	int		length;
 	int		i;
 	char	*concat;
 
 	if (size > 0)
-		lenght = ft_strlen(sep) * (size - 1);
+		length = ft_strlen(sep) * (size - 1);
 	i = 1;
 	while (i < size)
 	{
-		lenght += ft_strlen(strs[i]);
+		length += ft_strlen(strs[i]);
 		i++;
 	}
-	concat = malloc(sizeof(char) * (lenght + 1));
+	concat = malloc(sizeof(char) * (length + 1));
 	if (!concat)
 		return (NULL);
 	i = 1;
