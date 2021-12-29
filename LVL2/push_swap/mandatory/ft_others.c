@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 11:23:21 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/21 13:43:54 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/29 13:58:13 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	ft_abs(int n)
 
 void	ft_affiche(t_stack *lst)
 {
-	return ;
+	//return ;
 	if (!lst)
 		return ;
 	while (lst)

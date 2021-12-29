@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long.c                                          :+:      :+:    :+:   */
+/*   so_long_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 11:54:10 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/29 18:48:34 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/29 19:09:07 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,12 @@ typedef struct s_vars
 	void	*mlx;
 	void	*win;
 	void	*img_wall;
-	void	*img_collect;
+	void	*img_collect[8];
 	void	*img_floor;
-	void	*img_exit[2];
+	void	*img_enemy;
+	void	*img_exit[6];
 	void	*img_player;
+	void	*img_dead;
 }	t_vars;
 
 //mini utils
@@ -170,7 +172,7 @@ void	ft_check_valid(char **map)
 		{
 			if (map[i][j] != '1' && map[i][j] != '0'
 				&& map[i][j] != 'C' && map[i][j] != 'P'
-				&& map[i][j] != 'E')
+				&& map[i][j] != 'E' && map[i][j] != 'F')
 			{
 				printf("invalid component found !!\n");
 				exit(0);
@@ -316,6 +318,27 @@ void	ft_check_valid_map(t_vars *vars, char *path)
 
 //gameplay and display
 // init images and fill window
+void	ft_collect_img(t_vars *vars, int *cord)
+{
+	vars->img_collect[0] = mlx_xpm_file_to_image(vars->mlx, "./assests/box1.xpm", &cord[0], &cord[1]);
+	vars->img_collect[1] = mlx_xpm_file_to_image(vars->mlx, "./assests/box2.xpm", &cord[0], &cord[1]);
+	vars->img_collect[2] = mlx_xpm_file_to_image(vars->mlx, "./assests/box3.xpm", &cord[0], &cord[1]);
+	vars->img_collect[3] = mlx_xpm_file_to_image(vars->mlx, "./assests/box4.xpm", &cord[0], &cord[1]);
+	vars->img_collect[4] = mlx_xpm_file_to_image(vars->mlx, "./assests/box5.xpm", &cord[0], &cord[1]);
+	vars->img_collect[5] = mlx_xpm_file_to_image(vars->mlx, "./assests/box6.xpm", &cord[0], &cord[1]);
+	vars->img_collect[6] = mlx_xpm_file_to_image(vars->mlx, "./assests/box7.xpm", &cord[0], &cord[1]);
+	vars->img_collect[7] = mlx_xpm_file_to_image(vars->mlx, "./assests/box8.xpm", &cord[0], &cord[1]);
+}
+
+void	ft_door_img(t_vars *vars, int *cord)
+{
+	vars->img_exit[0] = mlx_xpm_file_to_image(vars->mlx, "./assests/door1.xpm", &cord[0], &cord[1]);
+	vars->img_exit[1] = mlx_xpm_file_to_image(vars->mlx, "./assests/door2.xpm", &cord[0], &cord[1]);
+	vars->img_exit[2] = mlx_xpm_file_to_image(vars->mlx, "./assests/door3.xpm", &cord[0], &cord[1]);
+	vars->img_exit[3] = mlx_xpm_file_to_image(vars->mlx, "./assests/door4.xpm", &cord[0], &cord[1]);
+	vars->img_exit[4] = mlx_xpm_file_to_image(vars->mlx, "./assests/door5.xpm", &cord[0], &cord[1]);
+	vars->img_exit[5] = mlx_xpm_file_to_image(vars->mlx, "./assests/door6.xpm", &cord[0], &cord[1]);
+}
 
 void	ft_vars_init(t_vars *vars)
 {
@@ -327,10 +350,10 @@ void	ft_vars_init(t_vars *vars)
 	vars->img_wall = mlx_xpm_file_to_image(vars->mlx, "./assests/wall.xpm", &cord[0], &cord[1]);
 	vars->img_floor = mlx_xpm_file_to_image(vars->mlx, "./assests/floor.xpm", &cord[0], &cord[1]);
 	vars->img_player = mlx_xpm_file_to_image(vars->mlx, "./assests/playerR.xpm", &cord[0], &cord[1]);
-	vars->img_collect = mlx_xpm_file_to_image(vars->mlx, "./assests/boxM.xpm", &cord[0], &cord[1]);
-	vars->img_exit[0] = mlx_xpm_file_to_image(vars->mlx, "./assests/door1.xpm", &cord[0], &cord[1]);
-	vars->img_exit[1] = mlx_xpm_file_to_image(vars->mlx, "./assests/doorM2.xpm", &cord[0], &cord[1]);
-
+	vars->img_enemy = mlx_xpm_file_to_image(vars->mlx, "./assests/enemy.xpm", &cord[0], &cord[1]);
+	vars->img_dead = mlx_xpm_file_to_image(vars->mlx, "./assests/dead.xpm", &cord[0], &cord[1]);
+	ft_collect_img(vars, cord);
+	ft_door_img(vars, cord);
 }
 
 void	ft_choose_img(t_vars vars, char c, int x, int y)
@@ -344,11 +367,13 @@ void	ft_choose_img(t_vars vars, char c, int x, int y)
 			mlx_put_image_to_window(vars.mlx, vars.win, vars.img_player, 50 * x, 50 * y);
 		}
 		if (c == 'C')
-			mlx_put_image_to_window(vars.mlx, vars.win, vars.img_collect, 50 * x, 50 * y);
+			mlx_put_image_to_window(vars.mlx, vars.win, vars.img_collect[0], 50 * x, 50 * y);
 		if (c == 'E' && vars.exit == 0 && vars.collect)
 			mlx_put_image_to_window(vars.mlx, vars.win, vars.img_exit[0], 50 * x, 50 * y);
 		if (c == 'E' && !vars.collect)
-			mlx_put_image_to_window(vars.mlx, vars.win, vars.img_exit[1], 50 * x, 50 * y);
+			mlx_put_image_to_window(vars.mlx, vars.win, vars.img_exit[5], 50 * x, 50 * y);
+		if (c == 'F')
+			mlx_put_image_to_window(vars.mlx, vars.win, vars.img_enemy, 50 * x, 50 * y);
 	}
 
 }
@@ -398,7 +423,7 @@ void	get_player_pos(char **map, int *x, int *y)
 int	ft_valid_move(char **map, int collect, int x, int y)
 {
 
-	if (map[x][y] == '0' || map[x][y] == 'C' || (map[x][y] == 'E' && !collect))
+	if (map[x][y] == '0' || map[x][y] == 'C' || (map[x][y] == 'E' && !collect) || map[x][y] == 'F')
 		return (1);
 	return (0);
 }
@@ -417,9 +442,12 @@ void	ft_collect_exit(t_vars *vars, int x, int y, int move)
 		vars->collect--;
 	if (vars->collect == 0)
 		vars->exit = 1;
-	if (vars->map[x][y] == 'E')
+	if (vars->map[x][y] == 'E' || vars->map[x][y] == 'F')
 	{
+		mlx_put_image_to_window(vars->mlx, vars->win, vars->img_floor, x * 50, y * 50);
+		mlx_put_image_to_window(vars->mlx, vars->win, vars->img_dead, x * 50, y * 50);
 		mlx_destroy_window(vars->mlx, vars->win);
+		sleep(1);
 		exit(0);
 	}
 }
@@ -481,6 +509,67 @@ int	ft_key_events(int keypress, t_vars *vars)
 	return (0);
 }
 
+void	ft_anim_collect(t_vars *vars, int k)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (vars->map[i])
+	{
+		j = 0;
+		while (vars->map[i][j])
+		{
+			if (vars->map[i][j] == 'C')
+				mlx_put_image_to_window(vars->mlx, vars->win, vars->img_collect[k], 50 * j, 50 * i);
+			j++;
+		}
+		i++;
+	}
+}
+
+void	ft_anim_door(t_vars *vars, int k)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (vars->map[i])
+	{
+		j = 0;
+		while (vars->map[i][j])
+		{
+			if (vars->map[i][j] == 'E')
+				mlx_put_image_to_window(vars->mlx, vars->win, vars->img_exit[k], 50 * j, 50 * i);
+			j++;
+		}
+		i++;
+	}
+}
+
+int anim(t_vars *vars)
+{
+	static int	k;
+	static int	j;
+
+	while(1)
+	{
+		ft_anim_collect(vars, k);
+		k++;
+		if (k == 8)
+			k = 0;
+		if (vars->exit == 1)
+			j++;
+		if (j >= 6)
+			vars->exit = 0;
+		if (j <= 6 && vars->exit == 1)
+			ft_anim_door(vars, j - 1);
+		usleep(100000);
+		break ;
+	}
+	return (0);
+}
+
 int	ft_close(t_vars *vars)
 {
 	mlx_destroy_window(vars->mlx, vars->win);
@@ -494,6 +583,7 @@ void	ft_gameplay(t_vars *vars)
 	ft_fill_window(*vars);
 	mlx_key_hook(vars->win, ft_key_events, vars);
 	mlx_hook(vars->win, 17, 0, ft_close, &vars);
+	mlx_loop_hook(vars->mlx, anim,vars);
 	mlx_loop(vars->mlx);
 }
 
