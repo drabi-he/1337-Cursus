@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 11:54:10 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/29 19:09:07 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/30 13:10:38 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct s_vars
 	int		collect;
 	int		exit;
 	int		cp;
+	int		gameOver;
 	void	*mlx;
 	void	*win;
 	void	*img_wall;
@@ -32,7 +33,6 @@ typedef struct s_vars
 	void	*img_enemy;
 	void	*img_exit[6];
 	void	*img_player;
-	void	*img_dead;
 }	t_vars;
 
 //mini utils
@@ -351,9 +351,9 @@ void	ft_vars_init(t_vars *vars)
 	vars->img_floor = mlx_xpm_file_to_image(vars->mlx, "./assests/floor.xpm", &cord[0], &cord[1]);
 	vars->img_player = mlx_xpm_file_to_image(vars->mlx, "./assests/playerR.xpm", &cord[0], &cord[1]);
 	vars->img_enemy = mlx_xpm_file_to_image(vars->mlx, "./assests/enemy.xpm", &cord[0], &cord[1]);
-	vars->img_dead = mlx_xpm_file_to_image(vars->mlx, "./assests/dead.xpm", &cord[0], &cord[1]);
 	ft_collect_img(vars, cord);
 	ft_door_img(vars, cord);
+	vars->gameOver = 0;
 }
 
 void	ft_choose_img(t_vars vars, char c, int x, int y)
@@ -368,9 +368,9 @@ void	ft_choose_img(t_vars vars, char c, int x, int y)
 		}
 		if (c == 'C')
 			mlx_put_image_to_window(vars.mlx, vars.win, vars.img_collect[0], 50 * x, 50 * y);
-		if (c == 'E' && vars.exit == 0 && vars.collect)
+		if (c == 'E' && (vars.collect || vars.exit))
 			mlx_put_image_to_window(vars.mlx, vars.win, vars.img_exit[0], 50 * x, 50 * y);
-		if (c == 'E' && !vars.collect)
+		if (c == 'E' && !vars.exit && !vars.collect)
 			mlx_put_image_to_window(vars.mlx, vars.win, vars.img_exit[5], 50 * x, 50 * y);
 		if (c == 'F')
 			mlx_put_image_to_window(vars.mlx, vars.win, vars.img_enemy, 50 * x, 50 * y);
@@ -428,6 +428,34 @@ int	ft_valid_move(char **map, int collect, int x, int y)
 	return (0);
 }
 
+void	ft_gameover(t_vars *vars)
+{
+	if(vars->gameOver == 1)
+	{
+		mlx_clear_window(vars->mlx, vars->win);
+		ft_fill_window(*vars);
+		mlx_destroy_window(vars->mlx, vars->win);
+		exit (0);
+	}
+}
+
+void	ft_dead(t_vars *vars, char c)
+{
+	int	x;
+	int	y;
+
+	ft_gameover(vars);
+	if (c == 'F')
+	{
+		mlx_destroy_image(vars->mlx, vars->img_player);
+		mlx_clear_window(vars->mlx, vars->win);
+		vars->img_player = mlx_xpm_file_to_image(vars->mlx, "./assests/dead.xpm", &x, &y);
+		vars->gameOver = 1;
+		ft_fill_window(*vars);
+		printf("you lose !!\n");
+	}
+}
+
 void	ft_collect_exit(t_vars *vars, int x, int y, int move)
 {
 	if (move == 1 )
@@ -439,25 +467,25 @@ void	ft_collect_exit(t_vars *vars, int x, int y, int move)
 	if (move == 4)
 		x++;
 	if (vars->map[x][y] == 'C')
-		vars->collect--;
-	if (vars->collect == 0)
-		vars->exit = 1;
-	if (vars->map[x][y] == 'E' || vars->map[x][y] == 'F')
 	{
-		mlx_put_image_to_window(vars->mlx, vars->win, vars->img_floor, x * 50, y * 50);
-		mlx_put_image_to_window(vars->mlx, vars->win, vars->img_dead, x * 50, y * 50);
-		mlx_destroy_window(vars->mlx, vars->win);
+		vars->collect--;
+		if (vars->collect == 0)
+		vars->exit = 1;
+	}
+	if (vars->map[x][y] == 'E')
+	{
 		sleep(1);
+		printf("you won!!\n");
+		mlx_destroy_window(vars->mlx, vars->win);
 		exit(0);
 	}
+	ft_dead(vars, vars->map[x][y]);
 }
 
-void	ft_move_player(t_vars *vars, int x, int y, int move)
+void	ft_player_img(t_vars *vars, int x, int y, int move)
 {
-	printf("%d moves\n",++(vars->cp));
-	vars->map[x][y] = '0';
-	ft_collect_exit(vars, x, y, move);
-	mlx_destroy_image(vars->mlx,vars->img_player);
+	if (vars->gameOver == 1)
+		return ;
 	if (move == 1 )
 	{
 		vars->map[x][++y] = 'P';
@@ -478,6 +506,17 @@ void	ft_move_player(t_vars *vars, int x, int y, int move)
 		vars->map[++x][y] = 'P';
 		vars->img_player = mlx_xpm_file_to_image(vars->mlx, "./assests/playerD.xpm", &x, &y);
 	}
+}
+
+void	ft_move_player(t_vars *vars, int x, int y, int move)
+{
+	ft_collect_exit(vars, x, y, move);
+	if (vars->gameOver == 1)
+		return ;
+	printf("%d moves\n",++(vars->cp));
+	vars->map[x][y] = '0';
+	mlx_destroy_image(vars->mlx,vars->img_player);
+	ft_player_img(vars, x, y, move);
 }
 
 void	ft_movments(t_vars *vars, int keypress, int x, int y)
@@ -515,6 +554,9 @@ void	ft_anim_collect(t_vars *vars, int k)
 	int j;
 
 	i = 0;
+	if (!vars->collect)
+		return ;
+	usleep(80000);
 	while (vars->map[i])
 	{
 		j = 0;
@@ -534,6 +576,7 @@ void	ft_anim_door(t_vars *vars, int k)
 	int j;
 
 	i = 0;
+	usleep(80000);
 	while (vars->map[i])
 	{
 		j = 0;
@@ -559,12 +602,14 @@ int anim(t_vars *vars)
 		if (k == 8)
 			k = 0;
 		if (vars->exit == 1)
+		{
+			if (j < 6)
+				ft_anim_door(vars, j);
+			else
+				vars->exit = 0;
 			j++;
-		if (j >= 6)
-			vars->exit = 0;
-		if (j <= 6 && vars->exit == 1)
-			ft_anim_door(vars, j - 1);
-		usleep(100000);
+		}
+
 		break ;
 	}
 	return (0);
