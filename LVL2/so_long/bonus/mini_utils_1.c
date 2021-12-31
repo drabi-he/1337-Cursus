@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/31 11:30:02 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/31 11:30:50 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/31 13:25:12 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	*get_next_line(int fd)
 {
 	char	buff[8000000];
 	char	c;
-	int	i;
+	int		i;
 
 	i = 0;
 	while (read(fd, &c, 1))

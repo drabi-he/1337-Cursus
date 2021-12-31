@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/31 11:34:17 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/31 11:34:36 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/31 13:24:41 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ void	ft_check_walls(t_vars *vars)
 		while (vars->map[i][j])
 		{
 			if ((vars->map[i][j] != '1' && (i == 0 || i == vars->length - 1))
-				|| ((vars->map[i][0] != '1' || vars->map[i][vars->width -1] != '1')
+				|| ((vars->map[i][0] != '1'
+				|| vars->map[i][vars->width -1] != '1')
 				&& (i != 0 || i != vars->length - 1)))
 			{
 				printf("Walls error !!\n");

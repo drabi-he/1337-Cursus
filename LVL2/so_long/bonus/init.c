@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/31 11:38:49 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/31 12:11:06 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/31 13:29:42 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	ft_vars_init(t_vars *vars)
 			"./assests/enemy.xpm", &cord[0], &cord[1]);
 	ft_collect_img(vars, cord);
 	ft_door_img(vars, cord);
-	vars->gameOver = 0;
+	vars->game_over = 0;
 }
 
 static void	ft_choose_img(t_vars vars, char c, int x, int y)

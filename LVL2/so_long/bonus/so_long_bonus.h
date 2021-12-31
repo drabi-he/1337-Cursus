@@ -6,13 +6,12 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/31 11:28:06 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/31 12:03:10 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/31 13:27:51 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-#ifndef SO_LONG_BONUS_C
-# define SO_LONG_BONUS_C
+#ifndef SO_LONG_BONUS_H
+# define SO_LONG_BONUS_H
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -27,7 +26,7 @@ typedef struct s_vars
 	int		collect;
 	int		exit;
 	int		cp;
-	int		gameOver;
+	int		game_over;
 	void	*mlx;
 	void	*win;
 	void	*img_wall;
