@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 13:52:39 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/22 14:15:22 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/31 14:06:37 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ int	main(int ac, char *av[])
 
 	str = ft_split(ft_strjoin(ac, av, " "), ' ');
 	a = ft_devide_args(str);
+	if (ac == 1)
+		exit(0);
 	while (read(0, buff, 4))
 	{
 		ft_check_cmd(buff);

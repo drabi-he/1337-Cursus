@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 11:47:50 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/29 13:58:42 by hdrabi           ###   ########.fr       */
+/*   Updated: 2021/12/31 13:41:40 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	main(int ac, char *av[])
 	ft_index_stack(a);
 	ft_sort(&a, &b);
 	ft_affiche(a);
-	// ft_affiche(b);
+	ft_affiche(b);
 	free_list(a);
 	return (0);
 }

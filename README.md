@@ -19,3 +19,4 @@
 | 1 | [get next line](./LVL1/get_next_line) | C | 70 hours | 882 | [![hdrabi's 42 get_next_line Score](https://badge42.herokuapp.com/api/project/hdrabi/get_next_line)](./LVL1/get_next_line.pdf) | 1.54 |
 | 1 | [ft_printf](./LVL1/ft_printf) | C | 175 hours | 882 | [![hdrabi's 42 ft_printf Score](https://badge42.herokuapp.com/api/project/hdrabi/ft_printf)](./LVL1/ft_printf.pdf) | 2.02 |
 | 1 | Born2beRoot | Virtual Machine | 40 hours | 577 | [![hdrabi's 42 Born2beRoot Score](https://badge42.herokuapp.com/api/project/hdrabi/Born2beroot)](./LVL1/Born2beRoot.pdf) | 2.25 |
+| 2 | [push_swap](./LVL2/push_swap) | C | 60 hours | 1855 | [![hdrabi's 42 Born2beRoot Score](https://badge42.herokuapp.com/api/project/hdrabi/push_swap)](./LVL2/push_swap.pdf) | 2.97 |
