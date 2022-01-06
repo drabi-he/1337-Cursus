@@ -6,37 +6,46 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/03 10:59:07 by hdrabi            #+#    #+#              #
-#    Updated: 2022/01/06 13:53:42 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/01/06 18:00:55 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCM = mandtory/
+SRCM = srcs/utils_1.c \
+		srcs/utils_2.c \
+		srcs/utils_3.c \
+		srcs/split.c \
+		srcs/parsing.c \
+		pipex.c
 
-SRCB = bonus/
+SRCB = srcs/utils_1.c \
+		srcs/utils_2.c \
+		srcs/utils_3.c \
+		srcs/split.c \
+		srcs/parsing.c \
+		srcs/here_doc.c \
+		pipex_bonus.c
 
 NAME = pipex
 
-#BNAME = pipex
+BNAME = pipex_bonus
 
-#CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
 $(NAME) : $(SRCM) pipex.h
+	touch infile
 	$(CC) $(CFLAGS) $(SRCM) -o $(NAME)
 
 all : $(NAME)
 
 $(BNAME) : $(SRCB) pipex.h
+	touch infile
 	$(CC) $(CFLAGS) $(SRCB) -o $(BNAME)
 
 bonus : $(BNAME)
 
 clean :
-	rm -rf pipex
+	rm -rf pipex pipex_bonus infile outfile .file_tmp
 
 fclean : clean
 
 re : fclean all
-
-
-test :
-	$(CC) $(CFLAGS) pipex_bonus.c -o pipex

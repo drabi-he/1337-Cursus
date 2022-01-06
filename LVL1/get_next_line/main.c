@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 16:31:04 by izouf             #+#    #+#             */
-/*   Updated: 2021/11/25 14:25:20 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/01/06 18:08:40 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include <stdio.h>
 #include <fcntl.h>
 
-int main()
+int	main(void)
 {
-	int fd = open("l", O_RDONLY | O_CREAT);
+	int	fd = open("l", O_RDONLY | O_CREAT);
 	/* int fd1 = open("test1", O_RDONLY | O_CREAT);
 	  int fd2 = open("test2", O_RDONLY | O_CREAT);
 	   int fd3 = open("test3", O_RDONLY | O_CREAT);
