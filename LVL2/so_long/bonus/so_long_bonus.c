@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 11:54:10 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/31 13:26:54 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/01/03 13:10:34 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_gameplay(t_vars *vars)
 int	main(int ac, char *av[])
 {
 	t_vars	vars;
-
+	
 	ft_check_args(ac, av);
 	ft_check_valid_map(&vars, av[1]);
 	ft_gameplay(&vars);
