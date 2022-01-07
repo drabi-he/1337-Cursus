@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/31 11:40:09 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/31 13:30:47 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/01/07 13:35:55 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	ft_valid_move(t_vars *vars, int x, int y)
 	return (0);
 }
 
-static void	ft_gameover(t_vars *vars)
+void	ft_gameover(t_vars *vars)
 {
 	if (vars->game_over == 1)
 	{

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/31 11:28:06 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/31 13:27:51 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/01/07 15:56:33 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,10 @@ void	ft_collect_exit(t_vars *vars, int x, int y, int move);
 void	get_player_pos(char **map, int *x, int *y);
 void	ft_dead(t_vars *vars, char c);
 int		ft_valid_move(t_vars *vars, int x, int y);
+void	ft_gameover(t_vars *vars);
 
 //anim
 int		anim(t_vars *vars);
+void	ft_anim_enemy(t_vars *vars);
 
 #endif

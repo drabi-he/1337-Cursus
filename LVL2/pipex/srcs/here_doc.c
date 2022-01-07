@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/06 17:04:01 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/01/06 17:41:26 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/01/06 19:10:01 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,10 @@ void	ft_exec2(t_all all, char **env)
 		close(all.p[1]);
 		execve(all.head->path, all.head->cmd, env);
 	}
-	all.fork[2] = fork();
-	if (all.fork[2] < 0)
+	all.fork[1] = fork();
+	if (all.fork[1] < 0)
 		ft_error(NULL);
-	if (!all.fork[2])
+	if (!all.fork[1])
 	{
 		dup2(all.p[0], STDIN_FILENO);
 		dup2(all.fd[1], 1);

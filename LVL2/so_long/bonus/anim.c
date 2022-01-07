@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/31 11:54:55 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/31 12:04:54 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/01/07 15:54:58 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,26 @@ static void	ft_anim_door(t_vars *vars, int k)
 	}
 }
 
+static void	ft_ft(t_vars *vars, int *i)
+{
+	if (*i == 10)
+	{
+		ft_anim_enemy(vars);
+		*i = 0;
+	}
+}
+
 int	anim(t_vars *vars)
 {
 	static int	k;
+	static int	i;
 	static int	j;
+	static int	l;
 
-	while (1)
+	if (l == 600)
 	{
-		usleep(80000);
 		ft_anim_collect(vars, k);
+		ft_ft(vars, &i);
 		k++;
 		if (k == 8)
 			k = 0;
@@ -74,7 +85,9 @@ int	anim(t_vars *vars)
 				vars->exit = 0;
 			j++;
 		}
-		break ;
+		i++;
+		l = 0;
 	}
+	l++;
 	return (0);
 }

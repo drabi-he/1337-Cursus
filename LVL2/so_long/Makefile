@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/27 11:27:12 by hdrabi            #+#    #+#              #
-#    Updated: 2021/12/31 11:58:48 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/01/07 15:05:38 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,13 +25,14 @@ SRCB = bonus/mini_utils_1.c \
 		bonus/keypress.c \
 		bonus/movements.c \
 		bonus/anim.c \
+		bonus/player_anim.c \
 		bonus/so_long_bonus.c \
 
 NAME = so_long
 
 BNAME = so_long_bonus
 
-CFLAGS = -Wall -Wextra -Werror -lmlx -framework OpenGL -framework AppKit
+CFLAGS = -lmlx -framework OpenGL -framework AppKit
 
 $(NAME) : $(SRCM)
 	$(CC) $(CFLAGS) $(SRCM) -o $(NAME)
