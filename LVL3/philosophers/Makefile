@@ -5,47 +5,28 @@
 #                                                     +:+ +:+         +:+      #
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/01/03 10:59:07 by hdrabi            #+#    #+#              #
-#    Updated: 2022/01/10 16:03:47 by hdrabi           ###   ########.fr        #
+#    Created: 2022/01/10 10:48:44 by hdrabi            #+#    #+#              #
+#    Updated: 2022/01/10 14:56:41 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCM = srcs/utils_1.c \
-		srcs/utils_2.c \
-		srcs/utils_3.c \
-		srcs/split.c \
-		srcs/parsing.c \
-		pipex.c
+SRCM = philo.c
 
-SRCB = srcs/utils_1.c \
-		srcs/utils_2.c \
-		srcs/utils_3.c \
-		srcs/split.c \
-		srcs/parsing.c \
-		srcs/here_doc.c \
-		pipex_bonus.c
+NAME = philo
 
-NAME = pipex
+#CFLAGS = -Wall -Wextra -Werror
 
-BNAME = pipex_bonus
-
-CFLAGS = -Wall -Wextra -Werror
-
-$(NAME) : $(SRCM) pipex.h
-	touch infile
+$(NAME) : $(SRCM)
 	$(CC) $(CFLAGS) $(SRCM) -o $(NAME)
 
 all : $(NAME)
 
-$(BNAME) : $(SRCB) pipex.h
-	touch infile
-	$(CC) $(CFLAGS) $(SRCB) -o $(BNAME)
-
-bonus : $(BNAME)
-
 clean :
-	rm -rf pipex pipex_bonus infile outfile .file_tmp
+	rm -rf $(NAME)
 
 fclean : clean
 
 re : fclean all
+
+test : all
+	./philo 10 200 200 200 5

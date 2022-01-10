@@ -1,0 +1,10 @@
+2 or more philosophers can only take 1 of 3 actions at a time
+	eating - sleeping - thinking
+each philosopher must use 2 forks at a time
+the actions must be in this order
+	eating -> sleeping -> thinking
+everyone should eat and no one should starve
+the programs stop when someone dies
+
+-------------------------------------------------------------------------------------
+
