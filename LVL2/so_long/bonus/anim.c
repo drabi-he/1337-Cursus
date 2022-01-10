@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/31 11:54:55 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/01/07 15:54:58 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/01/10 18:51:29 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void	ft_anim_door(t_vars *vars, int k)
 
 static void	ft_ft(t_vars *vars, int *i)
 {
-	if (*i == 10)
+	if (*i == 5)
 	{
 		ft_anim_enemy(vars);
 		*i = 0;

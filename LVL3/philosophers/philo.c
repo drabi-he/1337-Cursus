@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 10:50:25 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/01/10 17:37:15 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/01/10 18:27:04 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,9 +134,12 @@ void	ft_parse_args(t_all *all, char **av)
 
 void*	test(t_philo *philo)
 {
-	printf("philo %d\n", philo->_id);
-	sleep(1);
-	printf("------ HAHA %d ------!!\n",philo->_id);
+	pthread_mutex_lock(&philo->fork);
+	pthread_mutex_lock(&philo->next->fork);
+	printf("philo %d using forks %d | %d\n", philo->_id,philo->_id, philo->next->_id);
+	usleep(200000);
+	pthread_mutex_unlock(&philo->fork);
+	pthread_mutex_unlock(&philo->next->fork);
 	return (0);
 }
 
@@ -145,9 +148,28 @@ void	ft_exec(t_all all)
 {
 	int i = 0;
 
-	while (all.head->next != all._first)
+	while(1)
 	{
-		pthread_create(&all.head->philo, NULL, &test, all.head);
+		while (all.head)
+		{
+			if(pthread_create(&all.head->philo, NULL, &test, all.head))
+				printf("Error while creating thread\n");
+			if (all.head->next == all._first)
+				break ;
+			all.head = all.head->next;
+		}
+		sleep(1);
+		all.head = all.head->next;
+		while (all.head)
+		{
+			if(pthread_create(&all.head->philo, NULL, &test, all.head))
+				printf("Error while executing thread\n");
+			if (all.head->next == all._first)
+				break ;
+			all.head = all.head->next;
+		}
+		printf("------------------------------------\n");
+		sleep(1);
 		all.head = all.head->next;
 	}
 }
