@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 11:54:10 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/12/31 11:25:28 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/01/12 13:04:36 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static void	ft_gameplay(t_vars *vars)
 {
 	ft_vars_init(vars);
 	ft_fill_window(*vars);
+	printf("width = %d\n", vars->width);
 	mlx_key_hook(vars->win, ft_key_events, vars);
 	mlx_hook(vars->win, 17, 0, ft_close, NULL);
 	mlx_loop(vars->mlx);
