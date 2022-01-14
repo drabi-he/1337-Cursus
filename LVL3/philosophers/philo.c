@@ -1,4 +1,3 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -7,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 10:50:25 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/01/12 13:30:50 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/01/14 14:14:55 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +24,22 @@ typedef struct s_philo
 	pthread_mutex_t	fork;
 	size_t			last_meal;
 	int				is_full;
-	int				is_dead;
 	struct s_all	*all;
 	struct s_philo	*next;
 }	t_philo;
 
-typedef struct	s_all
+typedef struct s_all
 {
-	int		philo_cp;
-	t_philo	*_first;
-	t_philo	*head;
-	size_t	death_timer;
-	size_t	sleep_timer;
-	size_t	eating_timer;
-	size_t	meal_cp;
-	size_t	ground0;
-	int		all_full;
+	int				philo_cp;
+	t_philo			*_first;
+	t_philo			*head;
+	size_t			death_timer;
+	size_t			sleep_timer;
+	size_t			eating_timer;
+	size_t			meal_cp;
+	int				philo_dead;
+	size_t			ground0;
+	int				all_full;
 }	t_all;
 
 //utils
@@ -59,15 +58,16 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-void	ft_putstr(char *str)
+int	ft_putstr(char *str, int error)
 {
 	if (str)
 		write(1, str, strlen(str));
+	return (error);
 }
 
 size_t	ft_timestamp(void)
 {
-	struct timeval _t;
+	struct timeval	_t;
 
 	gettimeofday(&_t, NULL);
 	return (_t.tv_sec * 1000 + _t.tv_usec / 1000);
@@ -76,6 +76,19 @@ size_t	ft_timestamp(void)
 size_t	ft_time_diff(size_t current, size_t past)
 {
 	return (current - past);
+}
+
+void	ft_print(t_all *all, int _id, char *str)
+{
+	if (!all->philo_dead)
+		printf ("%10zu ms %3d %s\n",
+			ft_time_diff(ft_timestamp(), all->ground0), _id, str);
+}
+
+void	ft_sleep(t_all *all, size_t time)
+{
+	if (!all->philo_dead)
+		usleep(time * 1000);
 }
 
 int	ft_atoi(const char *str)
@@ -114,9 +127,8 @@ t_philo	*ft_new_node(int _id, t_all *all)
 	new->_id = _id;
 	new->last_meal = 0;
 	new->is_full = 0;
-	new->is_dead = 0;
-	if(pthread_mutex_init(&new->fork,NULL))
-		ft_putstr("Error : Failed to initialize mutex\n");
+	if (pthread_mutex_init(&new->fork, NULL))
+		ft_putstr("Error : Failed to initialize mutex\n", 1);
 	new->all = all;
 	new->next = NULL;
 	return (new);
@@ -143,7 +155,7 @@ void	ft_lstadd_back(t_philo **lst, t_philo *new)
 
 void	ft_free_list(t_all *all)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (++i <= all->philo_cp)
@@ -157,7 +169,7 @@ void	ft_free_list(t_all *all)
 //parsing
 int	ft_check_digits(char **av)
 {
-	int i;
+	int	i;
 	int	j;
 
 	i = 0;
@@ -173,7 +185,7 @@ int	ft_check_digits(char **av)
 
 int	ft_parse_args(t_all *all, char **av)
 {
-	int i;
+	int	i;
 
 	if (ft_check_digits(av))
 		return (1);
@@ -195,23 +207,57 @@ int	ft_parse_args(t_all *all, char **av)
 	return (0);
 }
 
-void*	launch(void *philo)
+void	ft_eats(t_all *all, t_philo *philo)
 {
-	t_philo *current;
+		pthread_mutex_lock(&philo->fork);
+		ft_print(all, philo->_id, "has taken a fork");
+		pthread_mutex_lock(&philo->next->fork);
+		ft_print(all, philo->_id, "has taken a fork");
+		ft_print(all, philo->_id, "is eating");
+		philo->last_meal = ft_timestamp();
+		philo->is_full++;
+		ft_sleep(all, all->eating_timer);
+		if (philo->is_full == all->meal_cp)
+			all->all_full++;
+		pthread_mutex_unlock(&philo->fork);
+		pthread_mutex_unlock(&philo->next->fork);
+		ft_print(all, philo->_id, "is sleeping");
+		ft_sleep(all, all->sleep_timer);
+		ft_print(all, philo->_id, "is thinking");
+}
+
+void	*launch(void *philo)
+{
+	t_philo	*current;
 	t_all	*all;
 
 	current = (t_philo *)philo;
 	all = current->all;
-	while (1)
-	{
-		pthread_mutex_lock(&current->fork);
-		pthread_mutex_lock(&current->next->fork);
-		printf("%lums current philo is %d\n", ft_time_diff(ft_timestamp(), all->ground0), current->_id);
-		pthread_mutex_unlock(&current->fork);
-		pthread_mutex_unlock(&current->next->fork);
-		usleep(500000);
-	}
+	if (current->_id % 2)
+		usleep(1000);
+	while (!all->philo_dead)
+		ft_eats(all, current);
 	return (0);
+}
+
+void	ft_dead(t_all *all, t_philo *philo)
+{
+	int i = 0;
+
+	while (philo)
+	{
+		if (ft_time_diff(ft_timestamp(), philo->last_meal) > all->death_timer)
+		{
+			ft_print(all, philo->_id, "died");
+			all->philo_dead = 1;
+			break ;
+		}
+		if (all->all_full == all->philo_cp)
+		{
+			all->philo_dead = 1;
+		}
+		philo = philo->next;
+	}
 }
 
 //exec
@@ -221,43 +267,35 @@ int	ft_exec(t_all *all)
 	{
 		if (pthread_create(&all->head->philo, NULL, &launch, all->head))
 			return (1);
-		usleep(50);
+		all->head->last_meal = ft_timestamp();
 		if (all->head->next == all->_first)
 			break ;
 		all->head = all->head->next;
 	}
-//	all->head = all->head->next;
+	all->head = all->head->next;
+	ft_dead(all, all->head);
 	return (0);
 }
 
 int	main(int ac, char *av[])
 {
-	t_all all;
+	t_all	all;
 
 	if (ac < 5 || ac > 6)
-	{
-		ft_putstr("Error : Wrong Number Of Arguments!!\n");
-		return (1);
-	}
+		return(ft_putstr("Error : Wrong Number Of Arguments!!\n", 1));
 	if (ft_parse_args(&all, av))
-	{
-		ft_putstr("Error : Wrong Arguments Format!!\n");
-		return (1);
-	}
+		return (ft_putstr("Error : Wrong Arguments Format!!\n", 1));
 	if (ft_exec(&all))
-	{
-		ft_putstr("Error : failed to create thread!!\n");
-		return (1);
-	}
-	while (1);
+		return(ft_putstr("Error : failed to create thread!!\n", 1));
+	//while (!all.philo_dead);
 	// t_philo	*tmp;
 	// tmp = all.head;
 	// while (tmp)
 	// {
 	// 	printf("philo %d\n",tmp->_id);
 	// 	tmp = tmp->next;
-		usleep(100000);
+		//usleep(100000);
 	// }
-
 	return (0);
 }
+
