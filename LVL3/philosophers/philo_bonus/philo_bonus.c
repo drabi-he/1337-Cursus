@@ -18,6 +18,7 @@
 #include <pthread.h>
 #include <sys/time.h>
 #include <sys/wait.h>
+# include <fcntl.h>
 #include <semaphore.h>
 
 typedef struct s_philo
@@ -42,6 +43,8 @@ typedef struct s_all
 	int				philo_dead;
 	size_t			ground0;
 	int				all_full;
+	sem_t			*forks;
+	sem_t			*writing;
 }	t_all;
 /******************************************************************************/
 int	ft_isdigit(int c)
@@ -159,7 +162,7 @@ void	ft_free_list(t_all *all)
 	i = 0;
 	while (++i <= all->philo_cp)
 	{
-		pthread_join(all->head->philo, NULL);
+		//pthread_join(all->head->philo, NULL);
 		free(all->head);
 		all->head = all->head->next;
 	}
@@ -195,8 +198,12 @@ int	ft_parse_args(t_all *all, char **av)
 		all->meal_cp = ft_atoi(av[5]);
 	else
 		all->meal_cp = -1;
-	all->ground0 = ft_timestamp();
+	all->philo_dead = 0;
 	all->all_full = 0;
+	sem_unlink("forks");
+	sem_unlink("writing");
+	all->forks = sem_open("forks", O_CREAT , 0644, all->philo_cp);
+	all->writing = sem_open("writing", O_CREAT , 0644, 1);
 	i = 0;
 	all->head = NULL;
 	while (++i <= all->philo_cp)
@@ -205,7 +212,116 @@ int	ft_parse_args(t_all *all, char **av)
 	return (0);
 }
 /******************************************************************************/
+void	*ft_death(void *philo)
+{
+	t_philo *p;
+	t_all 	*all;
 
+	p = (t_philo *)philo;
+	all = p->all;
+	while (1)
+	{
+
+		if(ft_time_diff(ft_timestamp(), p->last_meal) > all->death_timer)
+		{
+			ft_print(all, p->_id, "died");
+			all->philo_dead = 1;
+			sem_wait(all->writing);
+			exit(1);
+		}
+		if (all->philo_dead)
+			break;
+		sleep(1000);
+		if (all->all_full == all->philo_cp)
+		{
+			all->philo_dead = 1;
+			break ;
+		}
+	}
+	return (NULL);
+}
+
+void	ft_eats(t_all *all, t_philo *philo)
+{
+	sem_wait(all->forks);
+	ft_print(all, philo->_id, "has taken a fork");
+	sem_wait(all->forks);
+	ft_print(all, philo->_id, "has taken a fork");
+	ft_print(all, philo->_id, "is eating");
+	philo->last_meal = ft_timestamp();
+	ft_sleep(all, all->eating_timer);
+	philo->is_full++;
+	sem_post(all->forks);
+	sem_post(all->forks);
+	ft_print(all, philo->_id, "is sleeping");
+	ft_sleep(all, all->sleep_timer);
+	ft_print(all, philo->_id, "is thinking");
+}
+
+void	ft_start(t_philo *philo)
+{
+	t_all 		*all;
+	pthread_t	death;
+
+	all = philo->all;
+	philo->last_meal = ft_timestamp();
+	pthread_create(&death, NULL, ft_death, philo);
+	if (philo->_id % 2)
+		usleep(150000);
+	while (!all->philo_dead)
+		ft_eats(all, philo);
+	pthread_join(death, NULL);
+	if (all->philo_dead)
+		exit(1);
+	exit(0);
+}
+
+void ft_exit(t_all *all)
+{
+	int	i;
+	int	ret;
+
+	i = 0;
+	while (i < all->philo_cp)
+	{
+		waitpid(-1, &ret, 0);
+		if (ret != 0)
+		{
+			i = -1;
+			while (all->head)
+			{
+				kill(all->head->philo, 15);
+				if (all->head->next == all->_first)
+					break ;
+				all->head = all->head->next;
+			}
+			break ;
+		}
+		i++;
+	}
+	sem_close(all->forks);
+	sem_close(all->writing);
+	sem_unlink("forks");
+	sem_unlink("writing");
+}
+
+int	ft_exec(t_all *all)
+{
+	all->ground0 = ft_timestamp();
+	while (all->head)
+	{
+		all->head->philo = fork();
+		if (all->head->philo < 0)
+			return (1);
+		if (all->head->philo == 0)
+			ft_start(all->head);
+		usleep(100);
+		if (all->head->next == all->_first)
+			break ;
+		all->head = all->head->next;
+	}
+	ft_exit(all);
+}
 /******************************************************************************/
 int	main(int ac, char *av[])
 {
@@ -215,8 +331,8 @@ int	main(int ac, char *av[])
 		return (ft_putstr("Error : Wrong Number Of Arguments!!\n", 1));
 	if (ft_parse_args(&all, av))
 		return (ft_putstr("Error : Wrong Arguments Format!!\n", 1));
-	// if (ft_exec(&all))
-	// 	return (ft_putstr("Error : failed to create thread!!\n", 1));
-	// ft_free_list(&all);
+	if (ft_exec(&all))
+		return (ft_putstr("Error : failed to create thread!!\n", 1));
+	ft_free_list(&all);
 	return (0);
 }

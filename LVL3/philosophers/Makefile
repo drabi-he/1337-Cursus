@@ -31,7 +31,7 @@ $(NAME) : $(SRCM) philo/philo.h
 
 bonus : $(BNAME)
 
-$(BNAME) : $(SRCB) philo_bonus/philo.h
+$(BNAME) : $(SRCB)
 	$(CC) $(CFLAGS) $(SRCB) -o $(BNAME)
 
 clean :
