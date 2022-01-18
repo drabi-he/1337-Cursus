@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 11:11:20 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/01/08 16:30:06 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/01/18 13:52:53 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	main(int ac, char *av[], char *env[])
 {
 	t_all	all;
 
+	if (!env[0])
+		ft_error("Error : env");
 	if (ac < 5)
 		ft_error("Error : wrong number of arguments");
 	if (!ft_strcmp(av[1], "here_doc"))

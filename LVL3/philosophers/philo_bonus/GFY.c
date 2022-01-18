@@ -1,25 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   philo_bonus.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/14 16:05:38 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/01/18 12:00:33 by hdrabi           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
-#include <signal.h>
-#include <pthread.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <sys/time.h>
-#include <sys/wait.h>
-# include <fcntl.h>
+#include <pthread.h>
 #include <semaphore.h>
+#include <signal.h>
 
 typedef struct s_philo
 {
@@ -33,18 +18,18 @@ typedef struct s_philo
 
 typedef struct s_all
 {
-	int				philo_cp;
-	t_philo			*_first;
-	t_philo			*head;
-	size_t			death_timer;
-	size_t			sleep_timer;
-	size_t			eating_timer;
-	int				meal_cp;
-	int				philo_dead;
-	size_t			ground0;
-	int				all_full;
-	sem_t			*forks;
-	sem_t			*writing;
+	int		philo_cp;
+	t_philo	*_first;
+	t_philo	*head;
+	size_t	death_timer;
+	size_t	sleep_timer;
+	size_t	eating_timer;
+	int		meal_cp;
+	int		philo_dead;
+	size_t	ground0;
+	int		all_full;
+	sem_t	*forks;
+	sem_t	*writing;
 }	t_all;
 /******************************************************************************/
 int	ft_isdigit(int c)
@@ -65,36 +50,24 @@ size_t	ft_strlen(const char *s)
 int	ft_putstr(char *str, int error)
 {
 	if (str)
-		write(1, str, strlen(str));
+		write(1, str, ft_strlen(str));
 	return (error);
 }
 
-size_t	ft_timestamp(void)
+int	ft_check_digits(char **av)
 {
-	struct timeval	_t;
+	int	i;
+	int	j;
 
-	gettimeofday(&_t, NULL);
-	return (_t.tv_sec * 1000 + _t.tv_usec / 1000);
-}
-
-size_t	ft_time_diff(size_t current, size_t past)
-{
-	return (current - past);
-}
-/******************************************************************************/
-void	ft_print(t_all *all, int _id, char *str)
-{
-	sem_wait(all->writing);
-	if (!all->philo_dead)
-		printf ("%10zu ms %3d %s\n",
-			ft_time_diff(ft_timestamp(), all->ground0), _id, str);
-	sem_post(all->writing);
-}
-
-void	ft_sleep(t_all *all, size_t time)
-{
-	if (!all->philo_dead)
-		usleep(time * 1000);
+	i = 0;
+	while (av[++i])
+	{
+		j = -1;
+		while (av[i][++j])
+			if (!ft_isdigit(av[i][j]))
+				return (1);
+	}
+	return (0);
 }
 
 int	ft_atoi(const char *str)
@@ -122,7 +95,15 @@ int	ft_atoi(const char *str)
 	}
 	return (sign * rst);
 }
-
+/******************************************************************************/
+void	ft_sem_init(t_all *all)
+{
+	sem_unlink("forks");
+	sem_unlink("writing");
+	all->forks = sem_open("forks", O_CREAT , 0644, all->philo_cp);
+	all->writing = sem_open("writing", O_CREAT , 0644, 1);
+}
+/******************************************************************************/
 t_philo	*ft_new_node(int _id, t_all *all)
 {
 	t_philo	*new;
@@ -157,6 +138,34 @@ void	ft_lstadd_back(t_philo **lst, t_philo *new)
 	new->next = lst[0];
 }
 /******************************************************************************/
+size_t	ft_timestamp(void)
+{
+	struct timeval	_t;
+
+	gettimeofday(&_t, NULL);
+	return (_t.tv_sec * 1000 + _t.tv_usec / 1000);
+}
+
+size_t	ft_time_diff(size_t current, size_t past)
+{
+	return (current - past);
+}
+
+void	ft_print(t_all *all, int _id, char *str)
+{
+	sem_wait(all->writing);
+	if (!all->philo_dead)
+		printf ("%10zu ms %3d %s\n",
+			ft_time_diff(ft_timestamp(), all->ground0), _id, str);
+	sem_post(all->writing);
+}
+
+void	ft_sleep(t_all *all, size_t time)
+{
+	if (!all->philo_dead)
+		usleep(time * 1000);
+}
+
 void	ft_free_list(t_all *all)
 {
 	int	i;
@@ -168,24 +177,13 @@ void	ft_free_list(t_all *all)
 		free(all->head);
 		all->head = all->head->next;
 	}
+	sem_close(all->forks);
+	sem_close(all->writing);
+	sem_unlink("forks");
+	sem_unlink("writing");
+	exit(0);
 }
-
-int	ft_check_digits(char **av)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (av[++i])
-	{
-		j = -1;
-		while (av[i][++j])
-			if (!ft_isdigit(av[i][j]))
-				return (1);
-	}
-	return (0);
-}
-
+/******************************************************************************/
 int	ft_parse_args(t_all *all, char **av)
 {
 	int	i;
@@ -202,10 +200,7 @@ int	ft_parse_args(t_all *all, char **av)
 		all->meal_cp = -1;
 	all->philo_dead = 0;
 	all->all_full = 0;
-	sem_unlink("forks");
-	sem_unlink("writing");
-	all->forks = sem_open("forks", O_CREAT , 0644, all->philo_cp);
-	all->writing = sem_open("writing", O_CREAT , 0644, 1);
+	ft_sem_init(all);
 	i = 0;
 	all->head = NULL;
 	while (++i <= all->philo_cp)
@@ -214,34 +209,31 @@ int	ft_parse_args(t_all *all, char **av)
 	return (0);
 }
 /******************************************************************************/
-void	*ft_death(void *philo)
+void	*ft_death(void *p)
 {
-	t_philo *p;
-	t_all 	*all;
+	t_philo	*philo;
+	t_all	*all;
 
-	p = (t_philo *)philo;
-	all = p->all;
-	printf("%d | %zu | %zu\n", p->_id, ft_timestamp(), p->last_meal);
+	philo = (t_philo *)p;
+	all = philo->all;
 	while (1)
 	{
-		if(ft_time_diff(ft_timestamp(), p->last_meal) > all->death_timer)
+		if (ft_time_diff(ft_timestamp(),philo->last_meal) > all->death_timer)
 		{
-			ft_print(all, p->_id, "died");
+			ft_print(all, philo->_id, "died");
 			all->philo_dead = 1;
-			sem_wait(all->writing);
-			//ft_free_list(all);
 			exit(1);
 		}
-		// if (all->philo_dead)
-		// 	break;
-		sleep(1000);
-		// if (all->all_full == all->philo_cp)
-		// {
-		// 	all->philo_dead = 1;
-		// 	break ;
-		// }
+		usleep(50);
+		if (philo->is_full == all->meal_cp)
+			all->all_full++;
+		if (all->all_full == all->philo_cp)
+		{
+			all->philo_dead = 1;
+			exit(0) ;
+		}
 	}
-	return (NULL);
+	return ((void *)0);
 }
 
 void	ft_eats(t_all *all, t_philo *philo)
@@ -261,26 +253,18 @@ void	ft_eats(t_all *all, t_philo *philo)
 	ft_print(all, philo->_id, "is thinking");
 }
 
-void	ft_start(t_philo *philo)
+void	ft_start(t_philo *philo, t_all *all)
 {
-	t_all 		*all;
-	pthread_t	death;
-
-	all = philo->all;
+	pthread_t death;
 	philo->last_meal = ft_timestamp();
-	pthread_create(&death, NULL, ft_death, philo);
+	if(pthread_create(&death, NULL, &ft_death, philo))
+		exit(ft_putstr("Error : Failed To Create Thread!!", 1));
 	if (philo->_id % 2)
 		usleep(150000);
 	while (!all->philo_dead)
 		ft_eats(all, philo);
-	pthread_join(death, NULL);
-	if (all->philo_dead)
-	{
-		ft_free_list(all);
-		exit(1);
-	}
-	ft_free_list(all);
-	exit(0);
+		printf("bug\n");
+	pthread_detach(death);
 }
 
 void ft_exit(t_all *all)
@@ -312,36 +296,59 @@ void ft_exit(t_all *all)
 	sem_unlink("writing");
 }
 
-int	ft_exec(t_all *all)
+void	ft_exec(t_all *all)
 {
+	int i;
+
 	all->ground0 = ft_timestamp();
-	while (all->head)
+	i = 0;
+	while (++i <= all->philo_cp)
 	{
 		all->head->philo = fork();
 		if (all->head->philo < 0)
-			return (1);
+			exit(ft_putstr("Error : Forking Failed !!", 1));
 		if (all->head->philo == 0)
-			ft_start(all->head);
-		usleep(100);
-		if (all->head->next == all->_first)
-			break ;
+			ft_start(all->head, all);
+		usleep(50);
 		all->head = all->head->next;
 	}
-	//ft_exit(all);
-	return(0);
+	ft_exit(all);
 }
 /******************************************************************************/
-int	main(int ac, char *av[])
+int main(int ac, char *av[])
 {
-	t_all	all;
+	t_all all;
 
 	if (ac < 5 || ac > 6)
-		return (ft_putstr("Error : Wrong Number Of Arguments!!\n", 1));
+		exit(ft_putstr("Error : Wrong Number Of Arguments!!\n", 1));
 	if (ft_parse_args(&all, av))
-		return (ft_putstr("Error : Wrong Arguments Format!!\n", 1));
-	if (ft_exec(&all))
-		return (ft_putstr("Error : failed to create thread!!\n", 1));
+		exit(ft_putstr("Error : Wrong Arguments Format!!\n", 1));
+	ft_exec(&all);
 	//while (!all.philo_dead);
-	ft_free_list(&all);
+	/**************************************/
+/*	printf("nb  = %d\n", all.philo_cp);
+	printf("death  = %zu\n", all.death_timer);
+	printf("eat  = %zu\n", all.eating_timer);
+	printf("sleep  = %zu\n", all.sleep_timer);
+	printf("cp  = %d\n", all.meal_cp);
+	printf("dead  = %d\n", all.philo_dead);
+	printf("full  = %d\n", all.all_full);
+	t_philo *tmp;
+	tmp = all.head;
+	while (tmp)
+	{
+		printf("**************************************\n");
+		printf("id = %d\n",tmp->_id);
+		printf("meal = %zu\n", tmp->last_meal);
+		printf("full = %d\n", tmp->is_full);
+		if (tmp->next == all._first)
+			break;
+		tmp = tmp->next;
+	}
+	printf("***************** First *********************\n");
+		printf("id = %d\n",all._first->_id);
+		printf("meal = %zu\n", all._first->last_meal);
+		printf("full = %d\n", all._first->is_full);
+*/
 	return (0);
 }
