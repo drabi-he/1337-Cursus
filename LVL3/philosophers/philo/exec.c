@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 15:28:52 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/01/14 17:24:48 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/01/18 17:47:33 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	ft_eats(t_all *all, t_philo *philo)
 	pthread_mutex_lock(&philo->next->fork);
 	ft_print(all, philo->_id, "has taken a fork");
 	ft_print(all, philo->_id, "is eating");
-	ft_sleep(all, all->eating_timer);
 	philo->last_meal = ft_timestamp();
+	ft_sleep(all, all->eating_timer);
 	philo->is_full++;
 	if (philo->is_full == all->meal_cp)
 		all->all_full++;
@@ -39,7 +39,7 @@ void	*launch(void *philo)
 	current = (t_philo *)philo;
 	all = current->all;
 	if (current->_id % 2)
-		usleep(50);
+		usleep(100);
 	while (!all->philo_dead)
 		ft_eats(all, current);
 	return (0);
@@ -59,6 +59,7 @@ void	ft_dead(t_all *all, t_philo *philo)
 		if (all->all_full == all->philo_cp)
 		{
 			all->philo_dead = 1;
+			break;
 		}
 		philo = philo->next;
 	}
