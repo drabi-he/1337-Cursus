@@ -34,12 +34,12 @@ BNAME = so_long_bonus
 
 CFLAGS = -lmlx -framework OpenGL -framework AppKit
 
-$(NAME) : $(SRCM)
+$(NAME) : $(SRCM) mandatory/so_long.h
 	$(CC) $(CFLAGS) $(SRCM) -o $(NAME)
 
 all : $(NAME)
 
-$(BNAME) : $(SRCB)
+$(BNAME) : $(SRCB) bonus/so_long_bonus.h
 	$(CC) $(CFLAGS) $(SRCB) -o $(BNAME)
 
 bonus : $(BNAME)

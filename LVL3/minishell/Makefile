@@ -6,38 +6,25 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/10 10:48:44 by hdrabi            #+#    #+#              #
-#    Updated: 2022/02/07 10:29:01 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/02/07 10:29:25 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCM = philo/utils_1.c \
-		philo/utils_2.c \
-		philo/parsing.c \
-		philo/philo.c \
-		philo/exec.c
+SRCM = minishell.c
 
-SRCB = philo_bonus/philo_bonus.c
+NAME = minishell
 
-NAME = philo_m
-
-BNAME = philo_b
-
-CFLAGS = -Wall -Wextra -Werror
+#CFLAGS = -Wall -Wextra -Werror -lreadline
 
 all : $(NAME)
 
-$(NAME) : $(SRCM) philo/philo.h
-	$(CC) $(CFLAGS) $(SRCM) -o $(NAME)
-
-bonus : $(BNAME)
-
-$(BNAME) : $(SRCB)
-	$(CC) $(CFLAGS) $(SRCB) -o $(BNAME)
+$(NAME) : $(SRCM)
+	$(CC) $(CFLAGS) -lreadline $(SRCM) -o $(NAME)
 
 clean :
 	rm -f $(NAME)
-	rm -f $(BNAME)
 
 fclean : clean
 
 re : fclean all
+
