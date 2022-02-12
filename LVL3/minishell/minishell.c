@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 10:18:14 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/02/11 14:22:46 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/02/12 15:55:18 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 
 #define TABLE "|&<>"
 #define PIPE 0
-#define S_QUOTE 1
-#define D_QUOTE 2
+#define P_OPEN 1
+#define P_CLOSE 2
 #define OR 3
 #define INPUT 4
 #define OUTPUT 5
@@ -72,6 +72,17 @@ typedef struct s_env
 	char *val;
 	struct s_env *next;
 } t_env;
+
+/* ************************************************************************** */
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
 
 int	str_len(const char *s, char c)
 {
@@ -152,6 +163,138 @@ char	**ft_split(char const *s, char c)
 	return (t);
 }
 
+/* ************************************************************************** */
+void	ft_sub_len(char *s, unsigned int start, size_t *len)
+{
+	char	get;
+	int		cp;
+	int		i;
+
+	i = 0;
+	get = '\0';
+	cp = 0;
+	if (ft_strlen(s + start) < *len)
+		*len = ft_strlen(s + start);
+	while (i < *len)
+	{
+		if ((s[start + i] == '\'' || s[start + i] == '\"') && cp % 2 == 0)
+			get = s[start + i];
+		if (s[start + i] == get)
+			cp++;
+		i++;
+	}
+	*len -= cp;
+}
+
+char	*ft_substr2(char *s, unsigned int start, size_t len)
+{
+	size_t	i;
+	size_t	j;
+	char	*p;
+	char	get;
+	int		cp;
+
+	if (!s || start < 0)
+		return (NULL);
+	ft_sub_len(s, start, &len);
+	if (ft_strlen(s) <= start)
+		return (NULL);
+	p = (char *)malloc((len + 1) * sizeof(char));
+	if (!p)
+		return (NULL);
+	i = 0;
+	j = 0;
+	cp = 0;
+	while (j < len)
+	{
+		if ((s[start + i] == '\'' || s[start + i] == '\"') && cp % 2 == 0)
+			get = s[start + i];
+		if (s[start + i] == get)
+		{
+			cp++;
+			i++;
+		}
+		else
+			p[j++] = s[start + i++];
+	}
+	p[j] = 0;
+	return (p);
+}
+
+void	ft_count_words(char *str, int *j)
+{
+	int		i;
+	int		k;
+	char	get;
+
+	i = -1;
+	while (str[++i])
+	{
+		k = 0;
+		while (str[i] && str[i] == ' ')
+			i++;
+		while (str[i] && str[i] != ' ')
+		{
+			if (str[i] == '\'' || str[i] == '\"')
+			{
+				get = str[i++];
+				while (str[i] && str[i] != get)
+					i++;
+			}
+			k++;
+			i++;
+		}
+		if (k)
+			(*j)++;
+	}
+}
+
+void	ft_cpyyy(char *str, char ***t, int j)
+{
+	int		i;
+	int		len;
+	char	get;
+
+	i = -1;
+	while (str[++i])
+	{
+		while (str[i] && str[i] == ' ')
+			i++;
+		len = i;
+		while (str[i] && str[i] != ' ')
+		{
+			if (str[i] == '\'' || str[i] == '\"')
+			{
+				get = str[i++];
+				while (str[i] && str[i] != get)
+					i++;
+			}
+			i++;
+		}
+		t[0][j] = ft_substr2(str, len, i - len);
+		j++;
+	}
+	t[0][j] = 0;
+}
+
+char	**ft_split_echo(char *str)
+{
+	int		i;
+	int		j;
+	int		len;
+	char	get;
+	char	**t;
+
+
+	j = 0;
+	ft_count_words(str, &j);
+	t = malloc((j + 1) * sizeof(char *));
+	if (!t)
+		return (NULL);
+	ft_cpyyy(str, &t, 0);
+	return (t);
+}
+/* ************************************************************************** */
 
 t_env	*ft_new_node_env(char **env)
 {
@@ -341,16 +484,6 @@ void ft_check_tree2(t_tree *root)
 }
 
 /* ************************************************************************** */
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-
 int	ft_get_index(char const *str, char const *set, int cp, int index)
 {
 	size_t	j;
@@ -438,6 +571,11 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 		len = ft_strlen(s + start);
 	if (ft_strlen(s) <= start)
 		return (NULL);
+	if (s[0] == 40)
+	{
+		len -= 2;
+		start++;
+	}
 	p = (char *)malloc((len + 1) * sizeof(char));
 	if (!p)
 		return (NULL);
@@ -456,8 +594,10 @@ int ft_strstr(char *str, char *to_find, int *n)
 	int	i;
 	int	j;
 	char get;
+	int cp;
 
 	i = 0;
+	cp = 0;
 	while (str[i])
 	{
 		if (str[i] == '\'' || str[i] == '\"')
@@ -465,6 +605,19 @@ int ft_strstr(char *str, char *to_find, int *n)
 			get = str[i++];
 			while (str[i] != get)
 				i++;
+		}
+		if (str[i] == 40)
+		{
+			cp++;
+			i++;
+			while (str[i] && cp > 0)
+			{
+				if (str[i] == 41)
+					cp--;
+				if (str[i] == 40)
+					cp++;
+				i++;
+			}
 		}
 		j = 0;
 		while (to_find[j])
@@ -483,7 +636,7 @@ int ft_strstr(char *str, char *to_find, int *n)
 }
 
 /* ************************************************************************** */
-void ft_find_error(char *str)
+int ft_find_error(char *str)
 {
 	int i;
 	char get;
@@ -497,10 +650,7 @@ void ft_find_error(char *str)
 			while (str[i] && str[i] != get)
 				i++;
 			if (!str[i])
-			{
-				printf("1 ERROR!!!\n");
-				break ;
-			}
+				return (1);
 		}
 		if (ft_strchr(TABLE, str[i]) != -1 && str[i + 1] == ' ')
 		{
@@ -508,16 +658,14 @@ void ft_find_error(char *str)
 			while (str[i] && str[i] == ' ')
 				i++;
 			if (ft_strchr(TABLE, str[i]) != -1)
-			{
-				printf("2 ERROR!!!\n");
-				break;
-			}
+				return (1);
 		}
 		i++;
 	}
+	return (0);
 }
 
-void ft_find_error2(char *str)
+int ft_find_error2(char *str)
 {
 	int i;
 	char get;
@@ -534,10 +682,7 @@ void ft_find_error2(char *str)
 			while (str[i] && str[i] != get)
 				i++;
 			if (!str[i])
-			{
-				printf("3 ERROR!!!\n");
-				break ;
-			}
+				return (1);
 		}
 		if (ft_strchr(TABLE, str[i]) != -1)
 		{
@@ -547,25 +692,16 @@ void ft_find_error2(char *str)
 			if (ft_strchr(TABLE, str[i]) != -1)
 			{
 				if (get != str[i])
-				{
-					printf("3 syntax error!!\n");
-					return ;
-				}
+					return (1);
 				if (get == str[i])
 				{
 					cp++;
 					if (cp == 2)
-					{
-						printf("4 syntax error!!\n");
-						return ;
-					}
+						return (1);
 				}
 			}
 			if (get == '&' && cp == 0)
-			{
-				printf("5 syntax error!!\n");
-				return ;
-			}
+				return (1);
 		}
 		else
 		{
@@ -573,8 +709,49 @@ void ft_find_error2(char *str)
 			i++;
 		}
 	}
+	return (0);
 }
 
+int ft_find_error3(char *str)
+{
+	int i;
+	int cp;
+	char get;
+
+	i = 0;
+	cp = 0;
+	while (str[i])
+	{
+		if (str[i] == '\"' || str[i] =='\'')
+		{
+			get = str[i++];
+			while (str[i] && str[i] != get)
+				i++;
+			if (!str[i])
+				return (1);
+		}
+		if (str[i] == 41)
+			return (1);
+		if (str[i] == 40)
+		{
+			cp++;
+			i++;
+			while (str[i] && cp > 0)
+			{
+				if (str[i] == 40)
+					cp++;
+				if (str[i] == 41)
+					cp--;
+				if (cp)
+					i++;
+			}
+		}
+		if (cp !=0)
+			return (1);
+		i++;
+	}
+	return (0);
+}
 /* ************************************************************************** */
 int get_token(char c, int n)
 {
@@ -630,7 +807,7 @@ void	ft_fill_tree (char *str, t_tree **node, t_tree *parent)
 	{
 		node[0] = ft_new_node(C_OPTION, PIPE, parent, NULL);
 		if (i != 0)
-			ft_fill_tree(ft_substr(str, 0, i - 1), &node[0]->left, node[0]);
+			ft_fill_tree(ft_substr(str, 0, i), &node[0]->left, node[0]);
 		ft_fill_tree(ft_substr(str, i + 1, ft_strlen(str)),&node[0]->right, node[0]);
 	}
 	else if (ft_strstr(str, TABLE, &n) != -1)
@@ -640,19 +817,22 @@ void	ft_fill_tree (char *str, t_tree **node, t_tree *parent)
 		if (n == 0)
 		{
 			if (j != 0)
-				ft_fill_tree(ft_substr(str, 0, j - 1), &node[0]->left, node[0]);
+				ft_fill_tree(ft_substr(str, 0, j), &node[0]->left, node[0]);
 			ft_fill_tree(ft_substr(str, j + 1, ft_strlen(str)),&node[0]->right, node[0]);
 		}
 		else
 		{
 			if (j != 0)
-				ft_fill_tree(ft_substr(str, 0, j - 1), &node[0]->left, node[0]);
+				ft_fill_tree(ft_substr(str, 0, j), &node[0]->left, node[0]);
 			ft_fill_tree(ft_substr(str, j + 2, ft_strlen(str)),&node[0]->right, node[0]);
 		}
 	}
 	else
 	{
-		node[0] = ft_new_node(C_CMD, COMMAND, parent, ft_split(str, ' '));
+		if (ft_strtrim(str, " ")[0] == 40)
+			ft_fill_tree(ft_substr(str, 0, ft_strlen(str)),node,NULL);
+		else
+			node[0] = ft_new_node(C_CMD, COMMAND, parent, ft_split_echo(str));
 		return ;
 	}
 }
@@ -682,6 +862,7 @@ int main(int ac, char *av[], char *env[])
 	char *str;
 	t_all all;
 	t_env *lst;
+	char **test;
 
 	if (!env[0])
 	{
@@ -694,9 +875,18 @@ int main(int ac, char *av[], char *env[])
 	{
 		str = readline("\033[0;36m\e[1mMinishell > \e[0m\033[0m");
 		add_history(str);
-		ft_find_error(str);
-		ft_find_error2(str);
+		if (ft_find_error(str) || ft_find_error2(str) || ft_find_error3(str))
+		{
+			printf("syntax error!!\n");
+			free(str);
+			continue ;
+		}
 		ft_create_tree(str, &all);
+		// int i = 0;
+		// test = ft_split_echo(str);
+		// while (test[i])
+		// 	printf("%s\n", test[i++]);
+		free(str);
 	}
 	return (0);
 }
