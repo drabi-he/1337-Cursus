@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 10:18:14 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/02/12 15:55:18 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/02/12 16:34:48 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -801,7 +801,7 @@ void	ft_fill_tree (char *str, t_tree **node, t_tree *parent)
 
 	if (!str)
 		return ;
-	i = ft_strchr(str, '|');
+	i = ft_strchr(ft_strtrim(str, " "), '|');
 	n = 0;
 	if (i != -1)
 	{
@@ -812,7 +812,7 @@ void	ft_fill_tree (char *str, t_tree **node, t_tree *parent)
 	}
 	else if (ft_strstr(str, TABLE, &n) != -1)
 	{
-		j = ft_strstr(str, TABLE, &n);
+		j = ft_strstr(ft_strtrim(str, " "), TABLE, &n);
 		node[0] = ft_new_node(C_OPTION, get_token(str[j], n), parent, NULL);
 		if (n == 0)
 		{
