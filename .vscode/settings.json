@@ -1,12 +1,13 @@
 {
-	"files.associations": {
-		"sstream": "c",
-		"random": "c",
-		"array": "c",
-		"string_view": "c",
-		"initializer_list": "c",
-		"utility": "c",
-		"unistd.h": "c",
-		"wait.h": "c"
-	}
+  "files.associations": {
+    "sstream": "c",
+    "random": "c",
+    "array": "c",
+    "string_view": "c",
+    "initializer_list": "c",
+    "utility": "c",
+    "unistd.h": "c",
+    "wait.h": "c",
+    "readline.h": "c"
+  }
 }

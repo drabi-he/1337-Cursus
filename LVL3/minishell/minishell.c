@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 10:18:14 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/02/10 16:00:27 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/02/11 14:22:46 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ typedef struct s_env
 	struct s_env *next;
 } t_env;
 
-static int	str_len(const char *s, char c)
+int	str_len(const char *s, char c)
 {
 	int	i;
 
@@ -93,7 +93,7 @@ void	free_tab(char **t)
 	free(t);
 }
 
-static int	count_world(const char *s, char c)
+int	count_world(const char *s, char c)
 {
 	int	i;
 	int	j;
@@ -111,7 +111,7 @@ static int	count_world(const char *s, char c)
 	return (j);
 }
 
-static char	*str_cpy(const char *s, int size)
+char	*str_cpy(const char *s, int size)
 {
 	char	*t;
 
@@ -124,7 +124,7 @@ static char	*str_cpy(const char *s, int size)
 	return (t);
 }
 
-char	**ft_split(char *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	char	**t;
 	int		size;
@@ -151,6 +151,7 @@ char	**ft_split(char *s, char c)
 	t[size] = 0;
 	return (t);
 }
+
 
 t_env	*ft_new_node_env(char **env)
 {
@@ -666,7 +667,9 @@ void	ft_create_tree(char *str, t_all *all)
 	ft_check_tree(root);
 	ft_check_tree2(root);
 	ft_print_tree(root, 0, 0);
-	//printf("%d\n", root->token);
+	// int i = 0;
+	// while (root->cmd[i])
+	// 	printf("%s\n", root->cmd[i++]);
 }
 
 /* ************************************************************************** */

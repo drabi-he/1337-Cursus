@@ -1,1 +1,2 @@
 ls < ls > ls || ls && ls >> ls << ls || ls | ls < ls > c | ls && ls >> c << ls
+echo "" '' "''" '""' "hous" 'amm' "'hahaha'" '"khedam"' 3ajebna
