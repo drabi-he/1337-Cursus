@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 10:18:14 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/02/12 16:34:48 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/02/15 11:15:03 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,52 @@ typedef struct s_tree
 
 typedef struct s_all
 {
-	struct s_tree *root;
-
+	struct s_tree 		*root;
+	struct s_garbage	*head;
+	int					is_path;
 } t_all;
+
+typedef struct s_garbage
+{
+	void				*ptr;
+	struct s_garbage	*next;
+}	t_garbage;
+
+t_garbage	*ft_new_7aj(void *ptr)
+{
+	t_garbage *new;
+
+	new = malloc(sizeof(t_garbage));
+	if (!new)
+		return (NULL);
+	new->ptr = ptr;
+	new->next = NULL;
+	return (new);
+}
+
+void	ft_add_l7aj(t_garbage **lst, t_garbage *new)
+{
+	t_garbage *tmp;
+
+	if (!lst[0])
+	{
+		lst[0] = new;
+		return ;
+	}
+	tmp = lst[0];
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+}
+
+void	*ft_malloc(int len, int size, t_garbage **g)
+{
+	void *ptr;
+
+	ptr = malloc(len * size);
+	ft_add_l7aj(g, ft_new_7aj(ptr));
+	return (ptr);
+}
 /* ************************************************************************** */
 
 /*--------------------------env fill-------------------*/
@@ -74,6 +117,12 @@ typedef struct s_env
 } t_env;
 
 /* ************************************************************************** */
+int	ft_isalnum(int c)
+{
+	return ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z')
+		|| (c >= 'A' && c <= 'Z') || c == '_');
+}
+
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;
@@ -82,6 +131,18 @@ size_t	ft_strlen(const char *s)
 	while (s[i])
 		i++;
 	return (i);
+}
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+	{
+		i++;
+	}
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
 int	str_len(const char *s, char c)
@@ -294,8 +355,8 @@ char	**ft_split_echo(char *str)
 	ft_cpyyy(str, &t, 0);
 	return (t);
 }
-/* ************************************************************************** */
 
+/* ************************************************************************** */
 t_env	*ft_new_node_env(char **env)
 {
 	t_env	*new;
@@ -358,7 +419,6 @@ void	ft_affiche(t_env *lst)
 }
 
 /* ************************************************************************** */
-
 void ft_print_tree(t_tree *root, int space, int pos)
 {
 	if (root == NULL)
@@ -635,6 +695,27 @@ int ft_strstr(char *str, char *to_find, int *n)
 	return (-1);
 }
 
+char    *ft_strjoin(char const *s1, char const *s2)
+{
+    char    *p;
+    int        i;
+    int        j;
+
+    i = 0;
+    j = 0;
+    if (!s1 || !s2)
+        return (NULL);
+    p = malloc((ft_strlen(s1) + ft_strlen(s2)) + 1 * sizeof(char));
+    if (!p)
+        return (0);
+    while (s1[j])
+        p[i++] = s1[j++];
+    j = 0;
+    while (s2[j])
+        p[i++] = s2[j++];
+    p[i] = 0;
+    return (p);
+}
 /* ************************************************************************** */
 int ft_find_error(char *str)
 {
@@ -752,6 +833,7 @@ int ft_find_error3(char *str)
 	}
 	return (0);
 }
+
 /* ************************************************************************** */
 int get_token(char c, int n)
 {
@@ -846,14 +928,99 @@ void	ft_create_tree(char *str, t_all *all)
 
 	ft_check_tree(root);
 	ft_check_tree2(root);
-	ft_print_tree(root, 0, 0);
+	all->root = root;
+	//ft_print_tree(root, 0, 0);
 	// int i = 0;
 	// while (root->cmd[i])
 	// 	printf("%s\n", root->cmd[i++]);
 }
 
-/* ************************************************************************** */
+/* ***************************** BUILT-IN ************************************ */
+void    ft_env(t_env *lst)
+{
+    if (!lst)
+        return ;
+    while (lst)
+    {
+        printf("%s=%s\n", lst->name, lst->val);
+        lst = lst->next;
+    }
+}
 
+void ft_cd(char *s)
+{
+    if (!s)
+        return ;
+    if (s[0] != '/' && s[0] != '.')
+        ft_strjoin("./", s);
+    if (!access(s, F_OK))
+        chdir(s);
+    else
+        printf("%s: not found\n", s);
+}
+
+void ft_echo(int index, char **s)
+{
+    int i;
+
+	i = 0;
+	if (!ft_strcmp(s[++index], "-n"))
+	{
+		i++;
+	}
+	while (s[++index])
+		printf("%s", s[index]);
+	if (i)
+		printf("\n");
+}
+
+void	ft_pwd()
+{
+	char path[2000];
+
+	getcwd(path, 2000);
+	printf("%s\n", path);
+}
+
+void	ft_unset(t_env **lst, char *str)
+{
+	char	*tmp;
+	int		i;
+	t_env	*tmp_env;
+	t_env	*tmp_env2;
+
+	tmp = ft_substr2(str, 0, ft_strlen(str));
+	i = 0;
+	while (tmp[i])
+	{
+		if(!ft_isalnum(str[i]))
+		{
+			printf("unset `%s' : not a valid identifier\n", tmp);
+			return ;
+		}
+		i++;
+	}
+	tmp_env = lst[0];
+	while (tmp_env)
+	{
+		if (tmp_env->next && !ft_strcmp(tmp_env->next->name, tmp))
+		{
+			tmp_env2 = tmp_env->next;
+			tmp_env->next = tmp_env2->next;
+			free(tmp_env2->name);
+			free(tmp_env2->val);
+			free(tmp_env2);
+			return ;
+		}
+		tmp_env = tmp_env->next;
+	}
+}
+
+void	ft_exit()
+{
+	printf("exit\n");
+	exit(0);
+}
 /* ************************************************************************** */
 
 /* ************************************************************************** */
@@ -869,8 +1036,9 @@ int main(int ac, char *av[], char *env[])
 		printf("env -i dirha lmok machi lina \n");
 		exit(0);
 	}
+	lst = NULL;
 	fill_list(env, &lst);
-	//cuhft_affiche(lst);
+	//ft_affiche(lst);
 	while (1)
 	{
 		str = readline("\033[0;36m\e[1mMinishell > \e[0m\033[0m");
@@ -883,9 +1051,8 @@ int main(int ac, char *av[], char *env[])
 		}
 		ft_create_tree(str, &all);
 		// int i = 0;
-		// test = ft_split_echo(str);
-		// while (test[i])
-		// 	printf("%s\n", test[i++]);
+		// while (all.root->cmd[i])
+		// 	printf("%s\n", all.root->cmd[i++]);
 		free(str);
 	}
 	return (0);

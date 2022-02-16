@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 12:00:21 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/01/19 12:18:30 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/02/14 18:34:41 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,7 +280,6 @@ void	ft_start(t_philo *philo, t_all *all)
 		usleep(150000);
 	while (!all->philo_dead)
 		ft_eats(all, philo);
-//		printf("bug\n");
 	pthread_detach(death);
 }
 
@@ -305,7 +304,7 @@ void ft_exit(t_all *all)
 			}
 			break ;
 		}
-		i++;
+		i++;		
 	}
 	sem_close(all->forks);
 	sem_close(all->writing);

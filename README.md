@@ -11,8 +11,9 @@
 
 ### COMMON CORE
 (***! to see the subjects click on the status***)
-
 (***! some projects can't be uploaded due to there size***)
+(***! some projects only has 100 as score***)
+
 | CIRCLE  | NAME | FIELD | EXPECTED DURATION | EXP | STATUS | LVL |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | 0 | [libft](./LVL0/libft) | C | 70 hours | 462 | [![hdrabi's 42 Libft Score](https://badge42.herokuapp.com/api/project/hdrabi/Libft)](./LVL0/libft.pdf) | 1.05 |
