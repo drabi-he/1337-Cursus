@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/10 10:48:44 by hdrabi            #+#    #+#              #
-#    Updated: 2022/02/07 10:29:01 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/02/21 11:29:19 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,11 @@ SRCM = philo/utils_1.c \
 		philo/philo.c \
 		philo/exec.c
 
-SRCB = philo_bonus/philo_bonus.c
+SRCB = philo_bonus/utils1.c \
+		philo_bonus/utils2.c \
+		philo_bonus/parsing.c \
+		philo_bonus/exec.c \
+		philo_bonus/philo_bonus.c
 
 NAME = philo_m
 
@@ -31,7 +35,7 @@ $(NAME) : $(SRCM) philo/philo.h
 
 bonus : $(BNAME)
 
-$(BNAME) : $(SRCB)
+$(BNAME) : $(SRCB) philo_bonus/philo_bonus.h
 	$(CC) $(CFLAGS) $(SRCB) -o $(BNAME)
 
 clean :

@@ -5,12 +5,32 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/14 15:21:53 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/02/21 10:37:03 by hdrabi           ###   ########.fr       */
+/*   Created: 2022/02/21 11:24:12 by hdrabi            #+#    #+#             */
+/*   Updated: 2022/02/21 11:30:53 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
+
+size_t	ft_time_diff(size_t current, size_t past)
+{
+	return (current - past);
+}
+
+void	ft_print(t_all *all, int _id, char *str)
+{
+	sem_wait(all->writing);
+	if (!all->philo_dead)
+		printf ("%10zu ms %3d %s\n",
+			ft_time_diff(ft_timestamp(), all->ground0), _id, str);
+	sem_post(all->writing);
+}
+
+void	ft_sleep(t_all *all, size_t time)
+{
+	if (!all->philo_dead)
+		usleep(time * 1000);
+}
 
 void	ft_free_list(t_all *all)
 {
@@ -19,29 +39,15 @@ void	ft_free_list(t_all *all)
 	i = 0;
 	while (++i <= all->philo_cp)
 	{
-		pthread_detach(all->head->philo);
-		pthread_mutex_destroy(&all->head->fork);
+		kill(all->head->philo, 15);
 		free(all->head);
 		all->head = all->head->next;
 	}
-	pthread_mutex_destroy(&all->writing);
-	return ;
-}
-
-int	ft_check_digits(char **av)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (av[++i])
-	{
-		j = -1;
-		while (av[i][++j])
-			if (!ft_isdigit(av[i][j]))
-				return (1);
-	}
-	return (0);
+	sem_close(all->forks);
+	sem_close(all->writing);
+	sem_unlink("forks");
+	sem_unlink("writing");
+	exit(0);
 }
 
 int	ft_parse_args(t_all *all, char **av)
@@ -58,15 +64,13 @@ int	ft_parse_args(t_all *all, char **av)
 		all->meal_cp = ft_atoi(av[5]);
 	else
 		all->meal_cp = -1;
-	if (all->philo_cp < 1)
-		return (1);
-	all->ground0 = ft_timestamp();
+	all->philo_dead = 0;
 	all->all_full = 0;
+	ft_sem_init(all);
 	i = 0;
 	all->head = NULL;
 	while (++i <= all->philo_cp)
 		ft_lstadd_back(&all->head, ft_new_node(i, all));
-	pthread_mutex_init(&all->writing, NULL);
 	all->_first = all->head;
 	return (0);
 }

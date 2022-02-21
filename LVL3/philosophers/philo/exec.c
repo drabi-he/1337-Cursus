@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 15:28:52 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/01/18 17:47:33 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/02/21 10:28:53 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ void	ft_dead(t_all *all, t_philo *philo)
 		{
 			ft_print(all, philo->_id, "died");
 			all->philo_dead = 1;
-			break ;
+			return ;
 		}
 		if (all->all_full == all->philo_cp)
 		{
 			all->philo_dead = 1;
-			break;
+			return ;
 		}
 		philo = philo->next;
 	}
