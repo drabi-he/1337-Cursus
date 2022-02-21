@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:16:53 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/02/21 11:33:56 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/02/21 11:48:35 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,15 @@ typedef struct s_all
 }	t_all;
 
 //utils
-int	ft_isdigit(int c);
+int		ft_isdigit(int c);
 size_t	ft_strlen(const char *s);
-int	ft_putstr(char *str, int error);
-int	ft_check_digits(char **av);
-int	ft_atoi(const char *str);
+int		ft_putstr(char *str, int error);
+int		ft_check_digits(char **av);
+int		ft_atoi(const char *str);
 void	ft_sem_init(t_all *all);
 t_philo	*ft_new_node(int _id, t_all *all);
 void	ft_lstadd_back(t_philo **lst, t_philo *new);
 size_t	ft_timestamp(void);
-
 
 //parsing
 size_t	ft_time_diff(size_t current, size_t past);
@@ -73,7 +72,7 @@ int		ft_parse_args(t_all *all, char **av);
 void	*ft_death(void *p);
 void	ft_eats(t_all *all, t_philo *philo);
 void	ft_start(t_philo *philo, t_all *all);
-void 	ft_exit(t_all *all);
+void	ft_exit(t_all *all);
 void	ft_exec(t_all *all);
 
 #endif

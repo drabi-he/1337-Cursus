@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:32:35 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/02/21 11:33:25 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/02/21 11:48:20 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	ft_sem_init(t_all *all)
 {
 	sem_unlink("forks");
 	sem_unlink("writing");
-	all->forks = sem_open("forks", O_CREAT , 0644, all->philo_cp);
-	all->writing = sem_open("writing", O_CREAT , 0644, 1);
+	all->forks = sem_open("forks", O_CREAT, 0644, all->philo_cp);
+	all->writing = sem_open("writing", O_CREAT, 0644, 1);
 }
 
 t_philo	*ft_new_node(int _id, t_all *all)
@@ -61,4 +61,3 @@ size_t	ft_timestamp(void)
 	gettimeofday(&_t, NULL);
 	return (_t.tv_sec * 1000 + _t.tv_usec / 1000);
 }
-

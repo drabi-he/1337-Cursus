@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 11:24:12 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/02/21 11:30:53 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/02/21 11:52:33 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,9 @@ void	ft_free_list(t_all *all)
 	i = 0;
 	while (++i <= all->philo_cp)
 	{
-		kill(all->head->philo, 15);
 		free(all->head);
 		all->head = all->head->next;
 	}
-	sem_close(all->forks);
-	sem_close(all->writing);
-	sem_unlink("forks");
-	sem_unlink("writing");
-	exit(0);
 }
 
 int	ft_parse_args(t_all *all, char **av)
