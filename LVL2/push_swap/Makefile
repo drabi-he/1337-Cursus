@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/11 14:59:58 by hdrabi            #+#    #+#              #
-#    Updated: 2022/01/18 15:06:07 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/02/28 10:43:26 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ SRCB = mandatory/ft_strjoin.c \
 NAME = push_swap
 BNAME = checker
 
-#CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
 $(NAME) : ${SRCM} mandatory/push_swap.h
 	$(CC) $(CFLAGS) ${SRCM} -o ${NAME}

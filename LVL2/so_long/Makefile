@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/27 11:27:12 by hdrabi            #+#    #+#              #
-#    Updated: 2022/01/07 15:05:38 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/02/28 10:43:17 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ NAME = so_long
 
 BNAME = so_long_bonus
 
-CFLAGS = -lmlx -framework OpenGL -framework AppKit
+CFLAGS = -Wall -Wextra -Werror -lmlx -framework OpenGL -framework AppKit
 
 $(NAME) : $(SRCM) mandatory/so_long.h
 	$(CC) $(CFLAGS) $(SRCM) -o $(NAME)
