@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:18:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/01 13:55:28 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/04 14:03:14 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,26 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_tree
+{
+	char	type;
+	char	token;
+	int		is_builtin;
+	char	**cmd;
+	char	*path;
+	int		fd;
+	struct s_tree	*parent;
+	struct s_tree	*left;
+	struct s_tree	*right;
+}	t_tree;
+
 typedef struct s_all
 {
 	t_garbage	*g_head;
 	t_env		*env_head;
+	t_tree		*root;
 }	t_all;
+
 /* **************************** GARBAGE FUNCTIONS **************************** */
 t_garbage	*ft_new_garbage(void **addr)
 {
@@ -101,6 +116,7 @@ void	ft_free_garbage(t_garbage *garbage)
 		garbage = garbage->next;
 	}
 }
+
 /* **************************** ENV FUNCTIONS **************************** */
 t_env	*ft_new_env(char *key, char *value)
 {
@@ -155,6 +171,7 @@ void	ft_free_env(t_env *env)
 		env = env->next;
 	}
 }
+
 /* **************************** UTILS FUNCTIONS **************************** */
 size_t	ft_strlen(const char *s)
 {
@@ -164,6 +181,123 @@ size_t	ft_strlen(const char *s)
 	while (s[i])
 		i++;
 	return (i);
+}
+
+int get_token(char c, int n)
+{
+	if (n == 0)
+	{
+		if (c == '<')
+			return (INPUT);
+		if (c == '>')
+			return (OUTPUT);
+	}
+	else
+	{
+		if (c == '<')
+			return (H_DOC);
+		if (c == '>')
+			return (A_OUTPUT);
+	}
+	return (-1);
+}
+
+int	ft_skip_quote(char *str, int *i)
+{
+	char get;
+
+	if (str[*i] == '\"' || str[*i] =='\'')
+	{
+		get = str[(*i)++];
+		while (str[*i] && str[*i] != get)
+			(*i)++;
+		if (!str[*i])
+		{
+			printf("1 - MiniShell: syntax error unclosed quote near `%c'\n", str[*i]);
+			return (-1);
+		}
+	}
+	return (0);
+}
+
+void	ft_skip_par(char *str, int *i)
+{
+	int cp;
+
+	cp = 0;
+	if (str[*i] == 40)
+	{
+		cp++;
+		(*i)++;
+		while (str[*i] && cp > 0)
+		{
+			if (str[*i] == 41)
+				cp--;
+			if (str[*i] == 40)
+				cp++;
+			(*i)++;
+		}
+	}
+}
+
+int	ft_skip_quote_rev(char *str, int *i)
+{
+	char get;
+
+	if (str[*i] == '\"' || str[*i] =='\'')
+	{
+		get = str[(*i)--];
+		while (str[*i] && str[*i] != get)
+			(*i)--;
+		if (!str[*i])
+		{
+			printf("2 - MiniShell: syntax error unclosed quote near `%c'\n", str[*i]);
+			return (-1);
+		}
+	}
+	return (0);
+}
+
+void	ft_skip_par_rev(char *str, int *i)
+{
+	int cp;
+
+	cp = 0;
+	if (str[*i] == 41)
+	{
+		cp++;
+		(*i)--;
+		while (str[*i] && cp > 0)
+		{
+			if (str[*i] == 40)
+				cp--;
+			if (str[*i] == 41)
+				cp++;
+			(*i)--;
+		}
+	}
+}
+
+void ft_print_tree(t_tree *root, int space, int pos)
+{
+	if (root == NULL)
+        return;
+
+    // Increase distance between levels
+    space += COUNT;
+
+    // Process right child first
+    ft_print_tree(root->right, space, pos + 1);
+
+    // Print current node after space
+    // count
+    printf("\n");
+    for (int i = COUNT; i < space; i++)
+        printf(" ");
+    printf("p %d | t %d | %c | %s | %d \n", pos, root->token, root->type, root->cmd? root->cmd[0] : "null", root->fd);
+
+    // Process left child
+    ft_print_tree(root->left, space, pos +1);
 }
 
 void	**ft_malloc(int alloc, t_garbage **lst)
@@ -201,6 +335,395 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 	return (p);
 }
 
+int	ft_get_index(char const *str, char const *set, int cp, int index)
+{
+	size_t	j;
+
+	j = 0;
+	while (str[index] && set[j])
+	{
+		if (str[index] == set[j])
+		{
+			j = 0;
+			index += cp;
+		}
+		else
+			j++;
+		if (!index)
+			break ;
+	}
+	return (index);
+}
+
+char	*ft_strtrim(char *s1, char *set, t_garbage *head)
+{
+	char	*rst;
+	int		i;
+	int		len;
+	int		j;
+
+	if (!s1)
+		return (NULL);
+	i = ft_get_index(s1, set, 1, 0);
+	len = ft_get_index(s1, set, -1, ft_strlen(s1) - 1);
+	if (!len)
+	{
+		rst = (char *)ft_malloc(sizeof(char), &head);
+		rst[0] = 0;
+		return (rst);
+	}
+	rst = (char *)ft_malloc((len - i + 2) * sizeof(char), &head);
+	if (!rst)
+		return (NULL);
+	j = 0;
+	while (i <= len)
+		rst[j++] = s1[i++];
+	rst[j] = 0;
+	return (rst);
+}
+
+void	ft_recalculate_len(char **str, unsigned int *start, size_t *len, t_garbage *head)
+{
+	int cp;
+	int i;
+
+	i = 0;
+	cp = 0;
+	str[0] = ft_strtrim(str[0], " ", head);
+	(*len)--;
+	while (str[0][*len] == ' ')
+		(*len)--;
+	if (str[0][*len] == 41)
+	{
+		
+		(*len) -= 2;
+		(*start)++;
+	}
+	(*len)++;
+}
+
+char	*ft_substr_malloc(char *s, unsigned int start, size_t len, t_garbage *head)
+{
+	size_t	i;
+	char	*p;
+
+	ft_recalculate_len(&s, &start, &len, head);
+	if (!s || start < 0)
+		return (NULL);
+	if (ft_strlen(s + start) < len)
+		len = ft_strlen(s + start);
+	if (ft_strlen(s) <= start)
+		return (NULL);
+	p = (char *)ft_malloc((len + 1) * sizeof(char), &head);
+	if (!p)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		p[i] = s[start + i];
+		i++;
+	}
+	p[i] = 0;
+	return (p);
+}
+
+int	ft_strchr(char *s, int c)
+{
+	int	i;
+	char get;
+
+	i = 0;
+	while (s[i])
+	{
+		if (ft_skip_quote(s, &i) == -1)
+			return (-1);
+		ft_skip_par(s, &i);
+		if (s[i] == (char)c)
+		{
+			if (s[i + 1] == (char)c)
+			{
+				i += 2;
+				continue ;
+			}
+			return (i);
+		}
+		i++;
+	}
+	return (-1);
+}
+
+int	ft_strrchr(char *s, int c)
+{
+	int	i;
+
+	i = ft_strlen(s) - 1;
+	while (i >= 0)
+	{
+		if (ft_skip_quote_rev(s, &i) == -1)
+			return (-1);
+		ft_skip_par_rev(s, &i);
+		if (s[i] == (char)c && s[i - 1] == (char)c)
+			return (i - 1);
+		i--;
+	}
+	return (-1);
+}
+
+int	ft_strchr_v2_0(char *str)
+{
+	int i;
+	int j;
+	int cp;
+
+	i = ft_strrchr(str, '|');
+	j = ft_strrchr(str, '&');
+	if (i == -1 && j == -1)
+		return (-1);
+	if (i < j)
+		return (j);
+	else
+		return (i);
+}
+
+int ft_strstr(char *str, char *to_find, int *n)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (str[i])
+	{
+		ft_skip_quote(str, &i);
+		ft_skip_par(str, &i);
+		j = 0;
+		while (to_find[j])
+		{
+			if (to_find[j] == str[i])
+			{
+				if (to_find[j] == str[i + 1])
+					*n = 1;
+				return (i);
+			}
+			j++;
+		}
+		i++;
+	}
+	return (-1);
+}
+
+/* **************************** SPLIT ECHO **************************** */
+void	ft_sub_len(char *s, unsigned int start, size_t *len)
+{
+	char	get;
+	int		cp;
+	int		i;
+
+	i = 0;
+	get = '\0';
+	cp = 0;
+	if (ft_strlen(s + start) < *len)
+		*len = ft_strlen(s + start);
+	while (i < *len)
+	{
+		if ((s[start + i] == '\'' || s[start + i] == '\"') && cp % 2 == 0)
+			get = s[start + i];
+		if (s[start + i] == get)
+			cp++;
+		i++;
+	}
+	*len -= cp;
+}
+
+char	*ft_substr2(char *s, unsigned int start, size_t len, t_garbage *head)
+{
+	size_t	i;
+	size_t	j;
+	char	*p;
+	char	get;
+	int		cp;
+
+	if (!s || start < 0)
+		return (NULL);
+	ft_sub_len(s, start, &len);
+	if (ft_strlen(s) <= start)
+		return (NULL);
+	p = (char *)ft_malloc((len + 1) * sizeof(char), &head);
+	if (!p)
+		return (NULL);
+	i = 0;
+	j = 0;
+	cp = 0;
+	while (j < len)
+	{
+		if ((s[start + i] == '\'' || s[start + i] == '\"') && cp % 2 == 0)
+			get = s[start + i];
+		if (s[start + i] == get)
+		{
+			cp++;
+			i++;
+		}
+		else
+			p[j++] = s[start + i++];
+	}
+	p[j] = 0;
+	return (p);
+}
+
+void	ft_count_words(char *str, int *j)
+{
+	int		i;
+	int		k;
+	char	get;
+
+	i = -1;
+	while (str[++i])
+	{
+		k = 0;
+		while (str[i] && str[i] == ' ')
+			i++;
+		while (str[i] && str[i] != ' ')
+		{
+			if (str[i] == '\'' || str[i] == '\"')
+			{
+				get = str[i++];
+				while (str[i] && str[i] != get)
+					i++;
+			}
+			k++;
+			i++;
+		}
+		if (k)
+			(*j)++;
+	}
+}
+
+void	ft_cpyyy(char *str, char ***t, int j, t_garbage *head)
+{
+	int		i;
+	int		len;
+	char	get;
+
+	i = -1;
+	while (str[++i])
+	{
+		while (str[i] && str[i] == ' ')
+			i++;
+		len = i;
+		while (str[i] && str[i] != ' ')
+		{
+			if (str[i] == '\'' || str[i] == '\"')
+			{
+				get = str[i++];
+				while (str[i] && str[i] != get)
+					i++;
+			}
+			i++;
+		}
+		t[0][j] = ft_substr2(str, len, i - len, head);
+		j++;
+	}
+	t[0][j] = 0;
+}
+
+char	**ft_split_echo(char *str, t_garbage *head)
+{
+	int		i;
+	int		j;
+	int		len;
+	char	get;
+	char	**t;
+
+
+	j = 0;
+	ft_count_words(str, &j);
+	t = (char **)ft_malloc((j + 1) * sizeof(char *), &head);
+	if (!t)
+		return (NULL);
+	ft_cpyyy(str, &t, 0, head);
+	return (t);
+}
+
+/* **************************** TREE FUNCTIONS **************************** */
+t_tree	*ft_new_node(char type, int token, t_garbage *head, char **cmd)
+{
+	t_tree	*new;
+
+	new = (t_tree *)ft_malloc(sizeof(t_tree), &head);
+	if (!new)
+		return (NULL);
+	new->type = type;
+	new->token = token;
+	new->cmd = cmd;
+	new->fd = -2;
+	new->is_builtin = -1;
+	new->path = NULL;
+	new->parent = NULL;
+	new->left = NULL;
+	new->right = NULL;
+	return (new);
+}
+
+void	ft_fill_tree(t_all *all, t_tree **node, char *str, t_tree *parent)
+{
+	int i;
+	int n;
+
+	if (!str)
+		return ;
+	str = ft_strtrim(str, " ", all->g_head);
+	i = ft_strchr_v2_0(str);
+	n = 0;
+	if (i != -1)
+	{
+		if (str[i] == '|')
+			node[0] = ft_new_node(C_OPTION, OR, all->g_head, NULL);
+		if (str[i] == '&')
+			node[0] = ft_new_node(C_OPTION, AND, all->g_head, NULL);
+		if (i != 0)
+			ft_fill_tree(all, &node[0]->left, ft_substr_malloc(str, 0, i, all->g_head), node[0]);
+		ft_fill_tree(all, &node[0]->right, ft_substr_malloc(str, i + 2, ft_strlen(str), all->g_head), node[0]);
+	}
+	else
+	{
+		i = ft_strchr(str, '|');
+		if (i != -1)
+		{
+			node[0] = ft_new_node(C_OPTION, PIPE, all->g_head, NULL);
+			if (i != 0)
+				ft_fill_tree(all, &node[0]->left, ft_substr_malloc(str, 0, i, all->g_head), node[0]);
+			ft_fill_tree(all, &node[0]->right, ft_substr_malloc(str, i + 1, ft_strlen(str), all->g_head), node[0]);
+		}
+		else
+		{
+			i = ft_strstr(str, TABLE, &n);
+			if (i != -1)
+			{
+				node[0] = ft_new_node(C_OPTION, get_token(str[i], n), all->g_head, NULL);
+				if (n == 0)
+				{
+					if (i != 0)
+						ft_fill_tree(all, &node[0]->left, ft_substr_malloc(str, 0, i, all->g_head), node[0]);
+					ft_fill_tree(all, &node[0]->right, ft_substr_malloc(str, i + 1, ft_strlen(str), all->g_head), node[0]);
+				}
+				else
+				{
+					if (i != 0)
+						ft_fill_tree(all, &node[0]->left, ft_substr_malloc(str, 0, i, all->g_head), node[0]);
+					ft_fill_tree(all, &node[0]->right, ft_substr_malloc(str, i + 2, ft_strlen(str), all->g_head), node[0]);
+				}
+			}
+			else
+			{
+				if (str[0] == 40)
+					ft_fill_tree(all, node, ft_substr_malloc(str, 0, ft_strlen(str), all->g_head), NULL);
+				else
+					node[0] = ft_new_node(C_CMD, COMMAND, all->g_head, ft_split_echo(str, all->g_head));
+			}
+		}
+	}
+	node[0]->parent = parent;
+}
+
 /* **************************** INIT FUNCTIONS **************************** */
 void	ft_env_init(t_env **env, char *e[])
 {
@@ -222,6 +745,16 @@ void	ft_env_init(t_env **env, char *e[])
 	}
 }
 
+void	ft_tree_init(char *str, t_all *all)
+{
+	t_tree	*root;
+
+	root = NULL;
+	ft_fill_tree(all, &root, str, NULL);
+	all->root = root;
+	ft_print_tree(root, 0, 0);
+}
+
 /* **************************** BUILT-INS **************************** */
 void    ft_env(t_env *lst)
 {
@@ -235,10 +768,147 @@ void    ft_env(t_env *lst)
 }
 
 /* **************************** ERRORS CHECK **************************** */
+int	ft_check_options(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (ft_skip_quote(str, &i) == -1)
+			return (1);
+		if (ft_strchr(TABLE, str[i]) != -1 && str[i + 1] == ' ')
+		{
+			i++;
+			while (str[i] && str[i] == ' ')
+				i++;
+			if (ft_strchr(TABLE, str[i]) != -1)
+			{
+				printf ("2 - MiniShell: syntax error near unexpected token `%c'\n", str[i]);
+				return (1);
+			}
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	ft_valid_options_mini(char c, char get, int *cp)
+{
+	if (ft_strchr(TABLE, c) != -1)
+	{
+		if (get != c)
+		{
+			printf ("3 - MiniShell: syntax error near unexpected token `%c'\n", c);
+			return (1);
+		}
+		if (get == c)
+		{
+			(*cp)++;
+			if (*cp == 2)
+			{
+				printf ("3 - MiniShell: syntax error near unexpected token `%c'\n", c);
+				return (1);
+			}
+		}
+	}
+	if (get == '&' && *cp == 0)
+	{
+		printf ("4 - MiniShell: syntax error near unexpected token `&'\n");
+		return (1);
+	}
+	return (0);
+}
+
+int	ft_valid_options(char *str)
+{
+	int		i;
+	int		cp;
+	char	get;
+
+	i = 0;
+	cp = 0;
+	while (str[i])
+	{
+		if (ft_skip_quote(str, &i) == -1)
+			return (1);
+		if (ft_strchr(TABLE, str[i]) != -1)
+		{
+			get = str[i++];
+			if (ft_valid_options_mini(str[i], get, &cp))
+				return (1);
+		}
+		else
+		{
+			cp = 0;
+			i++;
+		}
+	}
+	return (0);
+}
+
+void	ft_valid_parenthesis_mini(char *str, int *i, int *cp)
+{
+	while (str[*i] && *cp > 0)
+	{
+		if (str[*i] == 40)
+			(*cp)++;
+		if (str[*i] == 41)
+			(*cp)--;
+		if (*cp)
+			(*i)++;
+	}
+}
+
+int	ft_valid_parenthesis(char *str)
+{
+	int	i;
+	int	cp;
+
+	i = 0;
+	cp = 0;
+	while (str[i])
+	{
+		if (ft_skip_quote(str, &i) == -1)
+			return (1);
+		if (str[i] == 41)
+		{
+			printf ("5 - MiniShell: syntax error near unexpected token `%c'\n", str[i]);
+			return (1);
+		}
+		if (str[i] == 40)
+		{
+			cp++;
+			i++;
+			ft_valid_parenthesis_mini(str, &i, &cp);
+		}
+		if (cp !=0)
+		{
+			printf ("6 - MiniShell: syntax error near unexpected token `%c'\n", str[i]);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
 
 int	ft_check_syntax(char *str)
 {
-
+	if(ft_check_options(str))
+	{
+		free(str);
+		return (1);
+	}
+	if(ft_valid_options(str))
+	{
+		free(str);
+		return (1);
+	}
+	if(ft_valid_parenthesis(str))
+	{
+		free(str);
+		return (1);
+	}
 	return (0);
 }
 /* **************************** main **************************** */
@@ -254,7 +924,10 @@ int main(int ac, char *av[], char *env[])
 		add_history(str);
 		if(ft_check_syntax(str))
 			continue ;
+		all.g_head = NULL;
+		ft_tree_init(str, &all);
 		free(str);
+		ft_free_garbage(all.g_head);
 	}
 	return (0);
 }

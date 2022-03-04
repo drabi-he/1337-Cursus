@@ -1,3 +1,4 @@
-ls < ls > ls || ls && ls >> ls << ls || ls | ls < ls > c | ls && ls >> c << ls
+< file cmd | cmd > file && cmd | cmd << file || (cmd && cmd) | cmd || cmd && cmd | cmd
+(cmd || cmd) && (cmd || cmd) && cmd
 echo "" '' "''" '""' "hous" 'amm' "'hahaha'" '"khedam"' 3ajebna
 ls && (cat || greo || (ls && pwd) && env)&& (ls || pwd)

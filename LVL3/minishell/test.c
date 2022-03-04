@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 10:18:14 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/01 11:06:01 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/03 15:15:11 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -539,6 +539,8 @@ void ft_check_tree2(t_tree *root)
 		if (root->token == 11)
 			root->fd = open(root->cmd[0], O_WRONLY | O_CREAT , 0644);
 	}
+	if (root->cmd)
+		printf ("----- %s -------\n", root->cmd[0]);
 	ft_check_tree2(root->right);
     ft_check_tree2(root->left);
 }
@@ -751,7 +753,6 @@ int ft_find_error2(char *str)
 	int i;
 	char get;
 	int cp;
-	int nb;
 
 	i = 0;
 	cp = 0;
@@ -850,10 +851,6 @@ int get_token(char c, int n)
 			return (H_DOC);
 		if (c == '>')
 			return (A_OUTPUT);
-		if (c == '|')
-			return (OR);
-		if (c == '&')
-			return (AND);
 	}
 	return (-1);
 }
@@ -874,6 +871,7 @@ t_tree	*ft_new_node(char t, int tok, t_tree *parent, char **cmd)
 	new->right = NULL;
 	return (new);
 }
+
 
 void	ft_fill_tree (char *str, t_tree **node, t_tree *parent)
 {
@@ -928,6 +926,7 @@ void	ft_create_tree(char *str, t_all *all)
 	ft_fill_tree(str, &root, NULL);
 
 	ft_check_tree(root);
+	//printf("%s\n", root->cmd);
 	ft_check_tree2(root);
 	all->root = root;
 	ft_print_tree(root, 0, 0);
