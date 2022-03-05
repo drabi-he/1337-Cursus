@@ -23,5 +23,5 @@
 | 2 | [push_swap](./LVL2/push_swap) | C | 60 hours | 1855 | [![hdrabi's 42 push_swap Score](https://badge42.herokuapp.com/api/project/hdrabi/push_swap)](./LVL2/push_swap.pdf) | 2.97 |
 | 2 | [so_long](./LVL2/so_long) | C | 60 hours | 1000 | [![hdrabi's 42 so_long Score](https://badge42.herokuapp.com/api/project/hdrabi/so_long)](./LVL2/so_long.pdf) | 3.20 |
 | 2 | [pipex](./LVL2/pipex) | C | 50 hours | 1142 | [![hdrabi's 42 pipex Score](https://badge42.herokuapp.com/api/project/hdrabi/pipex)](./LVL2/pipex.pdf) | 3.44 |
-| 3 | [philosophers](./LVL3/philosophers) | C | 70 hours | 3360 | [![hdrabi's 42 philo Score](https://badge42.herokuapp.com/api/project/hdrabi/Philosophers)](./LVL2/philosophers.pdf) | - |
-| 3 | [minishell](./LVL3/minishell) | C | 210 hours | 2814 | [![hdrabi's 42 minishell Score](https://badge42.herokuapp.com/api/project/hdrabi/minishell)](./LVL2/minishell.pdf) | - |
+| 3 | [philosophers](./LVL3/philosophers) | C | 70 hours | 3360 | [![hdrabi's 42 philo Score](https://badge42.herokuapp.com/api/project/hdrabi/Philosophers)](./LVL3/philosophers.pdf) | - |
+| 3 | [minishell](./LVL3/minishell) | C | 210 hours | 2814 | [![hdrabi's 42 minishell Score](https://badge42.herokuapp.com/api/project/hdrabi/minishell)](./LVL3/minishell.pdf) | - |

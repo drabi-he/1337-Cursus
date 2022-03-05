@@ -2,3 +2,8 @@
 (cmd || cmd) && (cmd || cmd) && cmd
 echo "" '' "''" '""' "hous" 'amm' "'hahaha'" '"khedam"' 3ajebna
 ls && (cat || greo || (ls && pwd) && env)&& (ls || pwd)
+**************************************************************************************************
++print prompt:
++readline:
++parse:
++execute:

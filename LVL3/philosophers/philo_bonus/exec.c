@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 10:38:33 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/02/22 11:30:12 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/05 15:05:27 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	*ft_death(void *p)
 			all->philo_dead = 1;
 			exit(1);
 		}
-		usleep(50);
 		if (philo->is_full == all->meal_cp)
 			all->all_full++;
 		if (all->all_full == all->philo_cp)
@@ -36,6 +35,7 @@ void	*ft_death(void *p)
 			all->philo_dead = 1;
 			exit(0);
 		}
+		usleep(100);
 	}
 	return ((void *)0);
 }
@@ -65,7 +65,7 @@ void	ft_start(t_philo *philo, t_all *all)
 	if (pthread_create(&death, NULL, &ft_death, philo))
 		exit(ft_putstr("Error : Failed To Create Thread!!", 1));
 	if (philo->_id % 2)
-		usleep(150000);
+		usleep(50);
 	while (!all->philo_dead)
 		ft_eats(all, philo);
 	pthread_detach(death);

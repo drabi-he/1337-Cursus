@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 15:28:52 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/02/21 10:28:53 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/05 15:03:22 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	ft_dead(t_all *all, t_philo *philo)
 	while (philo)
 	{
 		if (ft_time_diff(ft_timestamp(), philo->last_meal) \
-			> all->death_timer + 5)
+			> all->death_timer)
 		{
 			ft_print(all, philo->_id, "died");
 			all->philo_dead = 1;
@@ -61,6 +61,7 @@ void	ft_dead(t_all *all, t_philo *philo)
 			all->philo_dead = 1;
 			return ;
 		}
+		usleep(1000);
 		philo = philo->next;
 	}
 }
