@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:18:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/05 13:21:40 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/07 12:51:58 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ size_t	ft_strlen(char *s)
 int	ft_isalnum(int c)
 {
 	return ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z')
-		|| (c >= 'A' && c <= 'Z'));
+		|| (c >= 'A' && c <= 'Z') || c == '_');
 }
 
 int	ft_strcmp(char *s1, char *s2)
@@ -313,6 +313,7 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 		i++;
 	}
 	p[i] = 0;
+	//printf("bug 4= %%%s%%\n", p);
 	return (p);
 }
 
@@ -509,8 +510,12 @@ char    *ft_strjoin(char *s1, char *s2)
 
     i = 0;
     j = 0;
-    if (!s1 || !s2)
+    if (!s1 && !s2)
         return (NULL);
+	if (!s1)
+		return (s2);
+	if (!s2)
+		return (s1);
     p = malloc((ft_strlen(s1) + ft_strlen(s2)) + 1 * sizeof(char));
     if (!p)
         return (0);
@@ -522,6 +527,7 @@ char    *ft_strjoin(char *s1, char *s2)
     p[i] = 0;
     return (p);
 }
+
 /* **************************** ENV FUNCTIONS **************************** */
 t_env	*ft_new_env(char *key, char *value)
 {
@@ -593,6 +599,20 @@ void	ft_edit_env(t_env *env, char *key, char *new_val)
 		tmp = tmp->next;
 	}
 	ft_add_env(&env, ft_new_env(ft_strdup(key),ft_strdup(new_val)));
+}
+
+char *ft_get_env(t_env *head, char *search)
+{
+	t_env	*tmp;
+
+	tmp = head;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->key, search))
+			return (tmp->value);
+		tmp = tmp->next;
+	}
+	return (NULL);
 }
 
 /* **************************** SPLIT ECHO **************************** */
@@ -842,6 +862,8 @@ void	ft_close_fd(t_tree *root)
 	close(root->fd);
 	ft_close_fd(root->right);
 	ft_close_fd(root->left);
+	if(!access(".tmp", F_OK))
+		unlink(".tmp");
 }
 
 void	ft_tokening2(t_tree *node)
@@ -858,7 +880,7 @@ void	ft_tokening2(t_tree *node)
 			node->right->type = C_FILE;
 			node->right->token = OUTFIL;
 		}
-		if (node->token == DELIMITER)
+		if (node->token == H_DOC)
 		{
 			node->right->type = C_FILE;
 			node->right->token = DELIMITER;
@@ -916,6 +938,8 @@ int	ft_check_tree2(t_tree *root)
 			root->fd = open(root->cmd[0], O_WRONLY | O_CREAT , 0644);
 		if (root->token == A_OUTFIL)
 			root->fd = open(root->cmd[0], O_WRONLY | O_CREAT | O_APPEND , 0644);
+		if (root->token == DELIMITER)
+			root->fd = open(".tmp", O_WRONLY | O_CREAT , 0644);
 	}
 	if (root->fd == -1)
 		return (1);
@@ -1198,6 +1222,80 @@ int	ft_check_syntax(char *str)
 	return (0);
 }
 
+void	ft_export(char *str, t_env *head)
+{
+	int		i;
+	char	*str1;
+	char	*str2;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (!ft_isalnum(str[i]))
+		{
+			if (i == 0 || str[i] != '=')
+			{
+				printf("9 - MiniShell: export: `%s': not a valid identifier\n", str + i);
+				return ;
+			}
+			if (str[i] == '=')
+			{
+				str1 =ft_substr(str, 0, i);
+				str2 =ft_substr(str, i + 1, ft_strlen(str));
+				ft_edit_env(head, str1, str2);
+				free(str1);
+				free(str2);
+				return ;
+			}
+		}
+	}
+}
+
+/* **************************** HER_DOC **************************** */
+char	*ft_parse_dollar(t_env *head, char *str)
+{
+	int		i;
+	int		j;
+	char	*rst;
+
+	i = 0;
+	j = 0;
+	rst = NULL;
+	while (str[i])
+	{
+		if (str[i] == '$' && ft_isalnum(str[i + 1]))
+		{
+			rst = ft_strjoin(rst, ft_substr(str, j, i - j));
+			i++;
+			j = i;
+			while (str[i] && ft_isalnum(str[i]))
+				i++;
+			rst = ft_strjoin(rst, ft_get_env(head, ft_substr(str, j, i - j)));
+			j = i;
+		}
+		i++;
+	}
+	rst = ft_strjoin(rst, ft_substr(str, j, i - j));
+	free(str);
+	return (rst);
+}
+
+void	ft_heredoc(t_env *head, char *limiter, int fd)
+{
+	char *hdoc;
+
+	while (1)
+	{
+		if (!ft_strcmp(limiter, hdoc))
+			break;
+		hdoc = readline("\033[0;31mheredoc>\033[0m ");
+		hdoc = ft_parse_dollar(head, hdoc);
+		write (fd, hdoc, ft_strlen(hdoc));
+		write (fd, "\n", 1);
+		free(hdoc);
+	}
+}
+
 /* **************************** main **************************** */
 int main(int ac, char *av[], char *env[])
 {
@@ -1214,6 +1312,15 @@ int main(int ac, char *av[], char *env[])
 		all.g_head = NULL;
 		ft_tree_init(str, &all);
 		free(str);
+		// int i = 0;
+		// while (all.root->cmd && all.root->cmd[i])
+		// {
+		// 	printf("%s\n",all.root->cmd[i]);
+		// 	i++;
+		// }
+		// ft_export(all.root->cmd[1], all.env_head);
+		// ft_env(all.env_head);
+		//ft_heredoc(all.env_head, all.root->right->cmd[0],all.root->right->fd);
 		ft_close_fd(all.root);
 		ft_free_garbage(all.g_head);
 	}
