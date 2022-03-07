@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:18:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/07 12:51:58 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/07 16:04:36 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,11 @@ int	ft_isalnum(int c)
 		|| (c >= 'A' && c <= 'Z') || c == '_');
 }
 
+int	ft_isalpha(int c)
+{
+	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_');
+}
+
 int	ft_strcmp(char *s1, char *s2)
 {
 	int	i;
@@ -151,6 +156,8 @@ char	*ft_strdup(char *s1)
 	char	*copy;
 	int		i;
 
+	if (!s1)
+		return (NULL);
 	copy = malloc(sizeof(char) * (ft_strlen(s1) + 1));
 	if (!copy)
 		return (NULL);
@@ -292,6 +299,26 @@ void	**ft_malloc(int alloc, t_garbage **lst)
 	return (ptr);
 }
 
+char	*ft_strdup_malloc(char *s1, t_garbage *head)
+{
+	char	*copy;
+	int		i;
+
+	if (!s1)
+		return (NULL);
+	copy = (char *)ft_malloc(sizeof(char) * (ft_strlen(s1) + 1), &head);
+	if (!copy)
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		copy[i] = s1[i];
+		i++;
+	}
+	copy[i] = '\0';
+	return (copy);
+}
+
 char	*ft_substr(char *s, unsigned int start, size_t len)
 {
 	size_t	i;
@@ -313,7 +340,6 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 		i++;
 	}
 	p[i] = 0;
-	//printf("bug 4= %%%s%%\n", p);
 	return (p);
 }
 
@@ -348,7 +374,7 @@ char	*ft_strtrim(char *s1, char *set, t_garbage *head)
 		return (NULL);
 	i = ft_get_index(s1, set, 1, 0);
 	len = ft_get_index(s1, set, -1, ft_strlen(s1) - 1);
-	if (!len)
+	if (!len && ft_strlen(s1) != 1)
 	{
 		rst = (char *)ft_malloc(sizeof(char), &head);
 		rst[0] = 0;
@@ -747,6 +773,86 @@ char	**ft_split_echo(char *str, t_garbage *head)
 	return (t);
 }
 
+/* **************************** STANDAR SPLIT **************************** */
+int	str_len(const char *s, char c)
+{
+	int	i;
+
+	i = 0;
+	while (*s && (*s++ != c))
+		i++;
+	return (i);
+}
+
+void	free_tab(char **t)
+{
+	int	i;
+
+	i = 0;
+	while (t[i])
+		free(t[i++]);
+	free(t);
+}
+
+int	count_world(const char *s, char c)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	while (*s)
+	{
+		while (*s && *s == c)
+			s++;
+		i = str_len(s, c);
+		s += i;
+		if (i)
+			j++;
+	}
+	return (j);
+}
+
+char	*str_cpy(const char *s, int size)
+{
+	char	*t;
+
+	t = malloc((size + 1) * sizeof(char));
+	if (!t)
+		return (0);
+	t[size] = 0;
+	while (size--)
+		t[size] = s[size];
+	return (t);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	char	**t;
+	int		size;
+	int		n;
+	int		i;
+
+	if (!s)
+		return (NULL);
+	size = count_world(s, c);
+	t = malloc ((size + 1) * sizeof(char *));
+	if (!t)
+		return (0);
+	i = -1;
+	while (++i < size)
+	{
+		while (*s && *s == c)
+			s++;
+		n = str_len(s, c);
+		t[i] = str_cpy(s, n);
+		if (!(t[i]))
+			return (free_tab(t), NULL);
+		s += n;
+	}
+	t[size] = 0;
+	return (t);
+}
+
 /* **************************** TREE FUNCTIONS **************************** */
 t_tree	*ft_new_node(char type, int token, t_garbage *head, char **cmd)
 {
@@ -811,6 +917,7 @@ void	ft_fill_tree(t_all *all, t_tree **node, char *str, t_tree *parent)
 				}
 				else
 				{
+					printf("i = %d\n", i + 2);
 					if (i != 0)
 						ft_fill_tree(all, &node[0]->left, ft_substr_malloc(str, 0, i, all->g_head), node[0]);
 					ft_fill_tree(all, &node[0]->right, ft_substr_malloc(str, i + 2, ft_strlen(str), all->g_head), node[0]);
@@ -948,6 +1055,78 @@ int	ft_check_tree2(t_tree *root)
 	return (0);
 }
 
+int	ft_is_builtin(t_tree *node, char *str)
+{
+	if (!ft_strcmp("echo", str) || !ft_strcmp("pwd", str) || !ft_strcmp("cd", str)\
+		|| !ft_strcmp("unset", str) || !ft_strcmp("export", str) || !ft_strcmp("env", str)\
+		|| !ft_strcmp("exit", str))
+	{
+		node->is_builtin = 1;
+		return (1);
+	}
+	else
+	{
+		node->is_builtin = 0;
+		return (0);
+	}
+}
+
+int	ft_get_path(t_tree *node, char **path, t_garbage *head)
+{
+	int		i;
+	char *test1;
+	char *test2;
+
+	if (!path)
+		return (1);
+	i = ft_strchr(node->cmd[0], '/');
+	if (i != -1)
+	{
+		if (access(node->cmd[0], F_OK))
+			return (1);
+		else
+			node->path = ft_strdup_malloc(node->cmd[0], head);
+		return (0);
+	}
+	else
+	{
+		i = 0;
+		if(ft_is_builtin(node, node->cmd[0]))
+			return (0);
+		while (path[i])
+		{
+			test1 = ft_strjoin(path[i], "/");
+			test2 = ft_strjoin(test1, node->cmd[0]);
+			free(test1);
+			if (!access(test2, F_OK))
+			{
+				node->path = ft_strdup_malloc(test2, head);
+				free(test2);
+				return (0);
+			}
+			i++;
+		}
+	}
+	return (1);
+}
+
+int	ft_check_tree3(t_tree *root, char **path, t_garbage *head)
+{
+	if (!root)
+		return (0);
+	if (root->token == COMMAND)
+	{
+		if(ft_get_path(root, path, head))
+		{
+			printf("11 - MiniShell: %s: No such file or directory\n", root->cmd[0]);
+			return (1);
+		}
+	}
+	ft_check_tree3(root->right, path, head);
+	ft_check_tree3(root->left, path, head);
+	return (0);
+}
+
 /* **************************** INIT FUNCTIONS **************************** */
 void	ft_env_init(t_env **env, char *e[])
 {
@@ -972,12 +1151,16 @@ void	ft_env_init(t_env **env, char *e[])
 void	ft_tree_init(char *str, t_all *all)
 {
 	t_tree	*root;
+	char	**paths;
 
 	root = NULL;
 	ft_fill_tree(all, &root, str, NULL);
 	if(ft_check_tree(root))
 		printf("7 - MiniShell: syntax error\n");
 	ft_check_tree2(root);
+	paths = ft_split(ft_get_env(all->env_head, "PATH"), ':');
+	ft_check_tree3(root, paths, all->g_head);
+	free_tab(paths);
 	all->root = root;
 	ft_print_tree(root, 0, 0);
 }
@@ -985,13 +1168,14 @@ void	ft_tree_init(char *str, t_all *all)
 /* **************************** BUILT-INS **************************** */
 void    ft_env(t_env *lst)
 {
-    if (!lst)
-        return ;
-    while (lst)
-    {
-        printf("%s=%s\n", lst->key, lst->value);
-        lst = lst->next;
-    }
+	if (!lst)
+		return ;
+	while (lst)
+	{
+		if (lst->value)
+			printf("%s=%s\n", lst->key, lst->value);
+		lst = lst->next;
+	}
 }
 
 void	ft_pwd()
@@ -1069,6 +1253,65 @@ void	ft_unset(t_env **lst, char *str, t_garbage *head)
 		}
 		tmp_env = tmp_env->next;
 	}
+}
+
+void	ft_affiche_export(t_env *head)
+{
+	if (!head)
+		return ;
+	while (head)
+	{
+		printf("declare -x ");
+		printf("%s", head->key);
+		if (head->value)
+			printf("=\"%s\"", head->value);
+		printf("\n");
+		head = head->next;
+	}
+}
+
+void	ft_export(char *str, t_env *head)
+{
+	int		i;
+	int		cp;
+	char	*str1;
+	char	*str2;
+
+	if (!str)
+	{
+		ft_affiche_export(head);
+		return ;
+	}
+	i = -1;
+	cp = 0;
+	while (str[++i])
+	{
+		if (ft_isalpha(str[i]))
+			cp++;
+		if (str[i] > '0' && str[i] < '9' && !cp)
+		{
+			printf("9 - MiniShell: export: `%s': not a valid identifier\n", str + i);
+			return ;
+		}
+		if (!ft_isalnum(str[i]))
+		{
+			if (i == 0 || str[i] != '=')
+			{
+				printf("10 - MiniShell: export: `%s': not a valid identifier\n", str + i);
+				return ;
+			}
+			if (str[i] == '=')
+			{
+				str1 =ft_substr(str, 0, i);
+				str2 =ft_substr(str, i + 1, ft_strlen(str));
+				ft_edit_env(head, str1, str2);
+				free(str1);
+				free(str2);
+				return ;
+			}
+		}
+	}
+	ft_edit_env(head, str, NULL);
 }
 
 void	ft_exit()
@@ -1220,35 +1463,6 @@ int	ft_check_syntax(char *str)
 		return (1);
 	}
 	return (0);
-}
-
-void	ft_export(char *str, t_env *head)
-{
-	int		i;
-	char	*str1;
-	char	*str2;
-
-	i = -1;
-	while (str[++i])
-	{
-		if (!ft_isalnum(str[i]))
-		{
-			if (i == 0 || str[i] != '=')
-			{
-				printf("9 - MiniShell: export: `%s': not a valid identifier\n", str + i);
-				return ;
-			}
-			if (str[i] == '=')
-			{
-				str1 =ft_substr(str, 0, i);
-				str2 =ft_substr(str, i + 1, ft_strlen(str));
-				ft_edit_env(head, str1, str2);
-				free(str1);
-				free(str2);
-				return ;
-			}
-		}
-	}
 }
 
 /* **************************** HER_DOC **************************** */
