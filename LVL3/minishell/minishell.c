@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:18:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/07 16:04:36 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/08 12:56:36 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,9 @@ typedef struct s_all
 	t_garbage	*g_head;
 	t_env		*env_head;
 	t_tree		*root;
+	int			status;
+	int			p[2];
+	int			last_fd;
 }	t_all;
 
 
@@ -1127,6 +1130,40 @@ int	ft_check_tree3(t_tree *root, char **path, t_garbage *head)
 	return (0);
 }
 
+void	ft_exec(t_all *all, t_tree *root)
+{
+	pid_t	pid;
+
+	if (!root)
+		return ;
+	pipe(all->p);
+	pid = fork();
+	if (pid < 0)
+	{
+		printf("11 - failed to fork\n");
+		return ;
+	}
+	if (pid == 0)
+	{
+		if (root->token == COMMAND && root->is_builtin != 1)
+		{
+			dup2(all->last_fd, 0);
+			if (root->parent && root->parent->right && root->parent->right != root)
+				dup2(all->p[1], 1);
+			close(all->p[0]);
+			all->status = execve(root->path,root->cmd, NULL);
+		}
+		else if (root->token == PIPE)
+		{
+			ft_exec(all, root->left);
+			ft_exec(all, root->right);
+		}
+	}
+	waitpid(pid, &all->status, WUNTRACED);
+	close(all->p[1]);
+	all->last_fd = all->p[0];
+}
+
 /* **************************** INIT FUNCTIONS **************************** */
 void	ft_env_init(t_env **env, char *e[])
 {
@@ -1162,7 +1199,9 @@ void	ft_tree_init(char *str, t_all *all)
 	ft_check_tree3(root, paths, all->g_head);
 	free_tab(paths);
 	all->root = root;
-	ft_print_tree(root, 0, 0);
+	all->last_fd = 0;
+	//ft_print_tree(root, 0, 0);
+	ft_exec(all, all->root);
 }
 
 /* **************************** BUILT-INS **************************** */
@@ -1521,7 +1560,7 @@ int main(int ac, char *av[], char *env[])
 	{
 		str = readline("\033[0;36m\e[1mMiniShell > \e[0m\033[0m");
 		add_history(str);
-		if(ft_check_syntax(str))
+		if(ft_check_syntax(str) || !ft_strcmp(str, "\0"))
 			continue ;
 		all.g_head = NULL;
 		ft_tree_init(str, &all);
