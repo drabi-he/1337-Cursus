@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:18:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/08 12:56:36 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/09 11:41:44 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1130,6 +1130,32 @@ int	ft_check_tree3(t_tree *root, char **path, t_garbage *head)
 	return (0);
 }
 
+
+// void	ft_exec_cmd1(t_all *all, t_tree *root, int i)
+// {
+
+// 	dup2(all->last_fd, 0);
+// 	if (root->parent && root->parent->right && root->parent->right != root)
+// 		dup2(all->p[1], 1);
+// 	close(all->p[0]);
+// 	execve(root->path,root->cmd, NULL);
+// }
+
+// void	ft_exec_cmd1(t_all *all, t_tree *root, int i)
+// {
+// 	execve(root->path,root->cmd, NULL);
+// }
+
+// void	ft_exec_pipe(t_all *all, t_tree *root)
+// {
+
+// }
+
+// void	ft_exec_and(t_all *all, t_tree *root)
+// {
+
+// }
+
 void	ft_exec(t_all *all, t_tree *root)
 {
 	pid_t	pid;
@@ -1151,17 +1177,31 @@ void	ft_exec(t_all *all, t_tree *root)
 			if (root->parent && root->parent->right && root->parent->right != root)
 				dup2(all->p[1], 1);
 			close(all->p[0]);
-			all->status = execve(root->path,root->cmd, NULL);
+			execve(root->path,root->cmd, NULL);
 		}
 		else if (root->token == PIPE)
 		{
 			ft_exec(all, root->left);
 			ft_exec(all, root->right);
+			wait(NULL);
 		}
+		else if (root->token == AND)
+		{
+			ft_exec(all, root->left);
+			wait(NULL);
+			if (all->status != 0)
+				ft_exec(all, root->right);
+		}
+			execve(NULL, NULL, NULL);
 	}
-	waitpid(pid, &all->status, WUNTRACED);
-	close(all->p[1]);
-	all->last_fd = all->p[0];
+	// else
+	// {
+		close(all->p[1]);
+		close(all->p[0]);
+		all->last_fd = all->p[0];
+
+	// }
+
 }
 
 /* **************************** INIT FUNCTIONS **************************** */
@@ -1202,6 +1242,7 @@ void	ft_tree_init(char *str, t_all *all)
 	all->last_fd = 0;
 	//ft_print_tree(root, 0, 0);
 	ft_exec(all, all->root);
+	while(waitpid(-1, &all->status, WUNTRACED) > 0);
 }
 
 /* **************************** BUILT-INS **************************** */
