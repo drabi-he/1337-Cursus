@@ -3,3 +3,8 @@
 echo "" '' "''" '""' "hous" 'amm' "'hahaha'" '"khedam"' 3ajebna
 ls && (cat || greo || (ls && pwd) && env)&& (ls || pwd)
 
+****************************************************************************
+cat | cat | ls
+parsing $ in split echo
+parsing *
+no more substr for redirection
