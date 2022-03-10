@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:18:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/09 18:25:50 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/10 15:36:54 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ typedef struct s_all
 	int			p[2];
 	int			last_fd;
 }	t_all;
-
 
 /* **************************** GARBAGE FUNCTIONS **************************** */
 t_garbage	*ft_new_garbage(void **addr)
@@ -302,14 +301,14 @@ void	**ft_malloc(int alloc, t_garbage **lst)
 	return (ptr);
 }
 
-char	*ft_strdup_malloc(char *s1, t_garbage *head)
+char	*ft_strdup_malloc(char *s1, t_garbage **head)
 {
 	char	*copy;
 	int		i;
 
 	if (!s1)
 		return (NULL);
-	copy = (char *)ft_malloc(sizeof(char) * (ft_strlen(s1) + 1), &head);
+	copy = (char *)ft_malloc(sizeof(char) * (ft_strlen(s1) + 1), head);
 	if (!copy)
 		return (NULL);
 	i = 0;
@@ -366,7 +365,7 @@ int	ft_get_index(char *str, char *set, int cp, int index)
 	return (index);
 }
 
-char	*ft_strtrim(char *s1, char *set, t_garbage *head)
+char	*ft_strtrim(char *s1, char *set, t_garbage **head)
 {
 	char	*rst;
 	int		i;
@@ -379,11 +378,11 @@ char	*ft_strtrim(char *s1, char *set, t_garbage *head)
 	len = ft_get_index(s1, set, -1, ft_strlen(s1) - 1);
 	if (!len && ft_strlen(s1) != 1)
 	{
-		rst = (char *)ft_malloc(sizeof(char), &head);
+		rst = (char *)ft_malloc(sizeof(char), head);
 		rst[0] = 0;
 		return (rst);
 	}
-	rst = (char *)ft_malloc((len - i + 2) * sizeof(char), &head);
+	rst = (char *)ft_malloc((len - i + 2) * sizeof(char), head);
 	if (!rst)
 		return (NULL);
 	j = 0;
@@ -418,7 +417,7 @@ int	ft_strchr(char *s, int c)
 	return (-1);
 }
 
-void	ft_recalculate_len(char **str, unsigned int *start, size_t *len, t_garbage *head)
+void	ft_recalculate_len(char **str, unsigned int *start, size_t *len, t_garbage **head)
 {
 	int cp;
 	int i;
@@ -447,7 +446,7 @@ void	ft_recalculate_len(char **str, unsigned int *start, size_t *len, t_garbage 
 	(*len)++;
 }
 
-char	*ft_substr_malloc(char *s, unsigned int start, size_t len, t_garbage *head)
+char	*ft_substr_malloc(char *s, unsigned int start, size_t len, t_garbage **head)
 {
 	size_t	i;
 	char	*p;
@@ -459,7 +458,7 @@ char	*ft_substr_malloc(char *s, unsigned int start, size_t len, t_garbage *head)
 		len = ft_strlen(s + start);
 	if (ft_strlen(s) <= start)
 		return (NULL);
-	p = (char *)ft_malloc((len + 1) * sizeof(char), &head);
+	p = (char *)ft_malloc((len + 1) * sizeof(char), head);
 	if (!p)
 		return (NULL);
 	i = 0;
@@ -667,7 +666,7 @@ void	ft_sub_len(char *s, unsigned int start, size_t *len)
 	*len -= cp;
 }
 
-char	*ft_substr2(char *s, unsigned int start, size_t len, t_garbage *head)
+char	*ft_substr2(char *s, unsigned int start, size_t len, t_garbage **head)
 {
 	size_t	i;
 	size_t	j;
@@ -680,7 +679,7 @@ char	*ft_substr2(char *s, unsigned int start, size_t len, t_garbage *head)
 	ft_sub_len(s, start, &len);
 	if (ft_strlen(s) <= start)
 		return (NULL);
-	p = (char *)ft_malloc((len + 1) * sizeof(char), &head);
+	p = (char *)ft_malloc((len + 1) * sizeof(char), head);
 	if (!p)
 		return (NULL);
 	i = 0;
@@ -730,7 +729,7 @@ void	ft_count_words(char *str, int *j)
 	}
 }
 
-void	ft_cpyyy(char *str, char ***t, int j, t_garbage *head)
+void	ft_cpyyy(char *str, char ***t, int j, t_garbage **head)
 {
 	int		i;
 	int		len;
@@ -758,7 +757,7 @@ void	ft_cpyyy(char *str, char ***t, int j, t_garbage *head)
 	t[0][j] = 0;
 }
 
-char	**ft_split_echo(char *str, t_garbage *head)
+char	**ft_split_echo(char *str, t_garbage **head)
 {
 	int		i;
 	int		j;
@@ -769,7 +768,7 @@ char	**ft_split_echo(char *str, t_garbage *head)
 
 	j = 0;
 	ft_count_words(str, &j);
-	t = (char **)ft_malloc((j + 1) * sizeof(char *), &head);
+	t = (char **)ft_malloc((j + 1) * sizeof(char *), head);
 	if (!t)
 		return (NULL);
 	ft_cpyyy(str, &t, 0, head);
@@ -857,11 +856,11 @@ char	**ft_split(char const *s, char c)
 }
 
 /* **************************** TREE FUNCTIONS **************************** */
-t_tree	*ft_new_node(char type, int token, t_garbage *head, char **cmd)
+t_tree	*ft_new_node(char type, int token, t_garbage **head, char **cmd)
 {
 	t_tree	*new;
 
-	new = (t_tree *)ft_malloc(sizeof(t_tree), &head);
+	new = (t_tree *)ft_malloc(sizeof(t_tree), head);
 	if (!new)
 		return (NULL);
 	new->type = type;
@@ -883,55 +882,55 @@ void	ft_fill_tree(t_all *all, t_tree **node, char *str, t_tree *parent)
 
 	if (!str)
 		return ;
-	str = ft_strtrim(str, " ", all->g_head);
+	str = ft_strtrim(str, " ", &all->g_head);
 	i = ft_strchr_v2_0(str);
 	n = 0;
 	if (i != -1)
 	{
 		if (str[i] == '|')
-			node[0] = ft_new_node(C_OPTION, OR, all->g_head, NULL);
+			node[0] = ft_new_node(C_OPTION, OR, &all->g_head, NULL);
 		if (str[i] == '&')
-			node[0] = ft_new_node(C_OPTION, AND, all->g_head, NULL);
+			node[0] = ft_new_node(C_OPTION, AND, &all->g_head, NULL);
 		if (i != 0)
-			ft_fill_tree(all, &node[0]->left, ft_substr_malloc(str, 0, i, all->g_head), node[0]);
-		ft_fill_tree(all, &node[0]->right, ft_substr_malloc(str, i + 2, ft_strlen(str), all->g_head), node[0]);
+			ft_fill_tree(all, &node[0]->left, ft_substr_malloc(str, 0, i, &all->g_head), node[0]);
+		ft_fill_tree(all, &node[0]->right, ft_substr_malloc(str, i + 2, ft_strlen(str), &all->g_head), node[0]);
 	}
 	else
 	{
 		i = ft_strchr(str, '|');
 		if (i != -1)
 		{
-			node[0] = ft_new_node(C_OPTION, PIPE, all->g_head, NULL);
+			node[0] = ft_new_node(C_OPTION, PIPE, &all->g_head, NULL);
 			if (i != 0)
-				ft_fill_tree(all, &node[0]->left, ft_substr_malloc(str, 0, i, all->g_head), node[0]);
-			ft_fill_tree(all, &node[0]->right, ft_substr_malloc(str, i + 1, ft_strlen(str), all->g_head), node[0]);
+				ft_fill_tree(all, &node[0]->left, ft_substr_malloc(str, 0, i, &all->g_head), node[0]);
+			ft_fill_tree(all, &node[0]->right, ft_substr_malloc(str, i + 1, ft_strlen(str), &all->g_head), node[0]);
 		}
 		else
 		{
 			i = ft_strstr(str, TABLE, &n);
 			if (i != -1)
 			{
-				node[0] = ft_new_node(C_OPTION, get_token(str[i], n), all->g_head, NULL);
+				node[0] = ft_new_node(C_OPTION, get_token(str[i], n), &all->g_head, NULL);
 				if (n == 0)
 				{
 					if (i != 0)
-						ft_fill_tree(all, &node[0]->left, ft_substr_malloc(str, 0, i, all->g_head), node[0]);
-					ft_fill_tree(all, &node[0]->right, ft_substr_malloc(str, i + 1, ft_strlen(str), all->g_head), node[0]);
+						ft_fill_tree(all, &node[0]->left, ft_substr_malloc(str, 0, i, &all->g_head), node[0]);
+					ft_fill_tree(all, &node[0]->right, ft_substr_malloc(str, i + 1, ft_strlen(str), &all->g_head), node[0]);
 				}
 				else
 				{
 					printf("i = %d\n", i + 2);
 					if (i != 0)
-						ft_fill_tree(all, &node[0]->left, ft_substr_malloc(str, 0, i, all->g_head), node[0]);
-					ft_fill_tree(all, &node[0]->right, ft_substr_malloc(str, i + 2, ft_strlen(str), all->g_head), node[0]);
+						ft_fill_tree(all, &node[0]->left, ft_substr_malloc(str, 0, i, &all->g_head), node[0]);
+					ft_fill_tree(all, &node[0]->right, ft_substr_malloc(str, i + 2, ft_strlen(str), &all->g_head), node[0]);
 				}
 			}
 			else
 			{
 				if (str[0] == 40)
-					ft_fill_tree(all, node, ft_substr_malloc(str, 0, ft_strlen(str), all->g_head), NULL);
+					ft_fill_tree(all, node, ft_substr_malloc(str, 0, ft_strlen(str), &all->g_head), NULL);
 				else
-					node[0] = ft_new_node(C_CMD, COMMAND, all->g_head, ft_split_echo(str, all->g_head));
+					node[0] = ft_new_node(C_CMD, COMMAND, &all->g_head, ft_split_echo(str, &all->g_head));
 			}
 		}
 	}
@@ -1074,7 +1073,7 @@ int	ft_is_builtin(t_tree *node, char *str)
 	}
 }
 
-int	ft_get_path(t_tree *node, char **path, t_garbage *head)
+int	ft_get_path(t_tree *node, char **path, t_garbage **head)
 {
 	int		i;
 	char *test1;
@@ -1107,13 +1106,14 @@ int	ft_get_path(t_tree *node, char **path, t_garbage *head)
 				free(test2);
 				return (0);
 			}
+			free(test2);
 			i++;
 		}
 	}
 	return (1);
 }
 
-int	ft_check_tree3(t_tree *root, char **path, t_garbage *head)
+int	ft_check_tree3(t_tree *root, char **path, t_garbage **head)
 {
 	if (!root)
 		return (0);
@@ -1130,64 +1130,260 @@ int	ft_check_tree3(t_tree *root, char **path, t_garbage *head)
 	return (0);
 }
 
-// void	ft_exec_cmd1(t_all *all, t_tree *root, int i)
-// {
+/* **************************** BUILT-INS **************************** */
+int	ft_env(t_env *lst)
+{
+	if (!lst)
+		return (1);
+	while (lst)
+	{
+		if (lst->value)
+			printf("%s=%s\n", lst->key, lst->value);
+		lst = lst->next;
+	}
+	return (0);
+}
 
-// 	dup2(all->last_fd, 0);
-// 	if (root->parent && root->parent->right && root->parent->right != root)
-// 		dup2(all->p[1], 1);
-// 	close(all->p[0]);
-// 	execve(root->path,root->cmd, NULL);
-// }
+int	ft_pwd()
+{
+	char path[2000];
 
-// void	ft_exec_cmd1(t_all *all, t_tree *root, int i)
-// {
-// 	execve(root->path,root->cmd, NULL);
-// }
+	getcwd(path, 2000);
+	printf("%s\n", path);
+	return (0);
+}
 
-// void	ft_exec_pipe(t_all *all, t_tree *root)
-// {
+int ft_cd(t_env *env, char *s)
+{
+	char path[2000];
 
-// }
+	getcwd(path, 2000);
+    if (!s)
+	{
+		ft_edit_env(env, "OLDPWD", path);
+        chdir("/");
+		getcwd(path, 2000);
+		ft_edit_env(env, "PWD", path);
+		return (0);
+	}
+    if (s[0] != '/' && s[0] != '.')
+        ft_strjoin("./", s);
+    if (!access(s, F_OK))
+	{
+		ft_edit_env(env, "OLDPWD", path);
+        chdir(s);
+		getcwd(path, 2000);
+		ft_edit_env(env, "PWD", path);
+		return (0);
+	}
+    else
+	{
+        printf("%s: not found\n", s);
+		return (1);
+	}
+}
 
-// void	ft_exec_and(t_all *all, t_tree *root)
-// {
+int ft_echo(int index, char **s)
+{
+    int i;
 
-// }
+	i = 0;
+	if (!ft_strcmp(s[index], "-n"))
+	{
+		index++;
+		i++;
+	}
+	while (s[index])
+		printf("%s", s[index++]);
+	if (!i)
+		printf("\n");
+	return (0);
+}
 
-void	ft_exec(t_all *all, t_tree *root)
+int	ft_unset(t_env **lst, char *str)
+{
+	int		i;
+	t_env	*tmp_env;
+	t_env	*tmp_env2;
+
+	i = 0;
+	while (str[i])
+	{
+		if(!ft_isalnum(str[i]))
+		{
+			printf("unset `%s' : not a valid identifier\n", str);
+			return (1);
+		}
+		i++;
+	}
+	tmp_env = lst[0];
+	while (tmp_env)
+	{
+		if (tmp_env->next && !ft_strcmp(tmp_env->next->key, str))
+		{
+			tmp_env2 = tmp_env->next;
+			tmp_env->next = tmp_env2->next;
+			free(tmp_env2->key);
+			free(tmp_env2->value);
+			free(tmp_env2);
+			return (0);
+		}
+		tmp_env = tmp_env->next;
+	}
+	return (1);
+}
+
+void	ft_affiche_export(t_env *head)
+{
+	if (!head)
+		return ;
+	while (head)
+	{
+		printf("declare -x ");
+		printf("%s", head->key);
+		if (head->value)
+			printf("=\"%s\"", head->value);
+		printf("\n");
+		head = head->next;
+	}
+}
+
+int	ft_export(char *str, t_env *head)
+{
+	int		i;
+	int		cp;
+	char	*str1;
+	char	*str2;
+
+	if (!str)
+	{
+		ft_affiche_export(head);
+		return (0);
+	}
+	i = -1;
+	cp = 0;
+	while (str[++i])
+	{
+		if (ft_isalpha(str[i]))
+			cp++;
+		if (str[i] > '0' && str[i] < '9' && !cp)
+		{
+			printf("9 - MiniShell: export: `%s': not a valid identifier\n", str + i);
+			return (1);
+		}
+		if (!ft_isalnum(str[i]))
+		{
+			if (i == 0 || str[i] != '=')
+			{
+				printf("10 - MiniShell: export: `%s': not a valid identifier\n", str + i);
+				return (1);
+			}
+			if (str[i] == '=')
+			{
+				str1 =ft_substr(str, 0, i);
+				str2 =ft_substr(str, i + 1, ft_strlen(str));
+				ft_edit_env(head, str1, str2);
+				free(str1);
+				free(str2);
+				return (0);
+			}
+		}
+	}
+	ft_edit_env(head, str, NULL);
+	return (0);
+}
+
+void	ft_exit()
+{
+	printf("exit\n");
+	exit(0);
+}
+
+/* **************************** EXEC FUNCTIONS **************************** */
+void ft_exec_builtin(t_all *all, t_tree *root)
+{
+	if (!ft_strcmp(root->cmd[0], "cd"))
+		all->status = ft_cd(all->env_head, root->cmd[1]);
+	if (!ft_strcmp(root->cmd[0], "pwd"))
+		all->status = ft_pwd();
+	if (!ft_strcmp(root->cmd[0], "env"))
+		all->status = ft_env(all->env_head);
+	if (!ft_strcmp(root->cmd[0], "echo"))
+		all->status = ft_echo(1, root->cmd);
+	if (!ft_strcmp(root->cmd[0], "unset"))
+		all->status = ft_unset(&all->env_head, root->cmd[1]);
+	if (!ft_strcmp(root->cmd[0], "export"))
+		all->status = ft_export(root->cmd[1], all->env_head);
+	if (!ft_strcmp(root->cmd[0], "exit"))
+	{
+		all->status = 0;
+		ft_exit();
+	}
+	if (root->parent && root->parent->token == PIPE)
+		exit(0);
+}
+
+void	ft_exec(t_all *all, t_tree *root, int n)
 {
 	if (!root)
 		return ;
+	int pid;
 
 	if (root->token == COMMAND)
 	{
-		execve(root->path, root->cmd, NULL);
+		if (root->is_builtin == 0)
+		{
+			if (n)
+				execve(root->path, root->cmd, NULL);
+			else
+			{
+				if ((pid = fork()) == 0)
+				{
+					execve(root->path, root->cmd, NULL);
+				}
+				wait(&all->status);
+			}
+		}
+		else
+			ft_exec_builtin(all, root);
 	}
 	if (root->token == PIPE)
 	{
 		if (pipe(all->p))
 			printf("error pipe!");
-		if (fork() == 0)
+		if ((pid = fork())== 0)
 		{
 			close(1);
 			dup(all->p[1]);
 			close(all->p[0]);
 			close(all->p[1]);
-			ft_exec(all,root->left);
+			ft_exec(all,root->left, 1);
 		}
-		if (fork() == 0)
+		if ((pid = fork())== 0)
 		{
 			close(0);
 			dup(all->p[0]);
 			close(all->p[0]);
 			close(all->p[1]);
-			ft_exec(all,root->right);
+			ft_exec(all,root->right, 1);
 		}
 		close(all->p[0]);
 		close(all->p[1]);
 		wait(&all->status);
 		wait(&all->status);
+		return ;
+	}
+	if (root->token == AND)
+	{
+		ft_exec(all, root->left, 0);
+		if (all->status == 0)
+			ft_exec(all, root->right, 0);
+	}
+	if (root->token == OR)
+	{
+		ft_exec(all, root->left, 0);
+		if (all->status != 0)
+			ft_exec(all, root->right, 0);
 	}
 }
 
@@ -1223,168 +1419,13 @@ void	ft_tree_init(char *str, t_all *all)
 		printf("7 - MiniShell: syntax error\n");
 	ft_check_tree2(root);
 	paths = ft_split(ft_get_env(all->env_head, "PATH"), ':');
-	ft_check_tree3(root, paths, all->g_head);
+	ft_check_tree3(root, paths, &all->g_head);
 	free_tab(paths);
 	all->root = root;
 	all->last_fd = 0;
-	//ft_print_tree(root, 0, 0);
-	ft_exec(all, all->root);
-	//while(waitpid(-1, &all->status, WUNTRACED) > 0);
-}
-
-/* **************************** BUILT-INS **************************** */
-void    ft_env(t_env *lst)
-{
-	if (!lst)
-		return ;
-	while (lst)
-	{
-		if (lst->value)
-			printf("%s=%s\n", lst->key, lst->value);
-		lst = lst->next;
-	}
-}
-
-void	ft_pwd()
-{
-	char path[2000];
-
-	getcwd(path, 2000);
-	printf("%s\n", path);
-}
-
-void ft_cd(t_env *env, char *s)
-{
-	char path[2000];
-
-	getcwd(path, 2000);
-    if (!s)
-        return ;
-    if (s[0] != '/' && s[0] != '.')
-        ft_strjoin("./", s);
-    if (!access(s, F_OK))
-	{
-		ft_edit_env(env, "OLDPWD", path);
-        chdir(s);
-		getcwd(path, 2000);
-		ft_edit_env(env, "PWD", path);
-	}
-    else
-        printf("%s: not found\n", s);
-}
-
-void ft_echo(int index, char **s)
-{
-    int i;
-
-	i = 0;
-	if (!ft_strcmp(s[++index], "-n"))
-	{
-		i++;
-	}
-	while (s[++index])
-		printf("%s", s[index]);
-	if (i)
-		printf("\n");
-}
-
-void	ft_unset(t_env **lst, char *str, t_garbage *head)
-{
-	char	*tmp;
-	int		i;
-	t_env	*tmp_env;
-	t_env	*tmp_env2;
-
-	tmp = ft_substr2(str, 0, ft_strlen(str), head);
-	i = 0;
-	while (tmp[i])
-	{
-		if(!ft_isalnum(str[i]))
-		{
-			printf("unset `%s' : not a valid identifier\n", tmp);
-			return ;
-		}
-		i++;
-	}
-	tmp_env = lst[0];
-	while (tmp_env)
-	{
-		if (tmp_env->next && !ft_strcmp(tmp_env->next->key, tmp))
-		{
-			tmp_env2 = tmp_env->next;
-			tmp_env->next = tmp_env2->next;
-			free(tmp_env2->key);
-			free(tmp_env2->value);
-			free(tmp_env2);
-			return ;
-		}
-		tmp_env = tmp_env->next;
-	}
-}
-
-void	ft_affiche_export(t_env *head)
-{
-	if (!head)
-		return ;
-	while (head)
-	{
-		printf("declare -x ");
-		printf("%s", head->key);
-		if (head->value)
-			printf("=\"%s\"", head->value);
-		printf("\n");
-		head = head->next;
-	}
-}
-
-void	ft_export(char *str, t_env *head)
-{
-	int		i;
-	int		cp;
-	char	*str1;
-	char	*str2;
-
-	if (!str)
-	{
-		ft_affiche_export(head);
-		return ;
-	}
-	i = -1;
-	cp = 0;
-	while (str[++i])
-	{
-		if (ft_isalpha(str[i]))
-			cp++;
-		if (str[i] > '0' && str[i] < '9' && !cp)
-		{
-			printf("9 - MiniShell: export: `%s': not a valid identifier\n", str + i);
-			return ;
-		}
-		if (!ft_isalnum(str[i]))
-		{
-			if (i == 0 || str[i] != '=')
-			{
-				printf("10 - MiniShell: export: `%s': not a valid identifier\n", str + i);
-				return ;
-			}
-			if (str[i] == '=')
-			{
-				str1 =ft_substr(str, 0, i);
-				str2 =ft_substr(str, i + 1, ft_strlen(str));
-				ft_edit_env(head, str1, str2);
-				free(str1);
-				free(str2);
-				return ;
-			}
-		}
-	}
-	ft_edit_env(head, str, NULL);
-}
-
-void	ft_exit()
-{
-	printf("exit\n");
-	exit(0);
+	// ft_print_tree(root, 0, 0);
+	ft_exec(all, all->root, 0);
+	// while(waitpid(-1, &all->status, WUNTRACED) > 0);
 }
 
 /* **************************** ERRORS CHECK **************************** */
@@ -1592,16 +1633,9 @@ int main(int ac, char *av[], char *env[])
 			continue ;
 		all.g_head = NULL;
 		ft_tree_init(str, &all);
+		// ft_split_echo(str, &all.g_head);
+		// ft_substr2(str, 0, ft_strlen(str), &all.g_head);
 		free(str);
-		// int i = 0;
-		// while (all.root->cmd && all.root->cmd[i])
-		// {
-		// 	printf("%s\n",all.root->cmd[i]);
-		// 	i++;
-		// }
-		// ft_export(all.root->cmd[1], all.env_head);
-		// ft_env(all.env_head);
-		//ft_heredoc(all.env_head, all.root->right->cmd[0],all.root->right->fd);
 		ft_close_fd(all.root);
 		ft_free_garbage(all.g_head);
 	}

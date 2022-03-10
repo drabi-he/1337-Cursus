@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/10 10:48:44 by hdrabi            #+#    #+#              #
-#    Updated: 2022/03/09 16:06:21 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/03/10 14:49:03 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ NAME = minishell
 all : $(NAME)
 
 $(NAME) : $(SRCM)
-	$(CC) $(CFLAGS) -lreadline $(SRCM) -o $(NAME)
+	$(CC) $(CFLAGS) -L/usr/local/lib -I/usr/local/include -lreadline $(SRCM) -o $(NAME)
 	./${NAME}
 
 clean :

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 13:15:22 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/09 17:56:07 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/10 13:35:49 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ typedef struct s_red
 	char	*eof;
 	int		mode;
 	int		fd;
-
 } t_red;
 
 typedef struct s_pipe
