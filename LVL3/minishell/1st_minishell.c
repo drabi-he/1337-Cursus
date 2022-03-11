@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:18:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/10 15:36:54 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/11 17:24:15 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,10 @@ typedef struct s_tree
 	int		is_builtin;
 	char	**cmd;
 	char	*path;
-	int		fd;
+	char	*infile;
+	char	*outfile;
+	int		ifd;
+	int		ofd;
 	struct s_tree	*parent;
 	struct s_tree	*left;
 	struct s_tree	*right;
@@ -284,7 +287,7 @@ void ft_print_tree(t_tree *root, int space, int pos)
     printf("\n");
     for (int i = COUNT; i < space; i++)
         printf(" ");
-    printf("p %d | t %d | %c | %s | %d \n", pos, root->token, root->type, root->cmd? root->cmd[0] : "null", root->fd);
+    printf("p %d | t %d | %c | %s\n", pos, root->token, root->type, root->cmd? root->cmd[0] : "null");
 
     // Process left child
     ft_print_tree(root->left, space, pos +1);
@@ -637,7 +640,7 @@ char *ft_get_env(t_env *head, char *search)
 	while (tmp)
 	{
 		if (!ft_strcmp(tmp->key, search))
-			return (tmp->value);
+			return (ft_strdup(tmp->value));
 		tmp = tmp->next;
 	}
 	return (NULL);
@@ -664,6 +667,12 @@ void	ft_sub_len(char *s, unsigned int start, size_t *len)
 		i++;
 	}
 	*len -= cp;
+}
+
+void	ft_sub_len2(char *s, unsigned int start, size_t *len)
+{
+	if (ft_strlen(s + start) < *len)
+		*len = ft_strlen(s + start);
 }
 
 char	*ft_substr2(char *s, unsigned int start, size_t len, t_garbage **head)
@@ -697,6 +706,31 @@ char	*ft_substr2(char *s, unsigned int start, size_t len, t_garbage **head)
 		else
 			p[j++] = s[start + i++];
 	}
+	p[j] = 0;
+	return (p);
+}
+
+char	*ft_substr3(char *s, unsigned int start, size_t len, t_garbage **head)
+{
+	size_t	i;
+	size_t	j;
+	char	*p;
+	char	get;
+	int		cp;
+
+	if (!s || start < 0)
+		return (NULL);
+	ft_sub_len2(s, start, &len);
+	if (ft_strlen(s) <= start)
+		return (NULL);
+	p = (char *)ft_malloc((len + 1) * sizeof(char), head);
+	if (!p)
+		return (NULL);
+	i = 0;
+	j = 0;
+	cp = 0;
+	while (j < len)
+		p[j++] = s[start + i++];
 	p[j] = 0;
 	return (p);
 }
@@ -751,7 +785,7 @@ void	ft_cpyyy(char *str, char ***t, int j, t_garbage **head)
 			}
 			i++;
 		}
-		t[0][j] = ft_substr2(str, len, i - len, head);
+		t[0][j] = ft_substr3(str, len, i - len, head);
 		j++;
 	}
 	t[0][j] = 0;
@@ -827,7 +861,7 @@ char	*str_cpy(const char *s, int size)
 	return (t);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char *s, char c)
 {
 	char	**t;
 	int		size;
@@ -855,6 +889,231 @@ char	**ft_split(char const *s, char c)
 	return (t);
 }
 
+/* **************************** HER_DOC **************************** */
+char    *ft_strjoin2(char *s1, char *s2)
+{
+    char    *p;
+    int        i;
+    int        j;
+
+    i = 0;
+    j = 0;
+    if (!s1 && !s2)
+        return (NULL);
+	if (!s1)
+		return (s2);
+	if (!s2)
+		return (s1);
+    p = malloc((ft_strlen(s1) + ft_strlen(s2)) + 1 * sizeof(char));
+    if (!p)
+        return (0);
+    while (s1[j])
+        p[i++] = s1[j++];
+    j = 0;
+    while (s2[j])
+        p[i++] = s2[j++];
+    p[i] = 0;
+	free(s1);
+	free(s2);
+    return (p);
+}
+
+char	*ft_parse_dollar(t_env *head, char *str, int n)
+{
+	int		i;
+	int		j;
+	char	*rst;
+	char	*tmp;
+	i = 0;
+	j = 0;
+	rst = NULL;
+	while (str[i])
+	{
+		if (str[i] == '$' && ft_isalnum(str[i + 1]))
+		{
+			rst = ft_strjoin2(rst, ft_substr(str, j, i - j));
+			i++;
+			j = i;
+			while (str[i] && ft_isalnum(str[i]))
+				i++;
+			tmp = ft_substr(str, j, i - j);
+			rst = ft_strjoin2(rst, ft_get_env(head, tmp));
+			free (tmp);
+			j = i;
+		}
+		i++;
+	}
+	rst = ft_strjoin2(rst, ft_substr(str, j, i - j));
+	if (n)
+		free(str);
+	return (rst);
+}
+
+void	ft_heredoc(t_env *head, char *limiter, int fd)
+{
+	char *hdoc;
+
+	while (1)
+	{
+		hdoc = readline("\033[0;31mheredoc>\033[0m ");
+		hdoc = ft_parse_dollar(head, hdoc, 1);
+		if (!ft_strcmp(limiter, hdoc))
+			break;
+		write (fd, hdoc, ft_strlen(hdoc));
+		write (fd, "\n", 1);
+		free(hdoc);
+	}
+}
+
+/* **************************** PARSE CMD **************************** */
+void	ft_parse_cmd(t_all *all, char **cmd)
+{
+	int i;
+
+	i = 0;
+	while (cmd[i])
+	{
+		if (cmd[i][0] != '\'')
+		{
+			cmd[i] = ft_substr2(cmd[i], 0, ft_strlen(cmd[i]), &all->g_head);
+			cmd[i] = ft_parse_dollar(all->env_head, cmd[i], 0);
+			ft_add_garbage(&all->g_head, ft_new_garbage((void**)cmd[i]));
+		}
+		else
+			cmd[i] = ft_substr2(cmd[i], 0, ft_strlen(cmd[i]), &all->g_head);
+		i++;
+	}
+}
+
+/* **************************** test **************************** */
+char	*ft_get_infile(char *str, int i, t_all *all, t_tree **node)
+{
+	char	*left;
+	char	*right;
+	char	*rst;
+	int	j;
+
+	j = i;
+	while (str[j] && str[j] == ' ')
+		j++;
+	while (str[j] && str[j] != ' ')
+		j++;
+	node[0]->infile = ft_strtrim(ft_substr2(str, i, j - i, &all->g_head), " ", &all->g_head);
+	if (access(node[0]->infile, F_OK | R_OK))
+	{
+		printf("MiniShell: %s: file doesn't exist or permission denied!\n", node[0]->infile);
+	}
+	node[0]->ifd = open(node[0]->infile, O_RDONLY , 0644);
+	left = ft_substr(str, 0, i - 1);
+	right = ft_substr(str, j, ft_strlen(str));
+	rst = ft_strjoin(left, right);
+	return (rst);
+}
+
+char	*ft_get_herdoc(char *str, int i, t_all *all, t_tree **node)
+{
+	char	*left;
+	char	*right;
+	char	*rst;
+	int	j;
+
+	j = i;
+	while (str[j] && str[j] == ' ')
+		j++;
+	while (str[j] && str[j] != ' ')
+		j++;
+	node[0]->infile = ft_strtrim(ft_substr2(str, i, j - i, &all->g_head), " ", &all->g_head);
+	node[0]->ifd = open(".tmp", O_CREAT | O_RDWR | O_TRUNC, 0644);
+	ft_heredoc(all->env_head, node[0]->infile, node[0]->ifd);
+	left = ft_substr(str, 0, i - 2);
+	right = ft_substr(str, j, ft_strlen(str));
+	rst = ft_strjoin(left, right);
+	return (rst);
+}
+
+char	*ft_get_outfile(char *str, int i, t_all *all, t_tree **node)
+{
+	char	*left;
+	char	*right;
+	char	*rst;
+	int	j;
+
+	j = i;
+	while (str[j] && str[j] == ' ')
+		j++;
+	while (str[j] && str[j] != ' ')
+		j++;
+	node[0]->outfile = ft_strtrim(ft_substr2(str, i, j - i, &all->g_head), " ", &all->g_head);
+	if (!access(node[0]->outfile, F_OK) && access(node[0]->outfile, W_OK))
+	{
+		printf("MiniShell: %s: permission denied!\n", node[0]->outfile);
+	}
+	node[0]->ofd = open(node[0]->outfile, O_WRONLY | O_CREAT | O_TRUNC , 0644);
+	left = ft_substr(str, 0, i - 1);
+	right = ft_substr(str, j, ft_strlen(str));
+	rst = ft_strjoin(left, right);
+	return (rst);
+}
+
+char	*ft_get_a_outfile(char *str, int i, t_all *all, t_tree **node)
+{
+	char	*left;
+	char	*right;
+	char	*rst;
+	int	j;
+
+	j = i;
+	while (str[j] && str[j] == ' ')
+		j++;
+	while (str[j] && str[j] != ' ')
+		j++;
+	node[0]->outfile = ft_strtrim(ft_substr2(str, i, j - i, &all->g_head), " ", &all->g_head);
+	if (!access(node[0]->outfile, F_OK) && access(node[0]->outfile, W_OK))
+	{
+		printf("MiniShell: %s: permission denied!\n", node[0]->outfile);
+	}
+	node[0]->ofd = open(node[0]->outfile, O_WRONLY | O_CREAT | O_APPEND , 0644);
+	left = ft_substr(str, 0, i + 1);
+	right = ft_substr(str, j, ft_strlen(str));
+	rst = ft_strjoin(left, right);
+	return (rst);
+}
+
+void	ft_split_red(char **str, t_all *all, t_tree **node)
+{
+	int	i;
+
+	i = 0;
+	while (str[0][i])
+	{
+		if (str[0][i] == '<')
+		{
+			i++;
+			if (str[0][i] == '<')
+			{
+				i++;
+				str[0] = ft_get_herdoc(str[0], i, all, node);
+			}
+			else
+				str[0] = ft_get_infile(str[0], i, all, node);
+			i = 0;
+		}
+		else if (str[0][i] == '>')
+		{
+			i++;
+			if (str[0][i] == '<')
+			{
+				i++;
+				str[0] = ft_get_a_outfile(str[0], i, all, node);
+			}
+			else
+				str[0] = ft_get_outfile(str[0], i, all, node);
+			i = 0;
+		}
+		else
+			i++;
+	}
+}
 /* **************************** TREE FUNCTIONS **************************** */
 t_tree	*ft_new_node(char type, int token, t_garbage **head, char **cmd)
 {
@@ -866,7 +1125,10 @@ t_tree	*ft_new_node(char type, int token, t_garbage **head, char **cmd)
 	new->type = type;
 	new->token = token;
 	new->cmd = cmd;
-	new->fd = -2;
+	new->infile = NULL;
+	new->outfile = NULL;
+	new->ifd = -2;
+	new->ofd = -2;
 	new->is_builtin = -1;
 	new->path = NULL;
 	new->parent = NULL;
@@ -907,30 +1169,13 @@ void	ft_fill_tree(t_all *all, t_tree **node, char *str, t_tree *parent)
 		}
 		else
 		{
-			i = ft_strstr(str, TABLE, &n);
-			if (i != -1)
-			{
-				node[0] = ft_new_node(C_OPTION, get_token(str[i], n), &all->g_head, NULL);
-				if (n == 0)
-				{
-					if (i != 0)
-						ft_fill_tree(all, &node[0]->left, ft_substr_malloc(str, 0, i, &all->g_head), node[0]);
-					ft_fill_tree(all, &node[0]->right, ft_substr_malloc(str, i + 1, ft_strlen(str), &all->g_head), node[0]);
-				}
-				else
-				{
-					printf("i = %d\n", i + 2);
-					if (i != 0)
-						ft_fill_tree(all, &node[0]->left, ft_substr_malloc(str, 0, i, &all->g_head), node[0]);
-					ft_fill_tree(all, &node[0]->right, ft_substr_malloc(str, i + 2, ft_strlen(str), &all->g_head), node[0]);
-				}
-			}
+			if (str[0] == 40)
+				ft_fill_tree(all, node, ft_substr_malloc(str, 0, ft_strlen(str), &all->g_head), NULL);
 			else
 			{
-				if (str[0] == 40)
-					ft_fill_tree(all, node, ft_substr_malloc(str, 0, ft_strlen(str), &all->g_head), NULL);
-				else
-					node[0] = ft_new_node(C_CMD, COMMAND, &all->g_head, ft_split_echo(str, &all->g_head));
+				node[0] = ft_new_node(C_CMD, COMMAND, &all->g_head, NULL);
+				ft_split_red(&str, all, node);
+				node[0]->cmd = ft_split_echo(str, &all->g_head);
 			}
 		}
 	}
@@ -968,7 +1213,8 @@ void	ft_close_fd(t_tree *root)
 {
 	if (!root)
 		return ;
-	close(root->fd);
+	close(root->ifd);
+	close(root->ofd);
 	ft_close_fd(root->right);
 	ft_close_fd(root->left);
 	if(!access(".tmp", F_OK))
@@ -1023,39 +1269,39 @@ int	ft_check_tree(t_tree *root)
 	return (0);
 }
 
-int	ft_check_tree2(t_tree *root)
-{
-	if (!root)
-		return (0);
-	if (root->type == C_FILE)
-	{
-		if (root->token == INFILE)
-		{
-			if (access(root->cmd[0], F_OK))
-			{
-				printf("8 - MiniShell: %s: No such file or directory\n", root->cmd[0]);
-				return (1);
-			}
-			if (access(root->cmd[0], R_OK))
-			{
-				printf("8 - MiniShell: %s: Permission denied\n", root->cmd[0]);
-				return (1);
-			}
-			root->fd = open(root->cmd[0], O_RDONLY , 0644);
-		}
-		if (root->token == OUTFIL)
-			root->fd = open(root->cmd[0], O_WRONLY | O_CREAT , 0644);
-		if (root->token == A_OUTFIL)
-			root->fd = open(root->cmd[0], O_WRONLY | O_CREAT | O_APPEND , 0644);
-		if (root->token == DELIMITER)
-			root->fd = open(".tmp", O_WRONLY | O_CREAT , 0644);
-	}
-	if (root->fd == -1)
-		return (1);
-	ft_check_tree2(root->right);
-	ft_check_tree2(root->left);
-	return (0);
-}
+// int	ft_check_tree2(t_tree *root)
+// {
+// 	if (!root)
+// 		return (0);
+// 	if (root->type == C_FILE)
+// 	{
+// 		if (root->token == INFILE)
+// 		{
+// 			if (access(root->cmd[0], F_OK))
+// 			{
+// 				printf("8 - MiniShell: %s: No such file or directory\n", root->cmd[0]);
+// 				return (1);
+// 			}
+// 			if (access(root->cmd[0], R_OK))
+// 			{
+// 				printf("8 - MiniShell: %s: Permission denied\n", root->cmd[0]);
+// 				return (1);
+// 			}
+// 			root->fd = open(root->cmd[0], O_RDONLY , 0644);
+// 		}
+// 		if (root->token == OUTFIL)
+// 			root->fd = open(root->cmd[0], O_WRONLY | O_CREAT , 0644);
+// 		if (root->token == A_OUTFIL)
+// 			root->fd = open(root->cmd[0], O_WRONLY | O_CREAT | O_APPEND , 0644);
+// 		if (root->token == DELIMITER)
+// 			root->fd = open(".tmp", O_WRONLY | O_CREAT , 0644);
+// 	}
+// 	if (root->fd == -1)
+// 		return (1);
+// 	ft_check_tree2(root->right);
+// 	ft_check_tree2(root->left);
+// 	return (0);
+// }
 
 int	ft_is_builtin(t_tree *node, char *str)
 {
@@ -1331,6 +1577,7 @@ void	ft_exec(t_all *all, t_tree *root, int n)
 
 	if (root->token == COMMAND)
 	{
+		ft_parse_cmd(all, root->cmd);
 		if (root->is_builtin == 0)
 		{
 			if (n)
@@ -1339,8 +1586,16 @@ void	ft_exec(t_all *all, t_tree *root, int n)
 			{
 				if ((pid = fork()) == 0)
 				{
+					close(1);
+					dup(root->ofd);
+					close(0);
+					dup(root->ifd);
+					close(root->ofd);
+					close(root->ifd);
 					execve(root->path, root->cmd, NULL);
 				}
+				close(root->ofd);
+				close(root->ifd);
 				wait(&all->status);
 			}
 		}
@@ -1412,13 +1667,16 @@ void	ft_tree_init(char *str, t_all *all)
 {
 	t_tree	*root;
 	char	**paths;
+	char	*tmp;
 
 	root = NULL;
 	ft_fill_tree(all, &root, str, NULL);
 	if(ft_check_tree(root))
 		printf("7 - MiniShell: syntax error\n");
-	ft_check_tree2(root);
-	paths = ft_split(ft_get_env(all->env_head, "PATH"), ':');
+	// ft_check_tree2(root);
+	tmp = ft_get_env(all->env_head, "PATH");
+	paths = ft_split(tmp, ':');
+	free (tmp);
 	ft_check_tree3(root, paths, &all->g_head);
 	free_tab(paths);
 	all->root = root;
@@ -1573,50 +1831,6 @@ int	ft_check_syntax(char *str)
 	return (0);
 }
 
-/* **************************** HER_DOC **************************** */
-char	*ft_parse_dollar(t_env *head, char *str)
-{
-	int		i;
-	int		j;
-	char	*rst;
-
-	i = 0;
-	j = 0;
-	rst = NULL;
-	while (str[i])
-	{
-		if (str[i] == '$' && ft_isalnum(str[i + 1]))
-		{
-			rst = ft_strjoin(rst, ft_substr(str, j, i - j));
-			i++;
-			j = i;
-			while (str[i] && ft_isalnum(str[i]))
-				i++;
-			rst = ft_strjoin(rst, ft_get_env(head, ft_substr(str, j, i - j)));
-			j = i;
-		}
-		i++;
-	}
-	rst = ft_strjoin(rst, ft_substr(str, j, i - j));
-	free(str);
-	return (rst);
-}
-
-void	ft_heredoc(t_env *head, char *limiter, int fd)
-{
-	char *hdoc;
-
-	while (1)
-	{
-		if (!ft_strcmp(limiter, hdoc))
-			break;
-		hdoc = readline("\033[0;31mheredoc>\033[0m ");
-		hdoc = ft_parse_dollar(head, hdoc);
-		write (fd, hdoc, ft_strlen(hdoc));
-		write (fd, "\n", 1);
-		free(hdoc);
-	}
-}
 
 /* **************************** main **************************** */
 int main(int ac, char *av[], char *env[])
@@ -1633,8 +1847,6 @@ int main(int ac, char *av[], char *env[])
 			continue ;
 		all.g_head = NULL;
 		ft_tree_init(str, &all);
-		// ft_split_echo(str, &all.g_head);
-		// ft_substr2(str, 0, ft_strlen(str), &all.g_head);
 		free(str);
 		ft_close_fd(all.root);
 		ft_free_garbage(all.g_head);

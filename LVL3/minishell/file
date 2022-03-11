@@ -4,7 +4,34 @@ echo "" '' "''" '""' "hous" 'amm' "'hahaha'" '"khedam"' 3ajebna
 ls && (cat || greo || (ls && pwd) && env)&& (ls || pwd)
 
 ****************************************************************************
+signals
 cat | cat | ls
-parsing $ in split echo
-parsing *
 no more substr for redirection
+
+while (str[i])
+{
+	if (str[i] == '<')
+	{
+		i++;
+		close(struct->ifd);
+		struct->infile = ft_strdup(subtstr(str, i, 5))
+		struct->ifd = open(struct->infile);
+		if (fd < 0)
+		i += strlen(infile)
+	}
+	if (str[i] ==  |
+		struct->outfile = ft_strdup(subtstr(str, i, 5))
+
+}
+****************************************************************************
+char get;
+
+if (str[i] == '\"' || '\'')
+	get = str[i];
+	i++;
+	while (str[i] != get)
+	{
+		if (str[i] == "$" && get == '\"')
+
+		i++;
+	}
