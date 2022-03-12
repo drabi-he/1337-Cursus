@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:18:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/12 17:40:24 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/12 18:46:55 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_tree
 	int		ifd;
 	int		ofd;
 	int		p[2];
+	int		exist;
 	struct s_tree	*parent;
 	struct s_tree	*left;
 	struct s_tree	*right;
@@ -894,7 +895,7 @@ void	free_tab(char **t)
 	int	i;
 
 	i = 0;
-	while (t[i])
+	while (t && t[i])
 	{
 		if (t[i])
 			free(t[i]);
@@ -1221,11 +1222,13 @@ char	*ft_get_herdoc(char *str, int i, t_all *all, t_tree **node)
 	while (str[j] && str[j] != ' ')
 		j++;
 	node[0]->infile = ft_strtrim(ft_substr2(str, i, j - i, &all->g_head), " ", &all->g_head);
-	node[0]->ifd = open(".tmp", O_CREAT | O_RDWR | O_TRUNC, 0644);
+	node[0]->ifd = open(".tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	ft_heredoc(all, all->env_head, node[0]->infile, node[0]->ifd);
 	left = ft_substr(str, 0, i - 2);
 	right = ft_substr(str, j, ft_strlen(str));
 	rst = ft_strjoin(left, right);
+	close(node[0]->ifd);
+	node[0]->ifd = open(".tmp", O_RDONLY , 0644);
 	return (rst);
 }
 
@@ -1375,6 +1378,7 @@ void	ft_fill_tree(t_all *all, t_tree **node, char *str, t_tree *parent)
 				node[0] = ft_new_node(C_CMD, COMMAND, &all->g_head, NULL);
 				ft_split_red(&str, all, node);
 				node[0]->cmd = ft_split_echo(str, &all->g_head);
+				node[0]->exist = 1;
 				i = 0;
 				while (node[0]->cmd[i])
 				{
@@ -1480,6 +1484,7 @@ int	ft_check_tree(t_tree *root)
 
 int	ft_is_builtin(t_tree *node, char *str)
 {
+
 	if (!ft_strcmp("echo", str) || !ft_strcmp("pwd", str) || !ft_strcmp("cd", str)\
 		|| !ft_strcmp("unset", str) || !ft_strcmp("export", str) || !ft_strcmp("env", str)\
 		|| !ft_strcmp("exit", str))
@@ -1500,6 +1505,8 @@ int	ft_get_path(t_tree *node, char **path, t_garbage **head)
 	char *test1;
 	char *test2;
 
+	if(ft_is_builtin(node, node->cmd[0]) == 1)
+			return (0);
 	if (!path)
 		return (1);
 	i = ft_strchr(node->cmd[0], '/');
@@ -1514,8 +1521,6 @@ int	ft_get_path(t_tree *node, char **path, t_garbage **head)
 	else
 	{
 		i = 0;
-		if(ft_is_builtin(node, node->cmd[0]))
-			return (0);
 		while (path[i])
 		{
 			test1 = ft_strjoin(path[i], "/");
@@ -1543,6 +1548,7 @@ int	ft_check_tree3(t_tree *root, char **path, t_garbage **head)
 		if(ft_get_path(root, path, head))
 		{
 			ft_print_error("MiniShell: ", root->cmd[0], ": command not found\n");
+			root->exist = 0;
 			return (1);
 		}
 	}
@@ -1578,8 +1584,8 @@ void	ft_list_to_array(t_all *all)
 	tmp = all->env_head;
 	while (tmp)
 	{
-		all->env[i] = ft_strjoin(ft_strdup(tmp->key), ft_strdup("="));
-		all->env[i] = ft_strjoin(ft_strdup(all->env[i]), ft_strdup(tmp->value));
+		all->env[i] = ft_strjoin(ft_strdup_malloc(tmp->key, &all->g_head), ft_strdup_malloc("=" ,&all->g_head));
+		all->env[i] = ft_strjoin(ft_strdup_malloc(all->env[i] ,&all->g_head), ft_strdup_malloc(tmp->value, &all->g_head));
 		i++;
 		tmp = tmp->next;
 	}
@@ -1842,9 +1848,9 @@ void	ft_exec(t_all *all, t_tree *root, int n)
 
 	if (root->token == COMMAND)
 	{
-		ft_parse_cmd(all, root->cmd);
 		if (root->is_builtin == 0)
 		{
+		ft_parse_cmd(all, root->cmd);
 			if (n)
 			{
 				if (root->ofd > 0)
@@ -1861,7 +1867,7 @@ void	ft_exec(t_all *all, t_tree *root, int n)
 			}
 			else
 			{
-				if ((pid = fork()) == 0)
+				if (fork() == 0)
 				{
 					if (root->ofd > 0)
 					{
@@ -1875,6 +1881,8 @@ void	ft_exec(t_all *all, t_tree *root, int n)
 					}
 					close(root->ofd);
 					close(root->ifd);
+					if (!root->exist)
+						exit(1);
 					execve(root->path, root->cmd, all->env);
 				}
 				close(root->ifd);
@@ -1954,8 +1962,7 @@ void	ft_tree_init(char *str, t_all *all)
 	free_tab(paths);
 	all->root = root;
 	all->env = NULL;
-	//ft_print_tree(root, 0, 0);
-	ft_list_to_array(all);
+	//ft_list_to_array(all);
 	all->last_fd = 0;
 	ft_exec(all, all->root, 0);
 }
@@ -2124,6 +2131,7 @@ int main(int ac, char *av[], char *env[])
 		free(str);
 		ft_close_fd(all.root);
 		ft_free_garbage(all.g_head);
+		free_tab(all.env);
 	}
 	return (0);
 }
