@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:18:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/12 14:57:38 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/12 17:40:24 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct s_all
 	char		**env;
 	int			status;
 	int			p[2];
+	int			last_fd;
 }	t_all;
 
 /* **************************** GARBAGE FUNCTIONS **************************** */
@@ -1780,9 +1781,60 @@ void ft_exec_builtin(t_all *all, t_tree *root)
 		exit(0);
 }
 
+void	ft_exec(t_all *all, t_tree *root, int n);
+
+pid_t	run_pipe(t_all *all, t_tree *root, int fds[2], int side)
+{
+	pid_t		pid;
+	int			end;
+	int			fileno;
+	t_tree	*cmdtree;
+
+	end = 1;
+	fileno = STDOUT_FILENO;
+	cmdtree = root->left;
+	if (side & 2)
+	{
+		end = 0;
+		fileno = STDIN_FILENO;
+		cmdtree = root->right;
+	}
+	pid = fork();
+	if (pid == 0)
+	{
+		dup2(fds[end], fileno);
+		close(fds[0]);
+		close(fds[1]);
+		ft_exec(all, cmdtree, 1);
+		exit(0);
+	}
+	return (pid);
+}
+
+void	run_pipeline(t_all *all, t_tree *root)
+{
+	int	status;
+	int	pids[2];
+	int	fds[2];
+
+	if (pipe(fds) == -1)
+		return ;
+	pids[0] = run_pipe(all, root, fds, 1);
+	if (pids[0] == -1)
+		return ;
+	pids[1] = run_pipe(all, root, fds, 2);
+	if (pids[1] == -1)
+		return ;
+	close(fds[0]);
+	close(fds[1]);
+	wait(&status);
+	wait(&status);
+}
+
 void	ft_exec(t_all *all, t_tree *root, int n)
 {
 	int out;
+	int	p[2];
 
 	if (!root)
 		return ;
@@ -1844,28 +1896,7 @@ void	ft_exec(t_all *all, t_tree *root, int n)
 	}
 	if (root->token == PIPE)
 	{
-		if (pipe(root->p))
-			printf("error pipe!");
-		if ((pid = fork())== 0)
-		{
-			close(1);
-			dup(root->p[1]);
-			close(root->p[0]);
-			close(root->p[1]);
-			ft_exec(all,root->left, 1);
-		}
-		if ((pid = fork())== 0)
-		{
-			close(0);
-			dup(root->p[0]);
-			close(root->p[0]);
-			close(root->p[1]);
-			ft_exec(all,root->right, 1);
-		}
-		close(root->p[0]);
-		close(root->p[1]);
-		wait(&all->status);
-		wait(&all->status);
+		run_pipeline(all, root);
 	}
 	if (root->token == AND)
 	{
@@ -1879,7 +1910,7 @@ void	ft_exec(t_all *all, t_tree *root, int n)
 		if (all->status != 0)
 			ft_exec(all, root->right, 0);
 	}
-	sleep(1);
+
 }
 
 /* **************************** INIT FUNCTIONS **************************** */
@@ -1925,6 +1956,7 @@ void	ft_tree_init(char *str, t_all *all)
 	all->env = NULL;
 	//ft_print_tree(root, 0, 0);
 	ft_list_to_array(all);
+	all->last_fd = 0;
 	ft_exec(all, all->root, 0);
 }
 
@@ -2074,8 +2106,6 @@ int	ft_check_syntax(char *str)
 }
 
 /* **************************** main **************************** */
-
-
 
 int main(int ac, char *av[], char *env[])
 {

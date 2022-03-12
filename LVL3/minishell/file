@@ -1,11 +1,9 @@
-< file cmd | cmd > file && cmd | cmd << file || (cmd && cmd) | cmd || cmd && cmd | cmd
+< file cmd1 | cmd2 > file && cmd3 | cmd4 << file || (cmd5 && cmd6) | cmd7 || cmd8 && cmd9 | cmd10
 (cmd || cmd) && (cmd || cmd) && cmd
 echo "" '' "''" '""' "hous" 'amm' "'hahaha'" '"khedam"' 3ajebna
 ls && (cat || greo || (ls && pwd) && env)&& (ls || pwd)
 
 ****************************************************************************
 signals
-cat | cat | ls
-history fix
 
 ****************************************************************************
