@@ -6,32 +6,7 @@ ls && (cat || greo || (ls && pwd) && env)&& (ls || pwd)
 ****************************************************************************
 signals
 cat | cat | ls
-no more substr for redirection
+list to array
+history fix
 
-while (str[i])
-{
-	if (str[i] == '<')
-	{
-		i++;
-		close(struct->ifd);
-		struct->infile = ft_strdup(subtstr(str, i, 5))
-		struct->ifd = open(struct->infile);
-		if (fd < 0)
-		i += strlen(infile)
-	}
-	if (str[i] ==  |
-		struct->outfile = ft_strdup(subtstr(str, i, 5))
-
-}
 ****************************************************************************
-char get;
-
-if (str[i] == '\"' || '\'')
-	get = str[i];
-	i++;
-	while (str[i] != get)
-	{
-		if (str[i] == "$" && get == '\"')
-
-		i++;
-	}
