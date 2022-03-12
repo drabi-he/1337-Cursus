@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:18:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/12 14:42:08 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/12 14:57:38 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef struct s_tree
 	char	*outfile;
 	int		ifd;
 	int		ofd;
+	int		p[2];
 	struct s_tree	*parent;
 	struct s_tree	*left;
 	struct s_tree	*right;
@@ -1843,26 +1844,26 @@ void	ft_exec(t_all *all, t_tree *root, int n)
 	}
 	if (root->token == PIPE)
 	{
-		if (pipe(all->p))
+		if (pipe(root->p))
 			printf("error pipe!");
 		if ((pid = fork())== 0)
 		{
 			close(1);
-			dup(all->p[1]);
-			close(all->p[0]);
-			close(all->p[1]);
+			dup(root->p[1]);
+			close(root->p[0]);
+			close(root->p[1]);
 			ft_exec(all,root->left, 1);
 		}
 		if ((pid = fork())== 0)
 		{
 			close(0);
-			dup(all->p[0]);
-			close(all->p[0]);
-			close(all->p[1]);
+			dup(root->p[0]);
+			close(root->p[0]);
+			close(root->p[1]);
 			ft_exec(all,root->right, 1);
 		}
-		close(all->p[0]);
-		close(all->p[1]);
+		close(root->p[0]);
+		close(root->p[1]);
 		wait(&all->status);
 		wait(&all->status);
 	}
@@ -1878,7 +1879,7 @@ void	ft_exec(t_all *all, t_tree *root, int n)
 		if (all->status != 0)
 			ft_exec(all, root->right, 0);
 	}
-	return ;
+	sleep(1);
 }
 
 /* **************************** INIT FUNCTIONS **************************** */
