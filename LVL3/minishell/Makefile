@@ -24,7 +24,6 @@ all : $(NAME)
 $(NAME) : $(SRCM1)
 	$(CC) $(CFLAGS)  $(SRCM1) -o $(NAME)
 	clear
-	./${NAME}
 
 clean :
 	rm -f $(NAME)

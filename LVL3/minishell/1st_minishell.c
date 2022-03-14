@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1st_minishell.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:18:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/12 18:46:55 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/14 12:12:35 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct s_all
 	t_tree		*root;
 	char		**env;
 	int			status;
+	int			status_s;
 	int			p[2];
 	int			last_fd;
 }	t_all;
@@ -234,7 +235,7 @@ int	ft_skip_quote(char *str, int *i)
 			(*i)++;
 		if (!str[*i])
 		{
-			printf("MiniShell: syntax error unclosed quote near `%c'\n", str[*i]);
+			printf("2 -MiniShell: syntax error unclosed quote near `%c'\n", str[*i]);
 			return (-1);
 		}
 	}
@@ -409,9 +410,10 @@ char	*ft_strtrim(char *s1, char *set, t_garbage **head)
 	len = ft_get_index(s1, set, -1, ft_strlen(s1) - 1);
 	if (!len && ft_strlen(s1) != 1)
 	{
-		rst = (char *)ft_malloc(sizeof(char), head);
-		rst[0] = 0;
-		return (rst);
+		// rst = (char *)ft_malloc(sizeof(char), head);
+		// rst[0] = 0;
+		// return (rst);
+		return (NULL);
 	}
 	rst = (char *)ft_malloc((len - i + 2) * sizeof(char), head);
 	if (!rst)
@@ -459,7 +461,7 @@ void	ft_recalculate_len(char **str, unsigned int *start, size_t *len, t_garbage 
 	(*len)--;
 	while (str[0][*len] == ' ')
 		(*len)--;
-	if (str[0][*len] == 41)
+	if (str[0][*len] == 41 && str[0][0] == 40)
 	{
 		while (i < *len)
 		{
@@ -1154,14 +1156,19 @@ void	ft_heredoc(t_all *all, t_env *head, char *limiter, int fd)
 
 	while (1)
 	{
+		all->status_s= 0;
 		hdoc = readline("\033[0;31mheredoc>\033[0m ");
+		if (!hdoc)
+			return ;
 		hdoc = ft_parse_dollar(all, head, hdoc, 1);
 		if (!ft_strcmp(limiter, hdoc))
 			break;
 		write (fd, hdoc, ft_strlen(hdoc));
 		write (fd, "\n", 1);
 		free(hdoc);
+
 	}
+
 }
 
 /* **************************** PARSE CMD **************************** */
@@ -1200,7 +1207,7 @@ char	*ft_get_infile(char *str, int i, t_all *all, t_tree **node)
 	node[0]->infile = ft_strtrim(ft_substr2(str, i, j - i, &all->g_head), " ", &all->g_head);
 	if (access(node[0]->infile, F_OK | R_OK))
 	{
-		printf("MiniShell: %s: file doesn't exist or permission denied!\n", node[0]->infile);
+		ft_print_error("MiniShell: ", node[0]->infile, ": file doesn't exist or permission denied!\n");
 	}
 	node[0]->ifd = open(node[0]->infile, O_RDONLY , 0644);
 	left = ft_substr(str, 0, i - 1);
@@ -1343,6 +1350,8 @@ void	ft_fill_tree(t_all *all, t_tree **node, char *str, t_tree *parent)
 {
 	int i;
 	int n;
+	char **tmp;
+
 
 	if (!str)
 		return ;
@@ -1380,11 +1389,14 @@ void	ft_fill_tree(t_all *all, t_tree **node, char *str, t_tree *parent)
 				node[0]->cmd = ft_split_echo(str, &all->g_head);
 				node[0]->exist = 1;
 				i = 0;
+				tmp = alloc_tab();
 				while (node[0]->cmd[i])
 				{
+					if (!tmp[0])
+						break ;
 					if (!ft_strcmp(node[0]->cmd[i], "*"))
 					{
-						node[0]->cmd = ft_double_join(node[0]->cmd, alloc_tab() , &all->g_head,i);
+						node[0]->cmd = ft_double_join(node[0]->cmd, tmp , &all->g_head,i);
 						i = 0;
 					}
 					i++;
@@ -1426,8 +1438,10 @@ void	ft_close_fd(t_tree *root)
 {
 	if (!root)
 		return ;
-	close(root->ifd);
-	close(root->ofd);
+	if (root->ifd > 0)
+		close(root->ifd);
+	if (root->ofd > 0)
+		close(root->ofd);
 	ft_close_fd(root->right);
 	ft_close_fd(root->left);
 	if(!access(".tmp", F_OK))
@@ -1502,20 +1516,22 @@ int	ft_is_builtin(t_tree *node, char *str)
 int	ft_get_path(t_tree *node, char **path, t_garbage **head)
 {
 	int		i;
+	char	*tmp;
 	char *test1;
 	char *test2;
 
-	if(ft_is_builtin(node, node->cmd[0]) == 1)
+	tmp = ft_substr2(node->cmd[0], 0, ft_strlen(node->cmd[0]), head);
+	if(ft_is_builtin(node, tmp) == 1)
 			return (0);
 	if (!path)
 		return (1);
-	i = ft_strchr(node->cmd[0], '/');
+	i = ft_strchr(tmp, '/');
 	if (i != -1)
 	{
-		if (access(node->cmd[0], F_OK))
+		if (access(tmp, F_OK))
 			return (1);
 		else
-			node->path = ft_strdup_malloc(node->cmd[0], head);
+			node->path = ft_strdup_malloc(tmp, head);
 		return (0);
 	}
 	else
@@ -1524,7 +1540,7 @@ int	ft_get_path(t_tree *node, char **path, t_garbage **head)
 		while (path[i])
 		{
 			test1 = ft_strjoin(path[i], "/");
-			test2 = ft_strjoin(test1, node->cmd[0]);
+			test2 = ft_strjoin(test1, tmp);
 			free(test1);
 			if (!access(test2, F_OK))
 			{
@@ -1577,15 +1593,14 @@ void	ft_list_to_array(t_all *all)
 	t_env *tmp;
 
 	len = ft_get_list_size(all->env_head);
-	//all->env = NULL;
 	all->env = (char **)malloc((len + 1)* sizeof(char *));
 	if (!all->env)
 		return ;
 	tmp = all->env_head;
 	while (tmp)
 	{
-		all->env[i] = ft_strjoin(ft_strdup_malloc(tmp->key, &all->g_head), ft_strdup_malloc("=" ,&all->g_head));
-		all->env[i] = ft_strjoin(ft_strdup_malloc(all->env[i] ,&all->g_head), ft_strdup_malloc(tmp->value, &all->g_head));
+		all->env[i] = ft_strjoin(ft_strdup(tmp->key), ft_strdup("="));
+		all->env[i] = ft_strjoin(ft_strdup(all->env[i]), ft_strdup(tmp->value));
 		i++;
 		tmp = tmp->next;
 	}
@@ -1617,12 +1632,19 @@ int	ft_pwd()
 int ft_cd(t_env *env, char *s)
 {
 	char path[2000];
+	char *home;
 
 	getcwd(path, 2000);
     if (!s)
 	{
+		home = ft_get_env(env, "HOME");
+		if (!home)
+		{
+			write(2, "MiniShell: cd: HOME not set\n", 28);
+			return (1);
+		}
 		ft_edit_env(env, "OLDPWD", path);
-        chdir("/");
+        chdir(home);
 		getcwd(path, 2000);
 		ft_edit_env(env, "PWD", path);
 		return (0);
@@ -1649,7 +1671,7 @@ int ft_echo(int index, char **s)
     int i;
 
 	i = 0;
-	if (s[index] && !ft_strcmp(s[index], "-n"))
+	while (s[index] && !ft_strcmp(s[index], "-n"))
 	{
 		index++;
 		i++;
@@ -1657,7 +1679,8 @@ int ft_echo(int index, char **s)
 	while (s[index])
 	{
 		printf("%s", s[index++]);
-		printf(" ");
+		if (s[index])
+			printf(" ");
 	}
 	if (!i)
 		printf("\n");
@@ -1671,6 +1694,8 @@ int	ft_unset(t_env **lst, char *str)
 	t_env	*tmp_env2;
 
 	i = 0;
+	if (!str)
+		return (0);
 	while (str[i])
 	{
 		if(!ft_isalnum(str[i]))
@@ -1844,13 +1869,11 @@ void	ft_exec(t_all *all, t_tree *root, int n)
 
 	if (!root)
 		return ;
-	int pid;
-
 	if (root->token == COMMAND)
 	{
+		ft_parse_cmd(all, root->cmd);
 		if (root->is_builtin == 0)
 		{
-		ft_parse_cmd(all, root->cmd);
 			if (n)
 			{
 				if (root->ofd > 0)
@@ -1863,7 +1886,15 @@ void	ft_exec(t_all *all, t_tree *root, int n)
 					close(0);
 					dup(root->ifd);
 				}
+				if (root->infile && root->ifd < 0)
+				{
+					all->status = 1;
+					exit(1);
+				}
 				execve(root->path, root->cmd, all->env);
+				ft_print_error("MiniShell: ", root->cmd[0], ": is a directory\n");
+				all->status = 1;
+				exit(1);
 			}
 			else
 			{
@@ -1881,9 +1912,15 @@ void	ft_exec(t_all *all, t_tree *root, int n)
 					}
 					close(root->ofd);
 					close(root->ifd);
-					if (!root->exist)
+					if (!root->exist || (root->infile && root->ifd < 0))
+					{
+						all->status = 1;
 						exit(1);
+					}
 					execve(root->path, root->cmd, all->env);
+					ft_print_error("MiniShell: ", root->cmd[0], ": is a directory\n");
+					all->status = 1;
+					exit(1);
 				}
 				close(root->ifd);
 				close(root->ofd);
@@ -1929,11 +1966,11 @@ void	ft_env_init(t_env **env, char *e[])
 
 	i = 0;
 	env[0] = NULL;
-	if (!e[0])
-	{
-		printf("ERROR : cannot work without env\n");
-		exit(EXIT_FAILURE);
-	}
+	// if (!e[0])
+	// {
+	// 	printf("ERROR : cannot work without env\n");
+	// 	exit(EXIT_FAILURE);
+	// }
 	while (e[i])
 	{
 		j = ft_env_split(e[i]);
@@ -1949,6 +1986,7 @@ void	ft_tree_init(char *str, t_all *all)
 	char	*tmp;
 
 	root = NULL;
+	str = ft_strtrim(str, " \n\t\r\n\v", &all->g_head);
 	ft_fill_tree(all, &root, str, NULL);
 	if(ft_check_tree(root))
 	{
@@ -1962,7 +2000,7 @@ void	ft_tree_init(char *str, t_all *all)
 	free_tab(paths);
 	all->root = root;
 	all->env = NULL;
-	//ft_list_to_array(all);
+	ft_list_to_array(all);
 	all->last_fd = 0;
 	ft_exec(all, all->root, 0);
 }
@@ -1988,7 +2026,8 @@ int	ft_check_options(char *str)
 				return (1);
 			}
 		}
-		i++;
+		else
+			i++;
 	}
 	return (0);
 }
@@ -2047,10 +2086,15 @@ int	ft_valid_options(char *str)
 	return (0);
 }
 
-void	ft_valid_parenthesis_mini(char *str, int *i, int *cp)
+int	ft_valid_parenthesis_mini(char *str, int *i, int *cp)
 {
+	int tmp;
+
+	tmp = 0;
 	while (str[*i] && *cp > 0)
 	{
+		if (str[*i] == '&' || str[*i] == '|')
+			tmp++;
 		if (str[*i] == 40)
 			(*cp)++;
 		if (str[*i] == 41)
@@ -2058,6 +2102,9 @@ void	ft_valid_parenthesis_mini(char *str, int *i, int *cp)
 		if (*cp)
 			(*i)++;
 	}
+	if (tmp)
+		return (1);
+	return (0);
 }
 
 int	ft_valid_parenthesis(char *str)
@@ -2080,7 +2127,11 @@ int	ft_valid_parenthesis(char *str)
 		{
 			cp++;
 			i++;
-			ft_valid_parenthesis_mini(str, &i, &cp);
+			if (!ft_valid_parenthesis_mini(str, &i, &cp))
+			{
+				printf ("MiniShell: syntax error near unexpected token `%c'\n", str[i]);
+				return (1);
+			}
 		}
 		if (cp !=0)
 		{
@@ -2111,27 +2162,50 @@ int	ft_check_syntax(char *str)
 	}
 	return (0);
 }
+t_all	all;
 
+void handel_ctl(int sig)
+{
+	if (!all.status_s)
+	{
+		signal(SIGINT, &handel_ctl);
+		rl_on_new_line();
+		write(1, "\n", 1);
+		rl_replace_line("", 0);
+		rl_redisplay();
+		return ;
+	}
+}
 /* **************************** main **************************** */
 
 int main(int ac, char *av[], char *env[])
 {
-	t_all	all;
 	char	*str;
 
+	if (!env[0])
+	{
+		env = malloc(1 * sizeof(char*));
+		env[0] = 0;
+	}
 	ft_env_init(&all.env_head, env);
+	signal(SIGINT, &handel_ctl);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
+		all.status_s = 0;
 		str = readline("\033[0;36m\e[1mMiniShell > \e[0m\033[0m");
+		if (!str)
+			return(printf("Exit\n"), 1);
 		add_history(str);
 		if(ft_check_syntax(str) || !ft_strcmp(str, "\0"))
 			continue ;
 		all.g_head = NULL;
+		all.status_s = 1;
+		all.root = NULL;
 		ft_tree_init(str, &all);
 		free(str);
 		ft_close_fd(all.root);
 		ft_free_garbage(all.g_head);
-		free_tab(all.env);
 	}
 	return (0);
 }
