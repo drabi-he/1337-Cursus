@@ -408,13 +408,8 @@ char	*ft_strtrim(char *s1, char *set, t_garbage **head)
 		return (NULL);
 	i = ft_get_index(s1, set, 1, 0);
 	len = ft_get_index(s1, set, -1, ft_strlen(s1) - 1);
-	if (!len && ft_strlen(s1) != 1)
-	{
-		// rst = (char *)ft_malloc(sizeof(char), head);
-		// rst[0] = 0;
-		// return (rst);
+	if (len <= 0)
 		return (NULL);
-	}
 	rst = (char *)ft_malloc((len - i + 2) * sizeof(char), head);
 	if (!rst)
 		return (NULL);
