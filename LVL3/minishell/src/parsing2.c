@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 15:15:47 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/15 18:47:39 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/15 19:01:53 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ static void	ft_node_cmd(t_tree **node, char *str)
 		}
 		i++;
 	}
+	printf("%s\n", node[0]->cmd[0]);
 	free_tab(tmp);
 }
 
