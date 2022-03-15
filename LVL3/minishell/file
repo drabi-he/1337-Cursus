@@ -1,4 +1,4 @@
-< file cmd1 | cmd2 > file && cmd3 | cmd4 << file || (cmd5 && cmd6) | cmd7 || cmd8 && cmd9 | cmd10
+cmd1 | cmd2 && cmd3 | cmd4 || (cmd5 && cmd6) | cmd7 || cmd8 && cmd9 | cmd10
 (cmd || cmd) && (cmd || cmd) && cmd
 echo "" '' "''" '""' "hous" 'amm' "'hahaha'" '"khedam"' 3ajebna
 ls && (cat || greo || (ls && pwd) && env)&& (ls || pwd)

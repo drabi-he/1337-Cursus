@@ -6,24 +6,41 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/10 10:48:44 by hdrabi            #+#    #+#              #
-#    Updated: 2022/03/12 17:39:51 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/03/15 18:18:05 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCM = minishell.c
-SRCM1 = 1st_minishell.c
+SRCM =	src/utils1.c \
+		src/utils2.c \
+		src/utils3.c \
+		src/utils4.c \
+		src/utils5.c \
+		src/garbage1.c \
+		src/garbage2.c \
+		src/garbage3.c \
+		src/check_syntax1.c \
+		src/check_syntax2.c \
+		src/env_fct1.c \
+		src/env_fct2.c \
+		src/parsing1.c \
+		src/parsing2.c \
+		src/files1.c \
+		src/files2.c \
+		src/split_echo.c \
+		src/wildcard.c \
+		src/double_join.c \
+		minishell.c
 
 NAME = minishell
 
-#CFLAGS = -Wall -Wextra -Werror -L$(shell brew --prefix readline)/lib -I$(shell brew --prefix readline)/include  -lreadline
-
-CFLAGS = -L$(shell brew --prefix readline)/lib -I$(shell brew --prefix readline)/include  -lreadline
+CFLAGS = -Wall -Wextra -Werror -L$(shell brew --prefix readline)/lib -I$(shell brew --prefix readline)/include  -lreadline
 
 all : $(NAME)
 
-$(NAME) : $(SRCM1)
-	$(CC) $(CFLAGS)  $(SRCM1) -o $(NAME)
-	clear
+$(NAME) : $(SRCM) minishell.h
+	$(CC) $(CFLAGS)  $(SRCM) -o $(NAME)
+
+bonus : all
 
 clean :
 	rm -f $(NAME)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1st_minishell.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:18:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/14 12:12:35 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/03/15 17:18:29 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,7 +235,7 @@ int	ft_skip_quote(char *str, int *i)
 			(*i)++;
 		if (!str[*i])
 		{
-			printf("2 -MiniShell: syntax error unclosed quote near `%c'\n", str[*i]);
+			printf("MiniShell: syntax error unclosed quote near `%c'\n", str[*i]);
 			return (-1);
 		}
 	}
@@ -830,7 +830,7 @@ void	ft_count_words(char *str, int *j)
 	}
 }
 
-void	ft_cpyyy(char *str, char ***t, int j, t_garbage **head)
+void	ft_cpyyy(char *str, char ***t, int j)
 {
 	int		i;
 	int		len;
@@ -852,13 +852,13 @@ void	ft_cpyyy(char *str, char ***t, int j, t_garbage **head)
 			}
 			i++;
 		}
-		t[0][j] = ft_substr3(str, len, i - len, head);
+		t[0][j] = ft_substr3(str, len, i - len);
 		j++;
 	}
 	t[0][j] = 0;
 }
 
-char	**ft_split_echo(char *str, t_garbage **head)
+char	**ft_split_echo(char *str)
 {
 	int		i;
 	int		j;
@@ -866,13 +866,12 @@ char	**ft_split_echo(char *str, t_garbage **head)
 	char	get;
 	char	**t;
 
-
 	j = 0;
 	ft_count_words(str, &j);
-	t = (char **)ft_malloc((j + 1) * sizeof(char *), head);
+	t = (char **)ft_malloc((j + 1) * sizeof(char *));
 	if (!t)
 		return (NULL);
-	ft_cpyyy(str, &t, 0, head);
+	ft_cpyyy(str, &t, 0);
 	return (t);
 }
 

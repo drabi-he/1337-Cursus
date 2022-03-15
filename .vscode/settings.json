@@ -9,5 +9,8 @@
     "unistd.h": "c",
     "wait.h": "c",
     "readline.h": "c"
-  }
+},
+"cSpell.words": [
+	"hdoc"
+]
 }
