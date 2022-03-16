@@ -6,31 +6,61 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 14:40:37 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/15 19:00:58 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/16 15:05:01 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#define COUNT 20
 
-void	ft_print_tree(t_tree *root, int space, int pos)
+static int	ft_check_tree(t_tree *root)
 {
-	if (root == NULL)
-		return ;
-	space += COUNT;
-	ft_print_tree(root->right, space, pos + 1);
-	printf("\n");
-	for (int i = COUNT; i < space; i++)
-		printf(" ");
-	printf("p %d | t %d| %s\n", pos, root->token, root->cmd? root->cmd[0] : "null");
-	ft_print_tree(root->left, space, pos +1);
+	if (!root)
+		return (0);
+	if (root->token == PIPE || root->token == OR || root->token == AND)
+	{
+		if (!root->right || !root->left)
+			return (1);
+	}
+	ft_check_tree(root->right);
+	ft_check_tree(root->left);
+	return (0);
+}
+
+static int	ft_check_tree2(t_tree *root, char **path)
+{
+	if (!root)
+		return (0);
+	if (root->token == COMMAND)
+	{
+		if (ft_get_path(root, path))
+		{
+			ft_print_error("MiniShell: ", root->cmd[0], ": command not found\n");
+			root->exist = 0;
+			return (1);
+		}
+	}
+	ft_check_tree2(root->right, path);
+	ft_check_tree2(root->left, path);
+	return (0);
 }
 
 void	ft_tree_init(char *str)
 {
+	char	*tmp;
+	char	**paths;
+
 	g_all.root = NULL;
 	g_all.g_head = NULL;
 	str = ft_strtrim(str, WHITESPACE);
 	ft_fill_tree(&g_all.root, str, NULL);
-	ft_print_tree(g_all.root, 0, 0);
+	if (ft_check_tree(g_all.root))
+	{
+		printf("MiniShell: syntax error\n");
+		return ;
+	}
+	tmp = ft_get_env(g_all.env_head, "PATH");
+	paths = ft_split(tmp, ':');
+	ft_check_tree2(g_all.root, paths);
+	free_tab(paths);
+	ft_exec(g_all.root, 0);
 }

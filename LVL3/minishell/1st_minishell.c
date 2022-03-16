@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:18:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/15 17:18:29 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/16 17:12:21 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1585,6 +1585,7 @@ void	ft_list_to_array(t_all *all)
 	int len;
 	int i = 0;
 	t_env *tmp;
+	char *t;
 
 	len = ft_get_list_size(all->env_head);
 	all->env = (char **)malloc((len + 1)* sizeof(char *));
@@ -1593,10 +1594,11 @@ void	ft_list_to_array(t_all *all)
 	tmp = all->env_head;
 	while (tmp)
 	{
-		all->env[i] = ft_strjoin(ft_strdup(tmp->key), ft_strdup("="));
-		all->env[i] = ft_strjoin(ft_strdup(all->env[i]), ft_strdup(tmp->value));
+		t = ft_strjoin(ft_strdup(tmp->key), ft_strdup("="));
+		all->env[i] = ft_strjoin(t, ft_strdup(tmp->value));
 		i++;
 		tmp = tmp->next;
+		free(t);
 	}
 }
 
@@ -2160,15 +2162,37 @@ t_all	all;
 
 void handel_ctl(int sig)
 {
-	if (!all.status_s)
-	{
-		signal(SIGINT, &handel_ctl);
-		rl_on_new_line();
-		write(1, "\n", 1);
-		rl_replace_line("", 0);
-		rl_redisplay();
-		return ;
-	}
+    if (all.status_s && sig == SIGINT)
+    {
+        kill(all.pid, SIGINT);
+        write(1, "\n", 1);
+        return ;
+    }
+    if (!all.status_s)
+    {
+        rl_on_new_line();
+        write(1, "\n", 1);
+        rl_replace_line("", 0);
+        rl_redisplay();
+        return ;
+    }
+}
+
+void handel_ctl1(int sig)
+{
+    if (all.status_s && sig == SIGQUIT)
+    {
+        kill(all.pid, SIGQUIT);
+        write(1, "Quit: 3\n", 8);
+        return ;
+    }
+    printf("%d\n", all.full);
+    if (!all.status_s && sig == SIGQUIT)
+    {
+        printf("here\n");
+        return ;
+    }
+    return ;
 }
 /* **************************** main **************************** */
 
@@ -2182,8 +2206,10 @@ int main(int ac, char *av[], char *env[])
 		env[0] = 0;
 	}
 	ft_env_init(&all.env_head, env);
-	signal(SIGINT, &handel_ctl);
+	signal(SIGINT, handel_ctl);
+	signal(SIGQUIT, handel_ctl1);
 	signal(SIGQUIT, SIG_IGN);
+
 	while (1)
 	{
 		all.status_s = 0;

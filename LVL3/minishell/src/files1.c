@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 15:49:40 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/15 18:36:27 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/16 14:21:55 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	ft_heredoc(char *limiter, int fd)
 			break ;
 		write (fd, hdoc, ft_strlen(hdoc));
 		write (fd, "\n", 1);
-		free(hdoc);
 	}
 }
 
@@ -41,14 +40,14 @@ char	*ft_get_herdoc(char *str, int i, t_tree **node)
 	j = i;
 	while (str[j] && str[j] == ' ')
 		j++;
-	while (str[j] && str[j] != ' ')
+	while (str[j] && (str[j] != ' ' && str[j] != '<' && str[j] != '>'))
 		j++;
 	node[0]->infile = ft_strtrim(ft_substr2(str, i, j - i), " ");
 	node[0]->ifd = open(".tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	ft_heredoc(node[0]->infile, node[0]->ifd);
 	left = ft_substr(str, 0, i - 2);
 	right = ft_substr(str, j, ft_strlen(str));
-	rst = ft_strjoin(left, right);
+	rst = ft_strjoin2(left, right);
 	free(left);
 	free(right);
 	close(node[0]->ifd);
@@ -66,7 +65,7 @@ char	*ft_get_infile(char *str, int i, t_tree **node)
 	j = i;
 	while (str[j] && str[j] == ' ')
 		j++;
-	while (str[j] && str[j] != ' ')
+	while (str[j] && (str[j] != ' ' && str[j] != '<' && str[j] != '>'))
 		j++;
 	node[0]->infile = ft_strtrim(ft_substr2(str, i, j - i), " ");
 	if (access(node[0]->infile, F_OK | R_OK))
@@ -77,7 +76,7 @@ char	*ft_get_infile(char *str, int i, t_tree **node)
 	node[0]->ifd = open(node[0]->infile, O_RDONLY, 0644);
 	left = ft_substr(str, 0, i - 1);
 	right = ft_substr(str, j, ft_strlen(str));
-	rst = ft_strjoin(left, right);
+	rst = ft_strjoin2(left, right);
 	free(left);
 	free(right);
 	return (rst);
@@ -85,7 +84,7 @@ char	*ft_get_infile(char *str, int i, t_tree **node)
 
 void	ft_split_red_mini(t_tree **node, char **str, int *i)
 {
-	i++;
+	(*i)++;
 	if (str[0][*i] == '<')
 	{
 		(*i)++;

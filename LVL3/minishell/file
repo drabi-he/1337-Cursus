@@ -4,3 +4,5 @@ echo "" '' "''" '""' "hous" 'amm' "'hahaha'" '"khedam"' 3ajebna
 ls && (cat || greo || (ls && pwd) && env)&& (ls || pwd)
 
 ****************************************************************************
+cd double free
+$ print name

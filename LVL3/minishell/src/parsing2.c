@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 15:15:47 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/15 19:01:53 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/16 17:43:00 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static char	*ft_parse_dollar_mini(char *str, char *rst, int *i, int *j)
 		tmp = ft_substr(str, *j, *i - *j);
 		rst = ft_strjoin2(rst, ft_get_env(g_all.env_head, tmp));
 		free (tmp);
-		j = i;
+		*j = *i;
 	}
 	else if (str[*i + 1] == '?')
 	{
@@ -113,7 +113,6 @@ static void	ft_node_cmd(t_tree **node, char *str)
 		}
 		i++;
 	}
-	printf("%s\n", node[0]->cmd[0]);
 	free_tab(tmp);
 }
 

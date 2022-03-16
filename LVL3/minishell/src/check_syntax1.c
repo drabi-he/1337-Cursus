@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 14:05:21 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/15 15:14:17 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/16 15:05:43 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int	ft_check_options(char *str)
 				i++;
 			if (ft_strchr(TABLE, str[i]) != -1)
 			{
-				printf ("MiniShell: syntax error near \
-					unexpected token `%c'\n", str[i]);
+				printf ("MiniShell: syntax error near ");
+				printf("unexpected token `%c'\n", str[i]);
 				return (1);
 			}
 		}

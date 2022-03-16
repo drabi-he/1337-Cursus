@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 14:44:57 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/15 18:30:44 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/16 10:40:57 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*ft_strtrim(char *s1, char *set)
 		return (NULL);
 	i = ft_get_index(s1, set, 1, 0);
 	len = ft_get_index(s1, set, -1, ft_strlen(s1) - 1);
-	if (len <= 0)
+	if (len <= 0 && s1[0] == ' ')
 		return (NULL);
 	rst = (char *)ft_malloc((len - i + 2) * sizeof(char));
 	if (!rst)

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:09:51 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/15 13:59:07 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/16 18:31:44 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,19 +54,19 @@ int	ft_env_split(const char *s)
 	return (-1);
 }
 
-void	ft_free_env(t_env *env)
+void	ft_free_env(void)
 {
-	while (env)
+	while (g_all.env_head)
 	{
-		free(env->key);
-		if (env->value)
-			free(env->value);
-		free (env);
-		env = env->next;
+		free(g_all.env_head->key);
+		if (g_all.env_head->value)
+			free(g_all.env_head->value);
+		free (g_all.env_head);
+		g_all.env_head = g_all.env_head->next;
 	}
 }
 
-void	ft_edit_env(t_env *env, char **exec_env, char *key, char *new_val)
+void	ft_edit_env(t_env *env, char *key, char *new_val)
 {
 	t_env	*tmp;
 
@@ -82,7 +82,6 @@ void	ft_edit_env(t_env *env, char **exec_env, char *key, char *new_val)
 		}
 		tmp = tmp->next;
 	}
-	ft_add_env(&env, ft_new_env(ft_strdup(key), ft_strdup(new_val)));
-	ft_free_env_array(exec_env);
-	exec_env = ft_list_to_array(env);
+	if (key)
+		ft_add_env(&tmp, ft_new_env(ft_strdup(key), ft_strdup(new_val)));
 }

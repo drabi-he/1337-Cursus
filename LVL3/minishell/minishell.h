@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 11:06:01 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/15 18:39:27 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/16 18:36:48 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,7 @@ typedef struct s_all
 	char		**env;
 	int			status;
 	int			status_s;
-	int			p[2];
-	int			last_fd;
+	int			pid;
 }	t_all;
 
 t_all	g_all;
@@ -112,18 +111,18 @@ void		ft_sub_len(char *s, unsigned int start, size_t *len);
 char		*ft_substr2(char *s, unsigned int start, size_t len);
 char		*ft_strjoin(char *s1, char *s2);
 char		*ft_strjoin2(char *s1, char *s2);
+char		**ft_split(char *s, char c);
 t_tree		*ft_new_node(int token, char **cmd);
 
 /* **************************** ENV FUNCTIONS **************************** */
 t_env		*ft_new_env(char *key, char *value);
 void		ft_add_env(t_env **lst, t_env *new);
 int			ft_env_split(const char *s);
-void		ft_free_env(t_env *env);
-void		ft_edit_env(t_env *env, char **exec_env, char *key, char *new_val);
+void		ft_free_env(void);
+void		ft_edit_env(t_env *env, char *key, char *new_val);
 char		*ft_get_env(t_env *head, char *search);
 void		ft_env_init(t_env **env, char *s_env[]);
-void		ft_free_env_array(char	**env);
-char		**ft_list_to_array(t_env *env);
+char		**ft_list_to_array(void);
 
 /* **************************** CHECK SYNTAX **************************** */
 int			ft_check_options(char *str);
@@ -152,12 +151,33 @@ void		ft_split_red(char **str, t_tree **node);
 char		*ft_get_outfile(char *str, int i, t_tree **node);
 char		*ft_get_a_outfile(char *str, int i, t_tree **node);
 
+/* *************************** BUILTIN FUNCTIONS *************************** */
+int			ft_env(t_env *lst);
+int			ft_pwd(void);
+int			ft_echo(int index, char **s);
+int			ft_cd(t_env *env, char *s);
+int			ft_export(char *str, t_env *head, int cp);
+int			ft_unset(t_env **lst, char *str);
+void		ft_exit(void);
+
 /* *************************** PARSING FUNCTIONS *************************** */
 void		ft_tree_init(char *str);
 char		*ft_parse_dollar(char *str, int n);
 char		**ft_split_echo(char *str);
 char		**ft_double_join(char **s1, char **s2, int pos);
 char		**alloc_tab(t_wild w);
+int			ft_get_path(t_tree *node, char **path);
 void		ft_fill_tree(t_tree **node, char *str, t_tree *parent);
+
+/* ************************** EXECUTION FUNCTIONS ************************** */
+pid_t		run_pipe(t_tree *root, int fds[2], int side);
+void		run_pipeline(t_tree *root);
+void		ft_exec_builtin2(t_tree *root);
+void		ft_exec_builtin(t_tree *root);
+void		ft_exec_options(t_tree *root);
+void		ft_exec(t_tree *root, int n);
+
+void		handel_ctl(int sig);
+void		handel_ctl1(int sig);
 
 #endif
