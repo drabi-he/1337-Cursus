@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:09:51 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/16 18:31:44 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/16 18:48:58 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	ft_edit_env(t_env *env, char *key, char *new_val)
 		}
 		tmp = tmp->next;
 	}
+	tmp = env;
 	if (key)
 		ft_add_env(&tmp, ft_new_env(ft_strdup(key), ft_strdup(new_val)));
 }

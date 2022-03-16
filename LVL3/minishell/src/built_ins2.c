@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 13:44:12 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/16 18:31:10 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/16 18:47:07 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ int	ft_unset(t_env **lst, char *str)
 			free(tmp_env2->key);
 			free(tmp_env2->value);
 			free(tmp_env2);
-			ft_edit_env(g_all.env_head, NULL, NULL);
 			return (0);
 		}
 		tmp_env = tmp_env->next;
@@ -113,7 +112,7 @@ int	ft_export(char *str, t_env *head, int cp)
 			cp++;
 		if (str[i] > '0' && str[i] < '9' && !cp)
 		{
-			ft_print_error("9 - MiniShell: export: `", str + i, \
+			ft_print_error("MiniShell: export: `", str + i, \
 			"': not a valid identifier\n");
 			return (1);
 		}

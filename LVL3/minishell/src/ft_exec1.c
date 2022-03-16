@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 14:03:39 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/16 18:42:56 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/16 18:45:11 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,6 @@ void	ft_input_ouput_ctrl(t_tree *root)
 
 void	ft_exec_cmd(t_tree *root)
 {
-	char	**env;
-
-	env = NULL;
-	env = ft_list_to_array();
 	g_all.pid = fork();
 	if (g_all.pid == 0)
 	{
@@ -61,7 +57,7 @@ void	ft_exec_cmd(t_tree *root)
 			g_all.status = 1;
 			exit(1);
 		}
-		execve(root->path, root->cmd, env);
+		execve(root->path, root->cmd, g_all.env);
 		ft_print_error("1- MiniShell: ", root->cmd[0], ": is a directory\n");
 		g_all.status = 1;
 		exit(1);
@@ -69,14 +65,10 @@ void	ft_exec_cmd(t_tree *root)
 	close(root->ifd);
 	close(root->ofd);
 	wait(&g_all.status);
-	// if (env[0])
-	// 	free_tab(env);
 }
 
 void	ft_exec_pipe(t_tree *root)
 {
-	char	**env;
-
 	if (root->ofd > 0)
 	{
 		close(1);
@@ -92,8 +84,7 @@ void	ft_exec_pipe(t_tree *root)
 		g_all.status = 1;
 		exit(1);
 	}
-	env = ft_list_to_array();
-	execve(root->path, root->cmd, env);
+	execve(root->path, root->cmd, g_all.env);
 	ft_print_error("2- MiniShell: ", root->cmd[0], ": is a directory\n");
 	g_all.status = 1;
 	exit(1);
