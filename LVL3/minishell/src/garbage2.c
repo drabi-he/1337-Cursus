@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 14:44:57 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/17 11:04:25 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/17 12:57:24 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	**ft_malloc(int alloc)
 
 	ptr = (void **)malloc(alloc);
 	if (!ptr)
-		return (printf("failed allocation"), exit(1), NULL);
+		return (printf("failed allocation\n"), exit(1), NULL);
 	ft_add_garbage(&g_all.g_head, ft_new_garbage(ptr));
 	return (ptr);
 }

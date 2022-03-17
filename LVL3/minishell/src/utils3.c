@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 15:20:33 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/17 11:10:04 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/17 13:07:35 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ char	*ft_strjoin2(char *s1, char *s2)
 	j = 0;
 	if (!s1 && !s2)
 		return (NULL);
-	p = (char *)ft_malloc((ft_strlen(s1) + ft_strlen(s2)) + 1 * sizeof(char)); // chi tkhwira tma
+	p = (char *)ft_malloc((ft_strlen(s1) + ft_strlen(s2)) + 1 * sizeof(char));
 	if (!p)
-		return (0);
+		return (NULL);
 	while (s1 && s1[j])
 		p[i++] = s1[j++];
 	j = 0;
