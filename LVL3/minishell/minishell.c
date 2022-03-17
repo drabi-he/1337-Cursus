@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 11:05:24 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/17 18:35:19 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/17 18:40:08 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,16 @@ void	ft_exit(char **cmd)
 		}
 		i++;
 	}
-	if (cmd[2])
+	if (cmd[1] && cmd[2])
 	{
 		printf("MiniShell: exit: too many arguments\n");
 		g_all.status = 1;
 		return ;
 	}
-	g_all.status = ft_atoi(cmd[1]);
+	if (cmd[1])
+		g_all.status = ft_atoi(cmd[1]);
+	else
+		g_all.status = 0;
 	exit(0);
 }
 

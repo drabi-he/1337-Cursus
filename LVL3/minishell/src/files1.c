@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 15:49:40 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/17 13:04:51 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/17 18:49:26 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void	ft_split_red(char **str, t_tree **node)
 	i = 0;
 	while (str[0][i])
 	{
+		ft_skip_quote(str[0], &i);
 		if (str[0][i] == '<')
 			ft_split_red_mini(node, str, &i);
 		else if (str[0][i] == '>')
