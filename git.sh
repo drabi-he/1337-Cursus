@@ -5,4 +5,5 @@ git add .
 git status
 git commit -m "1337 cursus"
 git log
+exit
 git push
