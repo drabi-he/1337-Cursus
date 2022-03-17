@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 11:06:01 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/16 18:36:48 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/17 11:57:51 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_tree
 	char			token;
 	int				is_builtin;
 	char			**cmd;
+	char			**env;
 	char			*path;
 	char			*infile;
 	char			*outfile;
@@ -105,6 +106,7 @@ char		*ft_strdup(char *s1);
 int			ft_strchr(char *s, int c);
 int			ft_strrchr(char *s, int c);
 int			ft_strchr_v2_0(char *str);
+int			ft_atoi(const char *str);
 char		*ft_itoa(int n);
 char		*ft_substr(char *s, unsigned int start, size_t len);
 void		ft_sub_len(char *s, unsigned int start, size_t *len);
@@ -158,7 +160,7 @@ int			ft_echo(int index, char **s);
 int			ft_cd(t_env *env, char *s);
 int			ft_export(char *str, t_env *head, int cp);
 int			ft_unset(t_env **lst, char *str);
-void		ft_exit(void);
+void		ft_exit(char **cmd);
 
 /* *************************** PARSING FUNCTIONS *************************** */
 void		ft_tree_init(char *str);

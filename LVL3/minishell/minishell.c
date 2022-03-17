@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 11:05:24 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/16 18:37:05 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/17 12:20:41 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,29 @@ void	ft_close_fd(t_tree *root)
 		unlink(".tmp");
 }
 
-void	ft_exit(void)
+void	ft_exit(char **cmd)
 {
+	int	i;
+
+	i = 0;
 	printf("exit\n");
+	while (cmd[1][i])
+	{
+		if (cmd[1][i] < '0' || cmd[1][i] > '9')
+		{
+			printf("MiniShell: exit: %s: numeric argument required\n", cmd[1]);
+			g_all.status = 254;
+			exit(1);
+		}
+		i++;
+	}
+	if (cmd[2])
+	{
+		printf("MiniShell: exit: too many arguments\n");
+		g_all.status = 1;
+		return ;
+	}
+	g_all.status = ft_atoi(cmd[1]);
 	exit(0);
 }
 
@@ -53,18 +73,19 @@ char	**ft_list_to_array(void)
 	char	**t;
 
 	len = ft_get_list_size(g_all.env_head);
-	t = (char **)malloc((len + 1) * sizeof(char *));
+	t = (char **)ft_malloc((len + 1) * sizeof(char *));
 	if (!t)
 		return (NULL);
 	tmp = g_all.env_head;
 	i = 0;
-	while (tmp)
+	while (tmp && i < len)
 	{
-		t[i] = ft_strjoin(ft_strdup(tmp->key), ft_strdup("="));
-		t[i] = ft_strjoin(t[i], ft_strdup(tmp->value));
+		t[i] = ft_strjoin2(ft_strdup_garbage(tmp->key), ft_strdup_garbage("="));
+		t[i] = ft_strjoin2(t[i], ft_strdup_garbage(tmp->value));
 		i++;
 		tmp = tmp->next;
 	}
+	t[i] = NULL;
 	return (t);
 }
 

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 15:20:33 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/15 18:34:42 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/17 11:10:04 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	*ft_strjoin2(char *s1, char *s2)
 	j = 0;
 	if (!s1 && !s2)
 		return (NULL);
-	p = (char *)ft_malloc((ft_strlen(s1) + ft_strlen(s2)) + 1 * sizeof(char));
+	p = (char *)ft_malloc((ft_strlen(s1) + ft_strlen(s2)) + 1 * sizeof(char)); // chi tkhwira tma
 	if (!p)
 		return (0);
 	while (s1 && s1[j])
@@ -99,6 +99,7 @@ t_tree	*ft_new_node(int token, char **cmd)
 		return (NULL);
 	new->token = token;
 	new->cmd = cmd;
+	new->env = NULL;
 	new->infile = NULL;
 	new->outfile = NULL;
 	new->ifd = -2;

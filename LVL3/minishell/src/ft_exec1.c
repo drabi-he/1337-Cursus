@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 14:03:39 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/16 18:45:11 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/17 10:32:06 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ void	ft_exec_cmd(t_tree *root)
 			g_all.status = 1;
 			exit(1);
 		}
-		execve(root->path, root->cmd, g_all.env);
+		root->env = ft_list_to_array();
+		execve(root->path, root->cmd, root->env);
 		ft_print_error("1- MiniShell: ", root->cmd[0], ": is a directory\n");
 		g_all.status = 1;
 		exit(1);
@@ -84,7 +85,8 @@ void	ft_exec_pipe(t_tree *root)
 		g_all.status = 1;
 		exit(1);
 	}
-	execve(root->path, root->cmd, g_all.env);
+	root->env = ft_list_to_array();
+	execve(root->path, root->cmd, root->env);
 	ft_print_error("2- MiniShell: ", root->cmd[0], ": is a directory\n");
 	g_all.status = 1;
 	exit(1);

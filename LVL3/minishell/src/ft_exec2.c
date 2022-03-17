@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 14:14:55 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/16 17:04:30 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/17 12:20:36 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,7 @@ void	ft_exec_builtin(t_tree *root)
 	if (!ft_strcmp(root->cmd[0], "export"))
 		g_all.status = ft_export(root->cmd[1], g_all.env_head, 0);
 	if (!ft_strcmp(root->cmd[0], "exit"))
-	{
-		g_all.status = 0;
-		ft_exit();
-	}
+		ft_exit(root->cmd);
 	if (root->parent && root->parent->token == PIPE)
 		exit(0);
 }
