@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 14:14:55 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/17 12:20:36 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/18 10:45:34 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ pid_t	run_pipe(t_tree *root, int fds[2], int side)
 	end = 1;
 	fileno = STDOUT_FILENO;
 	cmdtree = root->left;
-	if (side & 2)
+	if (side == 2)
 	{
 		end = 0;
 		fileno = STDIN_FILENO;
@@ -57,7 +57,6 @@ pid_t	run_pipe(t_tree *root, int fds[2], int side)
 
 void	run_pipeline(t_tree *root)
 {
-	int	status;
 	int	pids[2];
 	int	fds[2];
 
@@ -71,8 +70,8 @@ void	run_pipeline(t_tree *root)
 		return ;
 	close(fds[0]);
 	close(fds[1]);
-	wait(&status);
-	wait(&status);
+	wait(&g_all.status);
+	wait(&g_all.status);
 }
 
 void	ft_exec_builtin2(t_tree *root)
