@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 17:17:05 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/17 12:58:17 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/19 18:07:25 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ char	**ft_split_echo(char *str)
 	char	**t;
 
 	j = 0;
+	if (!str)
+		return (NULL);
 	ft_count_words(str, &j);
 	t = (char **)ft_malloc((j + 1) * sizeof(char *));
 	if (!t)

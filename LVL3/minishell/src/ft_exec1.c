@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 14:03:39 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/17 10:32:06 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/19 18:10:46 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	ft_exec(t_tree *root, int n)
 {
 	if (!root)
 		return ;
-	if (root->token == COMMAND)
+	if (root->token == COMMAND && root->cmd)
 	{
 		ft_parse_cmd(root->cmd);
 		if (root->is_builtin == 0)

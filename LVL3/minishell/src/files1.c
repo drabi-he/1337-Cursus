@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 15:49:40 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/17 18:49:26 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/19 18:26:32 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ char	*ft_get_herdoc(char *str, int i, t_tree **node)
 	while (str[j] && (str[j] != ' ' && str[j] != '<' && str[j] != '>'))
 		j++;
 	node[0]->infile = ft_strtrim(ft_substr2(str, i, j - i), " ");
+	if (!node[0]->infile)
+		return (printf("MiniShell: syntax error\n"), NULL);
 	node[0]->ifd = open(".tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	ft_heredoc(node[0]->infile, node[0]->ifd);
 	left = ft_substr(str, 0, i - 2);
@@ -68,6 +70,8 @@ char	*ft_get_infile(char *str, int i, t_tree **node)
 	while (str[j] && (str[j] != ' ' && str[j] != '<' && str[j] != '>'))
 		j++;
 	node[0]->infile = ft_strtrim(ft_substr2(str, i, j - i), " ");
+	if (!node[0]->infile)
+		return (printf("MiniShell: syntax error\n"), NULL);
 	if (access(node[0]->infile, F_OK | R_OK))
 	{
 		ft_print_error("MiniShell: ", node[0]->infile, \
@@ -100,7 +104,7 @@ void	ft_split_red(char **str, t_tree **node)
 	int	i;
 
 	i = 0;
-	while (str[0][i])
+	while (str[0] && str[0][i])
 	{
 		ft_skip_quote(str[0], &i);
 		if (str[0][i] == '<')

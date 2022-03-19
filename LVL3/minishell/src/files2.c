@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 17:08:31 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/16 10:50:12 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/19 18:27:04 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ char	*ft_get_outfile(char *str, int i, t_tree **node)
 	{
 		printf("MiniShell: %s: permission denied!\n", node[0]->outfile);
 	}
+	if (!node[0]->outfile)
+		return (printf("MiniShell: syntax error\n"), NULL);
 	node[0]->ofd = open(node[0]->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	left = ft_substr(str, 0, i - 1);
 	right = ft_substr(str, j, ft_strlen(str));
@@ -51,6 +53,8 @@ char	*ft_get_a_outfile(char *str, int i, t_tree **node)
 	while (str[j] && (str[j] != ' ' && str[j] != '<' && str[j] != '>'))
 		j++;
 	node[0]->outfile = ft_strtrim(ft_substr2(str, i, j - i), " ");
+	if (!node[0]->outfile)
+		return (printf("MiniShell: syntax error\n"), NULL);
 	if (!access(node[0]->outfile, F_OK) && access(node[0]->outfile, W_OK))
 	{
 		printf("MiniShell: %s: permission denied!\n", node[0]->outfile);

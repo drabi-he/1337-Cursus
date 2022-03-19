@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 15:15:47 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/17 11:16:08 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/19 18:20:21 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ static void	ft_node_cmd(t_tree **node, char *str)
 	node[0]->exist = 1;
 	i = 0;
 	tmp = alloc_tab(w);
-	while (node[0]->cmd[i])
+	while (node[0]->cmd && node[0]->cmd[i])
 	{
 		if (!tmp || !tmp[0])
 			break ;

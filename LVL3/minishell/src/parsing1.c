@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 14:40:37 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/16 15:05:01 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/03/19 18:22:18 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ static int	ft_check_tree2(t_tree *root, char **path)
 {
 	if (!root)
 		return (0);
-	if (root->token == COMMAND)
+	if (root->token == COMMAND && !root->cmd)
+		return (1);
+	if (root->token == COMMAND && root->cmd[0])
 	{
 		if (ft_get_path(root, path))
 		{
