@@ -1,7 +1,7 @@
 # 1337 - 42 NETWORK
 
 ## HolyGraph
-![](./HolyGraph2.png)
+![](./HolyGraph3.png)
 ## INFO
 ***CLASS OF 01/11/2021 (4th promo)***
 
