@@ -11,8 +11,12 @@
 
 ### COMMON CORE
 (***! to see the subjects click on the status***)
-(***! some projects can't be uploaded due to there size***)
-(***! some projects only has 100 as score***)
+
+(***! some projects can't be uploaded due to there nature (virtual machine - networking - ...)***)
+
+(***! some projects only has 100 as max score***)
+
+(***! plz use the evaluation pdfs as reference only since they change with time***)
 
 | CIRCLE  | NAME | FIELD | EXPECTED DURATION | EXP | STATUS | LVL |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
