@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/28 10:11:47 by hdrabi            #+#    #+#              #
-#    Updated: 2022/04/04 13:41:49 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/04/04 22:11:48 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ SRC = utils/error_handle.c \
 		parsing/verify_walls.c \
 		raycasting/init.c \
 		raycasting/mini_map.c \
+		raycasting/load_texture.c \
 		raycasting/draw_screen.c \
 		raycasting/key_press.c \
 		raycasting/gameplay.c \
@@ -39,4 +40,4 @@ fclean: clean
 re: fclean all
 
 run : re
-	clear && ./cub3d map.cub
+	clear && ./cub3d map5.cub

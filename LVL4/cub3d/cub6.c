@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 14:55:27 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/04 17:28:59 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/04 22:09:40 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,30 +114,6 @@ void	draw_screen()
 {
 	img = mlx_new_image(mlx, screenWidth, screenHeight);
 	addr = mlx_get_data_addr(img, &bpp, &line_l, &en);
-	// for(int x = 0; x < texWidth; x++)
-	// for(int y = 0; y < texHeight; y++)
-	// {
-	// 	int xorcolor = (x * 256 / texWidth) ^ (y * 256 / texHeight);
-	// 	//int xcolor = x * 256 / texWidth;
-	// 	int ycolor = y * 256 / texHeight;
-	// 	int xycolor = y * 128 / texHeight + x * 128 / texWidth;
-	// 	texture[0].tex[texWidth * y + x] = 65536 * 254 * (x != y && x != texWidth - y); //flat red texture with black cross
-	// 	texture[1].tex[texWidth * y + x] = xycolor + 256 * xycolor + 65536 * xycolor; //sloped greyscale
-	// 	texture[2].tex[texWidth * y + x] = 256 * xycolor + 65536 * xycolor; //sloped yellow gradient
-	// 	texture[3].tex[texWidth * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor; //xor greyscale
-	// 	texture[4].tex[texWidth * y + x] = 256 * xorcolor; //xor green
-	// 	texture[5].tex[texWidth * y + x] = 65536 * 192 * (x % 16 && y % 16); //red bricks
-	// 	texture[6].tex[texWidth * y + x] = 65536 * ycolor; //red gradient
-	// 	texture[7].tex[texWidth * y + x] = 128 + 256 * 128 + 65536 * 128; //flat grey texture
-	// 	printf("text1 = %d\n", texture[0].tex[texWidth * y + x]);
-	// 	printf("text2 = %d\n", texture[1].tex[texWidth * y + x]);
-	// 	printf("text3 = %d\n", texture[2].tex[texWidth * y + x]);
-	// 	printf("text4 = %d\n", texture[3].tex[texWidth * y + x]);
-	// 	printf("text5 = %d\n", texture[4].tex[texWidth * y + x]);
-	// 	printf("text6 = %d\n", texture[5].tex[texWidth * y + x]);
-	// 	printf("text7 = %d\n", texture[6].tex[texWidth * y + x]);
-	// 	printf("text8 = %d\n", texture[7].tex[texWidth * y + x]);
-	// }
 	for(int x = 0; x < screenWidth; x++)
     {
 		//calculate ray position and direction
@@ -200,6 +176,18 @@ void	draw_screen()
 				mapY += stepY;
 				side = 1;
 			}
+			// if(planeX < sideDistY)
+			// {
+			// 	sideDistX += deltaDistX;
+			// 	mapX += stepX;
+			// 	side = 0;
+			// }
+			// else
+			// {
+			// 	sideDistY += deltaDistY;
+			// 	mapY += stepY;
+			// 	side = 1;
+			// }
 			//Check if ray has hit a wall
 			if(worldMap[mapX][mapY] > 0) hit = 1;
 		}
@@ -222,7 +210,7 @@ void	draw_screen()
 		double wallX; //where exactly the wall was hit
 		if (side == 0) wallX = posY + perpWallDist * rayDirY;
 		else           wallX = posX + perpWallDist * rayDirX;
-		wallX -= floor((wallX));
+		wallX -= floor(wallX);
 
 		//x coordinate on the texture
 		int texX = (int)(wallX * (double)texWidth);
@@ -263,6 +251,7 @@ int		key_press(int key)
 	mlx_clear_window(mlx, win);
 	double moveSpeed = 1; //the constant value is in squares/second
 	double rotSpeed = 0.1; //the constant value is in radians/second
+	printf("%f | %f\n", posX, posY);
 	if (key == 13)
 	{
 		if(worldMap[(int)(posX + dirX * moveSpeed)][(int)posY] == 0) posX += dirX * moveSpeed;
@@ -275,6 +264,16 @@ int		key_press(int key)
 	}
 	if (key == 2)
 	{
+		if(worldMap[(int)(posX - planeX * moveSpeed)][(int)posY] == 0) posX += planeX * moveSpeed;
+		if(worldMap[(int)posX][(int)(posY - planeY * moveSpeed)] == 0) posY += planeY * moveSpeed;
+	}
+	if (key == 0)
+	{
+		if(worldMap[(int)(posX - planeX * moveSpeed)][(int)posY] == 0) posX -= planeX * moveSpeed;
+		if(worldMap[(int)posX][(int)(posY - planeY * moveSpeed)] == 0) posY -= planeY * moveSpeed;
+	}
+	if (key == 124)
+	{
 		double oldDirX = dirX;
 		dirX = dirX * cos(-rotSpeed) - dirY * sin(-rotSpeed);
 		dirY = oldDirX * sin(-rotSpeed) + dirY * cos(-rotSpeed);
@@ -282,7 +281,7 @@ int		key_press(int key)
 		planeX = planeX * cos(-rotSpeed) - planeY * sin(-rotSpeed);
 		planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
 	}
-	if (key == 0)
+	if (key == 123)
 	{
 		double oldDirX = dirX;
 		dirX = dirX * cos(rotSpeed) - dirY * sin(rotSpeed);

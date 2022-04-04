@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 17:10:30 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/04 13:41:23 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/04 22:00:15 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,39 @@ void	initial_color(t_win *win, t_ray *ray, char **map)
 		ray->line_height / 2) * ray->step;
 }
 
+unsigned int	get_color(t_texture *t, int x, int y)
+{
+	char	*ptr;
+	int		pixel;
+
+	pixel = y * t->sl + x * 4;
+	ptr = t->addr + pixel;
+	if (t->en == 0)
+		return ((((unsigned char)ptr[2]) << 16)
+			+ (((unsigned char)ptr[1]) << 8) + ((unsigned char)ptr[0]));
+	return ((((unsigned char)ptr[0]) << 16)
+		+ (((unsigned char)ptr[1]) << 8) + ((unsigned char)ptr[2]));
+}
+
 void	initial_color_2(t_win *win, t_ray *ray)
 {
 	int	i;
 
-	i = ray->draw_start;
+	i = 0;
+	while (i < ray->draw_start)
+		ray->buffer[i++][win->x] = 0x90e0ef;
 	while (i < ray->draw_end)
 	{
 		ray->tex_y = (int)ray->tex_pos & (T_H - 1);
 		ray->tex_pos += ray->step;
-		ray->color = ray->t[ray->tex_num].t[T_H * ray->tex_y + ray->tex_x];
+		ray->color = get_color(&ray->t[ray->tex_num], ray->tex_x, ray->tex_y);
 		if (ray->side == 1)
 			ray->color = (ray->color >> 1) & 8355711;
 		ray->buffer[i][win->x] = ray->color;
 		i++;
 	}
+	while (i < SCREEN_H)
+		ray->buffer[i++][win->x] = 0x99d98c;
 }
 
 void	print_ray(t_ray *ray)
@@ -73,35 +91,6 @@ void	print_ray(t_ray *ray)
 	printf("----------------------------------------------\n");
 }
 
-void	texture_init(t_ray *ray)
-{
-	int	x_col;
-	int	y_col;
-	int	xy_col;
-	int	i;
-	int	j;
-
-	i = -1;
-	while (++i < T_W)
-	{
-		j = -1;
-		while (++j < T_H)
-		{
-			x_col = (i * 256 / T_W) ^ (j * 256 / T_H);
-			y_col = j * 256 / T_H;
-			xy_col = j * 128 / T_H + i * 128 / T_W;
-			ray->t[0].t[T_W * j + i] = 65536 * 254 * (i != j && i != T_W - j);
-			ray->t[1].t[T_W * j + i] = xy_col + 256 * xy_col + 65536 * xy_col;
-			ray->t[2].t[T_W * j + i] = 256 * xy_col + 65536 * xy_col;
-			ray->t[3].t[T_W * j + i] = x_col + 256 * x_col + 65536 * x_col;
-			ray->t[4].t[T_W * j + i] = 256 * x_col;
-			ray->t[5].t[T_W * j + i] = 65536 * 192 * (i % 16 && j % 16);
-			ray->t[6].t[T_W * j + i] = 65536 * y_col;
-			ray->t[7].t[T_W * j + i] = 128 + 256 * 128 + 65536 * 128;
-		}
-	}
-}
-
 void	draw_screen(t_ray *ray, t_win *win, char **map)
 {
 	int	x;
@@ -112,8 +101,6 @@ void	draw_screen(t_ray *ray, t_win *win, char **map)
 	win->mini = mlx_new_image(win->mlx, SCREEN_W / 5, SCREEN_H / 5);
 	win->addr_mini = mlx_get_data_addr(win->mini, &win->bpp, \
 	&win->sl, &win->en);
-	texture_init(ray);
-	// printf("bug\n");
 	x = 0;
 	while (x < SCREEN_W)
 	{
@@ -125,7 +112,6 @@ void	draw_screen(t_ray *ray, t_win *win, char **map)
 		initial_color_2(win, ray);
 		x++;
 	}
-	printf("-----------------------------------------\n");
 	ft_verline(win, ray->buffer, 1);
 	ft_verline(win, ray->buffer, 0);
 	draw_mini_map(ray, win, map);

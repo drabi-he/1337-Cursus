@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:16 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/04 20:23:08 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/04 22:00:11 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 # define SCREEN_W 1024
 # define SCREEN_H 720
-# define MOVE_SPEED 1
+# define MOVE_SPEED 0.5
 # define ROT_SPEED 0.05
 # define T_W 64
 # define T_H 64
@@ -142,6 +142,7 @@ void	check_walls(t_all *all);
 void	ray_init(t_ray	*ray, char **map);
 void	vars_init(t_ray *ray, int x);
 void	initial_dist(t_ray *ray);
+void	load_texture(t_win *win, t_ray *ray);
 void	wall_collision(t_ray *ray, char **map);
 void	draw_mini_map(t_ray *ray, t_win *win, char **map);
 void	draw_screen(t_ray *ray, t_win *win, char **map);

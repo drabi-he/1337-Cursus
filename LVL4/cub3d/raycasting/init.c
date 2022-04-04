@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 16:52:49 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/04 20:25:02 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/04 20:29:32 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,5 +123,4 @@ void	ray_init(t_ray	*ray, char **map)
 		if (!ray->buffer[i])
 			ft_error("Error: allocation failed\n", 1);
 	}
-	load_texture(ray);
 }
