@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 14:55:27 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/04 22:09:40 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/05 15:20:37 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define screenWidth 640
-#define screenHeight 480
+#define screenWidth 1280
+#define screenHeight 720
 #define texWidth 64
 #define texHeight 64
 #define mapWidth 24
@@ -71,6 +71,7 @@ double dirX = -1.0, dirY = 0.0; //initial direction vector
 double planeX = 0.0, planeY = 0.66; //the 2d raycaster version of camera plane
 double time = 0; //time of current frame
 double oldTime = 0; //time of previous frame
+int		first_pos = 0;
 
 unsigned int buffer[screenHeight][screenWidth];
 t_vector	texture[8];
@@ -176,18 +177,6 @@ void	draw_screen()
 				mapY += stepY;
 				side = 1;
 			}
-			// if(planeX < sideDistY)
-			// {
-			// 	sideDistX += deltaDistX;
-			// 	mapX += stepX;
-			// 	side = 0;
-			// }
-			// else
-			// {
-			// 	sideDistY += deltaDistY;
-			// 	mapY += stepY;
-			// 	side = 1;
-			// }
 			//Check if ray has hit a wall
 			if(worldMap[mapX][mapY] > 0) hit = 1;
 		}
@@ -294,6 +283,37 @@ int		key_press(int key)
 	return (0);
 }
 
+int	move(int x)
+{
+	static int pos;
+	mlx_clear_window(mlx, win);
+	double moveSpeed = 1; //the constant value is in squares/second
+	double rotSpeed = 0.1; //the constant value is in radians/second
+
+	if (x > pos + 5)
+	{
+		double oldDirX = dirX;
+		dirX = dirX * cos(-rotSpeed) - dirY * sin(-rotSpeed);
+		dirY = oldDirX * sin(-rotSpeed) + dirY * cos(-rotSpeed);
+		double oldPlaneX = planeX;
+		planeX = planeX * cos(-rotSpeed) - planeY * sin(-rotSpeed);
+		planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
+	}
+	if (x < pos - 5)
+	{
+		double oldDirX = dirX;
+		dirX = dirX * cos(rotSpeed) - dirY * sin(rotSpeed);
+		dirY = oldDirX * sin(rotSpeed) + dirY * cos(rotSpeed);
+		double oldPlaneX = planeX;
+		planeX = planeX * cos(rotSpeed) - planeY * sin(rotSpeed);
+		planeY = oldPlaneX * sin(rotSpeed) + planeY * cos(rotSpeed);
+	}
+	pos = x;
+	usleep(100);
+	draw_screen();
+	return (0);
+}
+
 int main()
 {
 	int 	w, h;
@@ -317,5 +337,6 @@ int main()
 	win = mlx_new_window(mlx, screenWidth, screenHeight, "RayCasting");
 	draw_screen();
 	mlx_hook(win, 2, (1L << 0), key_press, NULL);
+	mlx_hook(win, 6, (1L << 6), move, NULL);
 	mlx_loop(mlx);
 }

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:16 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/04 22:00:11 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/05 14:53:16 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 # include <stdlib.h>
 # include <string.h>
 
-# define SCREEN_W 1024
+# define SCREEN_W 1280
 # define SCREEN_H 720
-# define MOVE_SPEED 0.5
+# define MOVE_SPEED 1
 # define ROT_SPEED 0.05
 # define T_W 64
 # define T_H 64

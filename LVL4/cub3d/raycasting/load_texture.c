@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 20:25:29 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/04 20:45:16 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/05 00:10:48 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,3 +32,4 @@ void	load_texture(t_win *win, t_ray *ray)
 	load_img(win->mlx, &ray->t[6], "./pics/wood.xpm");
 	load_img(win->mlx, &ray->t[7], "./pics/colorstone.xpm");
 }
+
