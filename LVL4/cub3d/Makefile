@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/28 10:11:47 by hdrabi            #+#    #+#              #
-#    Updated: 2022/04/05 14:55:36 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/04/06 00:56:46 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,4 +40,4 @@ fclean: clean
 re: fclean all
 
 run : re
-	clear && ./cub3d map.cub
+	clear && ./cub3d map6.cub

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 16:50:48 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/05 15:42:10 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/06 17:08:29 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	gameplay(t_all *all)
 	all->win.info.width = SCREEN_W / 50;
 	load_texture(&all->win, &all->ray);
 	draw_screen(&all->ray, &all->win, all->map);
-	mlx_hook(all->win.win, 2, (1L << 0), key_press, &all->win);
+	print_ray(&all->ray);
+	mlx_hook(all->win.win, 2, (1L << 0), key_press, all);
 	mlx_loop(all->win.mlx);
 }
