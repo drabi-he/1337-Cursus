@@ -5,7 +5,7 @@
 ## INFO
 ***CLASS OF 01/11/2021 (4th promo)***
 
-[![hdrabi's 42 stats](https://badge42.vercel.app/api/v2/cl1o5timl006409lcgmcbk4yo/stats?cursusId=21&coalitionId=75)](https://github.com/chaosreaper)
+[![hdrabi's 42 stats](https://badge42.vercel.app/api/v2/cl1o5timl006409lcgmcbk4yo/stats?cursusId=21&coalitionId=75)](https://github.com/drabi-he)
 
 ## PROJECTS
 
@@ -29,4 +29,5 @@
 | 2 | [pipex](./LVL2/pipex) | C | 50 hours | 1142 | [![hdrabi's 42 pipex Score](https://badge42.vercel.app/api/v2/cl1o5timl006409lcgmcbk4yo/project/2463056)](./LVL2/pipex.pdf) | 3.44 |
 | 3 | [philosophers](./LVL3/philosophers) | C | 70 hours | 3360 | [![hdrabi's 42 philo Score](https://badge42.vercel.app/api/v2/cl1o5timl006409lcgmcbk4yo/project/2522280)](./LVL3/philosophers.pdf) | 4.05 |
 | 3 | [minishell](./LVL3/minishell) | C | 210 hours | 2814 | [![hdrabi's 42 minishell Score](https://badge42.vercel.app/api/v2/cl1o5timl006409lcgmcbk4yo/project/2529951)](./LVL3/minishell.pdf) | 4.25 |
-| 4 | NetPractice | Networking | 50 hours | 3160 | [![hdrabi's 42 NetPractice Score](https://badge42.vercel.app/api/v2/cl1o5timl006409lcgmcbk4yo/project/2540807)](./LVL4/net_practice.pdf) | - |
+| 4 | NetPractice | Networking | 50 hours | 3160 | [![hdrabi's 42 NetPractice Score](https://badge42.vercel.app/api/v2/cl1o5timl006409lcgmcbk4yo/project/2540807)](./LVL4/net_practice.pdf) | 4.43 |
+
