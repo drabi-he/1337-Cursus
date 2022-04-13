@@ -5,23 +5,34 @@
 #                                                     +:+ +:+         +:+      #
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/03/28 10:11:47 by hdrabi            #+#    #+#              #
-#    Updated: 2022/04/06 00:56:46 by hdrabi           ###   ########.fr        #
+#    Created: 2022/04/05 22:05:25 by hdrabi            #+#    #+#              #
+#    Updated: 2022/04/09 00:16:36 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC = utils/error_handle.c \
-		utils/mini_utils.c \
-		utils/mini_utils2.c \
-		parsing/read_map.c \
-		parsing/verify_walls.c \
-		raycasting/init.c \
-		raycasting/mini_map.c \
-		raycasting/load_texture.c \
-		raycasting/draw_screen.c \
-		raycasting/key_press.c \
-		raycasting/gameplay.c \
-		cub3d.c
+SRC = parsing/parsing_utils_five.c \
+		parsing/parsing_utils_four.c \
+		parsing/parsing_utils_one.c \
+		parsing/parsing_utils_six.c \
+		parsing/parsing_utils_three.c \
+		parsing/parsing_utils_two.c \
+		parsing/parsing_utils_seven.c \
+		parsing/main_parse.c \
+		utils/utils.c \
+		utils/utils2.c \
+		init/init.c \
+		init/dda.c \
+		graphic/mini_utils.c \
+		graphic/mini_utils2.c \
+		graphic/draw_screen.c \
+		graphic/sprite.c \
+		graphic/sprite2.c \
+		keypress/key_press.c \
+		keypress/key_press2.c \
+		keypress/mouse_move.c
+
+SRCM = mandatory.c
+SRCB = bonus.c
 
 NAME = cub3d
 
@@ -30,7 +41,7 @@ NAME = cub3d
 all : $(NAME)
 
 $(NAME): $(SRC)
-	$(CC) $(CFLAGS) -lmlx -framework OpenGL -framework AppKit $(SRC) -o $(NAME)
+	$(CC) $(CFLAGS) -lmlx -framework OpenGL -framework AppKit $(SRCB) $(SRC) -o $(NAME)
 
 clean:
 	rm -rf $(NAME)
@@ -40,4 +51,4 @@ fclean: clean
 re: fclean all
 
 run : re
-	clear && ./cub3d map6.cub
+	clear && ./cub3d bonus.cub
