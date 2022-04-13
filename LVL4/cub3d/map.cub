@@ -1,7 +1,7 @@
 C 60,10,10
 F 30,30,30
 
-NO ./assets/test
+NO ./assets/lavawall.xpm
 SO ./assets/reddarkbricks.xpm
 EA ./assets/dark-wood.xpm
 WE ./assets/darkstone.xpm

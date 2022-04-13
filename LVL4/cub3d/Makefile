@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/05 22:05:25 by hdrabi            #+#    #+#              #
-#    Updated: 2022/04/09 00:16:36 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/04/13 13:55:22 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,20 +31,30 @@ SRC = parsing/parsing_utils_five.c \
 		keypress/key_press2.c \
 		keypress/mouse_move.c
 
+
 SRCM = mandatory.c
+
 SRCB = bonus.c
 
-NAME = cub3d
+NAME = cub3D
 
-#CFLAGS = -Wall -Wextra -Werror -lmlx -framework OpenGL -framework AppKit
+BNAME = haha
+
+CFLAGS = -Wall -Wextra -Werror -lmlx -framework OpenGL -framework AppKit
 
 all : $(NAME)
 
-$(NAME): $(SRC)
-	$(CC) $(CFLAGS) -lmlx -framework OpenGL -framework AppKit $(SRCB) $(SRC) -o $(NAME)
+$(NAME): $(SRC) cub3d.h
+	$(CC) $(CFLAGS) $(SRCM) $(SRC) -o $(NAME)
+
+bonus : $(BNAME)
+
+$(BNAME): $(SRC) cub3d.h
+	$(CC) $(CFLAGS) $(SRCB) $(SRC) -o $(BNAME)
 
 clean:
 	rm -rf $(NAME)
+	rm -rf $(BNAME)
 
 fclean: clean
 
