@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/05 22:05:25 by hdrabi            #+#    #+#              #
-#    Updated: 2022/04/13 13:55:22 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/04/14 16:09:04 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,16 +38,16 @@ SRCB = bonus.c
 
 NAME = cub3D
 
-BNAME = haha
+BNAME = cub3D_bonus
 
 CFLAGS = -Wall -Wextra -Werror -lmlx -framework OpenGL -framework AppKit
 
-all : $(NAME)
+all: $(NAME)
 
 $(NAME): $(SRC) cub3d.h
 	$(CC) $(CFLAGS) $(SRCM) $(SRC) -o $(NAME)
 
-bonus : $(BNAME)
+bonus: $(BNAME)
 
 $(BNAME): $(SRC) cub3d.h
 	$(CC) $(CFLAGS) $(SRCB) $(SRC) -o $(BNAME)
@@ -60,5 +60,4 @@ fclean: clean
 
 re: fclean all
 
-run : re
-	clear && ./cub3d bonus.cub
+.PHONY: bonus all re clean fclean
