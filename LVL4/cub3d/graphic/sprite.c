@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 13:53:40 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/08 21:47:03 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/16 00:45:59 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,16 +92,15 @@ void	sprit_dda_1(t_ray *ray, int i)
 
 void	sprit_dda_2(t_ray *ray, int i, int x)
 {
-	int	stripe;
 	int	y;
 	int	d;
 
-	stripe = ray->draw_x[0] - 1;
-	while (++stripe < ray->draw_x[1])
+	ray->s = ray->draw_x[0] - 1;
+	while (++ray->s < ray->draw_x[1])
 	{
-		ray->tex[X] = (int)(256 * (stripe - (-ray->spr_w / 2 + \
+		ray->tex[X] = (int)(256 * (ray->s - (-ray->spr_w / 2 + \
 		ray->spr_screen)) * T_W / ray->spr_w) / 256;
-		if (ray->transform[Y] > 0 && ray->transform[Y] < ray->z_buffer[stripe])
+		if (ray->transform[Y] > 0 && ray->transform[Y] < ray->z_buffer[ray->s])
 		{
 			y = ray->draw_y[0] - 1;
 			while (++y < ray->draw_y[1])
@@ -109,10 +108,12 @@ void	sprit_dda_2(t_ray *ray, int i, int x)
 				d = (y - ray->move_screen) * 256 - SCREEN_H * 128 \
 					+ ray->spr_h * 128;
 				ray->tex[Y] = ((d * T_H) / ray->spr_h) / 256;
+				if (ray->sprite[ray->sprit_order[i]].texture == 16)
+					x = 0;
 				ray->color = get_color(&ray->t[ray->sprite[ray->\
 				sprit_order[i]].texture + x], ray->tex[X], ray->tex[Y]);
 				if ((ray->color & 0x00FFFFFF) != 0)
-					ray->buffer[y][stripe] = ray->color;
+					ray->buffer[y][ray->s] = ray->color;
 			}
 		}
 	}

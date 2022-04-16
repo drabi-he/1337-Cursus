@@ -17,7 +17,7 @@ int	main(int ac, char *av[])
 	t_all		all;
 	t_parsing	parsing;
 
-	all.key.move_speed = 0.2;
+	all.key.move_speed = 0.11;
 	all.key.rot_speed = 0.1;
 	main_parse(ac, av, &parsing, MANDATORY);
 	print_instructions(&all.key);

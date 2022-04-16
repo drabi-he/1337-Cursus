@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 22:29:22 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/09 15:37:21 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/16 01:44:43 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	choose_color(t_win *win, float x, float y, char c)
 	(c == '1' && scale_mini(win, x, y, 0xFFFFFF));
 	(c == '0' && scale_mini(win, x, y, 0x525E75));
 	(c == 'F' && scale_mini(win, x, y, 0xFFFF00));
+	(c == 'T' && scale_mini(win, x, y, 0xFF9900));
 	(c == 'D' && scale_mini(win, x, y, 0xFF0000));
 	(c == 'O' && scale_mini(win, x, y, 0x00FF00));
 }

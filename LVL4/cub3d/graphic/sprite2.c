@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 14:44:44 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/08 16:13:50 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/16 00:31:15 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,14 @@ void	init_sprit_locations(t_sprite **sprite, char **map)
 		j = -1;
 		while (map[i][++j])
 		{
-			if (map[i][j] == 'F')
+			if (map[i][j] == 'F' || map[i][j] == 'T')
 			{
 				sprite[0][k].x = i + 0.5;
 				sprite[0][k].y = j + 0.5;
-				sprite[0][k].texture = 4;
+				if (map[i][j] == 'F')
+					sprite[0][k].texture = 4;
+				if (map[i][j] == 'T')
+					sprite[0][k].texture = 16;
 				k++;
 			}
 		}

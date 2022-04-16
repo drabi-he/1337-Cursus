@@ -98,9 +98,6 @@ unsigned int	get_color(t_texture *t, int x, int y)
 
 	pixel = y * t->sl + x * 4;
 	ptr = t->addr + pixel;
-	if (t->en == 0)
-		return ((((unsigned char)ptr[2]) << 16)
-			+ (((unsigned char)ptr[1]) << 8) + ((unsigned char)ptr[0]));
-	return ((((unsigned char)ptr[0]) << 16)
-		+ (((unsigned char)ptr[1]) << 8) + ((unsigned char)ptr[2]));
+	return ((((unsigned char)ptr[2]) << 16)
+		+ (((unsigned char)ptr[1]) << 8) + ((unsigned char)ptr[0]));
 }

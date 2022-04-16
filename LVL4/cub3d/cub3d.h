@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 22:01:15 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/09 13:30:30 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/16 00:46:03 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ typedef struct s_ray
 	float			old_plane_x;
 	int				line_height;
 	int				draw[2];
-	t_texture		t[16];
+	t_texture		t[17];
 	unsigned int	**buffer;
 	float			*z_buffer;
 	int				*sprit_order;
@@ -140,6 +140,7 @@ typedef struct s_ray
 	int				spr_w;
 	int				draw_x[2];
 	int				anime;
+	int				s;
 }	t_ray;
 
 typedef struct s_info

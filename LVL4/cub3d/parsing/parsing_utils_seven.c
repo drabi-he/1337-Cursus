@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 21:43:43 by atouhami          #+#    #+#             */
-/*   Updated: 2022/04/06 14:47:27 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/16 00:29:00 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	search_for_player2(t_parsing *parsing, int i, int j, int count)
 				&& parsing->map[i][j] != '0' && parsing->map[i][j] != 'N'\
 				&& parsing->map[i][j] != 'S' && parsing->map[i][j] != 'E'\
 				&& parsing->map[i][j] != 'W' && parsing->map[i][j] != 'D'\
-				&& parsing->map[i][j] != 'F')
+				&& parsing->map[i][j] != 'F' && parsing->map[i][j] != 'T')
 				return (free_parsing(parsing),
 					printf("Error: invalid identifier\n"), 1);
 			else if (parsing->map[i][j] == 'N' || parsing->map[i][j] == 'S'

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 22:40:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/09 22:11:28 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/16 00:31:35 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static void	texture_init(void *mlx, t_ray *ray, t_parsing parsing)
 	load_img(mlx, &ray->t[13], "./assets/demon10.xpm");
 	load_img(mlx, &ray->t[14], "./assets/demon11.xpm");
 	load_img(mlx, &ray->t[15], "./assets/door.xpm");
+	load_img(mlx, &ray->t[16], "./assets/teemo.xpm");
 	ray->sprite = malloc(ray->amount * sizeof(t_sprite));
 	(!ray->sprite && ft_error("Error: allocation failed\n", 1));
 	ray->anime = 0;
