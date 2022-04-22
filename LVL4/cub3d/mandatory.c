@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 22:17:36 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/09 14:12:38 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/22 15:00:01 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 int	main(int ac, char *av[])
 {
 	t_all		all;
-	t_parsing	parsing;
+	t_data		data;
 
 	all.key.move_speed = 0.11;
 	all.key.rot_speed = 0.1;
-	main_parse(ac, av, &parsing, MANDATORY);
+	parse_map(ac, av[1], &data, MANDATORY);
 	print_instructions(&all.key);
-	init_all(&all, parsing, MANDATORY);
-	free_parsing(&parsing);
-	return (0);
+	init_all(&all, data, MANDATORY);
+	free_all(&data, &all);
+	return (ac);
 }

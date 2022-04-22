@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 13:53:40 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/16 00:45:59 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/22 14:55:26 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	sort_sprites(int *order, float *dist, int amount)
 		dist[i] = sprites[amount - i - 1].first;
 		order[i] = sprites[amount - i - 1].second;
 	}
+	free(sprites);
 }
 
 void	sprit_dda_1(t_ray *ray, int i)

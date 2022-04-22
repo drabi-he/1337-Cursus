@@ -1,10 +1,10 @@
 C 60,10,10
 F 30,30,30
 
-NO ./assets/lavawall.xpm
-SO ./assets/reddarkbricks.xpm
-EA ./assets/dark-wood.xpm
-WE ./assets/darkstone.xpm
+NO ./assets/lavawall1.xpm
+SO ./assets/lavawall4.xpm
+EA ./assets/lavawall2.xpm
+WE ./assets/lavawall3.xpm
 
 1111111
 1000001

@@ -6,20 +6,20 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 22:40:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/16 00:31:35 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/22 14:56:32 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-static void	texture_init(void *mlx, t_ray *ray, t_parsing parsing)
+static void	texture_init(void *mlx, t_ray *ray, t_data data)
 {
-	ray->ceiling = parsing.color_ceiling;
-	ray->floor = parsing.color_floor;
-	load_img(mlx, &ray->t[0], parsing.no);
-	load_img(mlx, &ray->t[1], parsing.so);
-	load_img(mlx, &ray->t[2], parsing.ea);
-	load_img(mlx, &ray->t[3], parsing.we);
+	ray->ceiling = data.ceiling;
+	ray->floor = data.floor;
+	load_img(mlx, &ray->t[0], data.no);
+	load_img(mlx, &ray->t[1], data.so);
+	load_img(mlx, &ray->t[2], data.ea);
+	load_img(mlx, &ray->t[3], data.we);
 	load_img(mlx, &ray->t[4], "./assets/demon1.xpm");
 	load_img(mlx, &ray->t[5], "./assets/demon2.xpm");
 	load_img(mlx, &ray->t[6], "./assets/demon3.xpm");
@@ -90,12 +90,12 @@ static void	init_player(char	**map, float *x, float *y, char *c)
 	}
 }
 
-static void	ray_init(t_ray *ray, t_parsing parsing, int mode, char **map)
+static void	ray_init(t_ray *ray, t_data data, int mode, char **map)
 {
 	char	c;
 	int		i;
 
-	init_player(parsing.map, &ray->pos[X], &ray->pos[Y], &c);
+	init_player(data.map, &ray->pos[X], &ray->pos[Y], &c);
 	init_dir(c, &ray);
 	ray->buffer = malloc(SCREEN_H * sizeof(unsigned int *));
 	(!ray->buffer && ft_error("Error: allocation failed\n", 1));
@@ -117,19 +117,19 @@ static void	ray_init(t_ray *ray, t_parsing parsing, int mode, char **map)
 	}
 }
 
-void	init_all(t_all *all, t_parsing parsing, int mode)
+void	init_all(t_all *all, t_data data, int mode)
 {
 	t_ray	ray;
 	t_win	win;
 
-	all->map = parsing.map;
-	ray_init(&ray, parsing, mode, all->map);
+	all->map = data.map;
+	ray_init(&ray, data, mode, all->map);
 	win.mode = mode;
 	win.mlx = mlx_init();
 	win.win = mlx_new_window(win.mlx, SCREEN_W, SCREEN_H, "cub3D");
 	win.info.height = SCREEN_H / 50;
 	win.info.width = SCREEN_W / 50;
-	texture_init(win.mlx, &ray, parsing);
+	texture_init(win.mlx, &ray, data);
 	draw_screen(&ray, &win, all->map, mode);
 	all->ray = &ray;
 	all->win = &win;

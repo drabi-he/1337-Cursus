@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 22:01:15 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/16 00:46:03 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/22 14:47:05 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,31 +62,19 @@ typedef struct s_key
 	float	rot_speed;
 }	t_key;
 
-typedef struct s_parsing
+typedef struct s_data
 {
-	int		fd;
-	int		index;
-	int		counter;
-	char	*tmpline;
+	int		height;
+	int		width;
 	char	*no;
 	char	*so;
-	char	*we;
 	char	*ea;
-	int		floor_red;
-	int		floor_green;
-	int		floor_blue;
-	int		color_floor;
-	int		ceiling_red;
-	int		ceiling_green;
-	int		ceiling_blue;
-	int		color_ceiling;
-	char	**argv;
-	char	*first_line;
+	char	*we;
+	int		ceiling;
+	int		floor;
+	int		bola[255];
 	char	**map;
-	size_t	count_lines;
-	size_t	biggest_lines;
-	size_t	skip_lines;
-}	t_parsing;
+}	t_data;
 
 typedef struct s_texture
 {
@@ -174,7 +162,7 @@ typedef struct s_all
 {
 	t_win		*win;
 	t_ray		*ray;
-	t_parsing	*parsing;
+	t_data		*data;
 	char		**map;
 	t_key		key;
 }	t_all;
@@ -189,42 +177,21 @@ int				count_sprites(char **map);
 int				ft_close(void);
 
 /*-------------------------------- PARSING --------------------------------*/
-void			*ft_memset(void *s, int c, size_t n);
-void			replace_nl_with_null(char *str);
-void			free_parsing(t_parsing *parsing);
-int				ft_atoi(const char *str);
-char			*ft_strdup(char *source);
-int				check_file_name(char *str);
-int				skip_spaces(char *tmpline);
-int				assign_floor(t_parsing *parsing, int i);
-int				assign_ceiling(t_parsing *parsing, int i);
-int				assign_vars_two(t_parsing *parsing, int i);
-int				assign_vars_three(t_parsing *parsing, int i);
-int				assign_vars(t_parsing *parsing);
-void			init_parsing(t_parsing *parsing, char *argv[]);
-void			parsing_directions_colors_two(t_parsing *parsing);
-int				parsing_directions_colors(t_parsing *parsing, \
-						char *argv[], int argc);
-int				skip_newlines(t_parsing *parsing);
-void			parse_map(t_parsing *parsing, size_t i);
-int				check_fist_last_line(t_parsing *parsing);
-int				check_first_indexes(t_parsing *parsing);
-int				check_map(t_parsing *parsing, int i, int j);
-void			parse_map_assign_two(t_parsing *parsing, size_t *i);
-void			parse_map_assign(t_parsing *parsing, size_t i);
-void			replace_spc_wall(t_parsing *parsing);
-int				search_for_player(t_parsing *parsing, int i, int j, int count);
-int				search_for_player2(t_parsing *parsing, int i, int j, int count);
-void			ft_bzero(void *s, size_t n);
-void			*ft_memmove(void *dest, const void *src, size_t n);
-size_t			ft_strlen(const char *s);
-char			*ft_strjoin(char const *s1, char const *s2);
-int				contains_newline(char const *s1);
-char			*first_line(char *str);
-char			*second_part(char *str);
+size_t			ft_strlen(char *str);
+char			*ft_strdup(char *str);
+int				ft_strcmp(char *s1, char *s2);
 char			*get_next_line(int fd);
-int				check_colors(char *str);
-void			main_parse(int ac, char **av, t_parsing *parsing, int mode);
+char			*ft_strtrim(char *s1, char const *set);
+void			ft_check_color(t_data *data, char c, char *line, int *cp);
+int				ft_isspace(char c);
+int				ft_atoi(const char *str);
+void			ft_check_texture(t_data *data, char c, char *line, int *cp);
+void			count_height(int fd, t_data *data);
+void			fill_map(t_data *data, char *filename);
+void			free_all(t_data *data, t_all *all);
+void			free_bonus(t_all *all);
+void			check_walls(t_data *data, int mode);
+void			parse_map(int ac, char *filename, t_data *data, int mode);
 
 /*-------------------------------- INIT --------------------------------*/
 void			vars_init(t_ray *ray, int x);
@@ -233,7 +200,7 @@ void			wall_collision(t_ray *ray, char **map);
 void			mini_check(t_ray *ray, char c);
 void			initial_color(t_ray *ray);
 void			initial_color_2(t_win *win, t_ray *ray);
-void			init_all(t_all *all, t_parsing parsing, int mode);
+void			init_all(t_all *all, t_data data, int mode);
 
 /*-------------------------------- GRAPHICS --------------------------------*/
 void			print_ray(t_ray *ray);
