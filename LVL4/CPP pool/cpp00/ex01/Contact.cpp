@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 15:26:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/27 23:16:29 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/29 22:56:05 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,10 @@ void Contact::display(){
 
 void Contact::displayAll()
 {
-    std::cout << "|" << std::setw(10) << this->index + 1
-                << "|" << std::setw(10) << (this->firstName.length() >= 10 ? this->firstName.substr(0, 9) + "." : this->firstName) 
-                << "|" << std::setw(10) << (this->lastName.length() >= 10 ? this->lastName.substr(0, 9) + "." : this->lastName) 
-                << "|" << std::setw(10) << (this->nickName.length() >= 10 ? this->nickName.substr(0, 9) + "." : this->nickName) << std::endl ;
+    std::cout << (this->index % 2 ? "\033[35m" : "\033[36m") 
+                << "|" << std::setw(10) << this->index + 1
+                << "|" << std::setw(10) << (this->firstName.length() > 10 ? this->firstName.substr(0, 9) + "." : this->firstName) 
+                << "|" << std::setw(10) << (this->lastName.length() > 10 ? this->lastName.substr(0, 9) + "." : this->lastName) 
+                << "|" << std::setw(10) << (this->nickName.length() > 10 ? this->nickName.substr(0, 9) + "." : this->nickName) 
+                << "|" << "\033[0m" << std::endl ;
 }

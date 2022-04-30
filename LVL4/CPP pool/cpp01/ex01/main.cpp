@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:03:09 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/28 16:53:55 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/30 00:15:41 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 int main()
 {
     Zombie *z;
-    int cp = 1;
+    int cp = -10;
 
     z = zombieHorde(cp, "momayaz");
     if (z == NULL)

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 17:02:55 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/28 17:31:15 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/29 22:31:30 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@ std::string Weapon::getType(){
 }
 
 void    Weapon::setType(std::string type){
+
     this->type = type;
 }

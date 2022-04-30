@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 16:43:54 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/29 17:26:00 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/30 01:05:07 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ bool bsp( Point const a, Point const b, Point const c, Point const point){
     d2 = get_sign(point, b, c);
     d3 = get_sign(point, c, a);
 
+    // TODO: re-check the values
+    std::cout << d1 << d2 << d3 << std::endl;
+    if (d1 == 0 || d2 == 0 || d3 == 0)
+        return (false);
     n = (d1 < 0 || d2 < 0 || d3 < 0);
     p = (d1 > 0 || d2 > 0 || d3 > 0);
     return !(n && p);

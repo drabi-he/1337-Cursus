@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 22:51:25 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/28 23:56:22 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/30 00:41:19 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,10 @@ void    Replace::replaceAll(){
     int len;
     int i;
 
-    if (!this->oldString.compare("") || !this->inFile.compare(""))
+    if (!this->oldString.compare("") || !this->inFile.compare("")){
+        std::cout << "\033[1m\033[31m" << "infile \\ string to replace can't be empty" << "\033[0m" << std::endl;
         return ;
+    }
     infile.open(this->inFile);
     outfile.open(this->outFile);
     len = this->oldString.length();
@@ -42,9 +44,13 @@ void    Replace::replaceAll(){
                 line.erase(i, len);
                 line.insert(i, this->newString);
             }
-            outfile << line << std::endl;
+            if (outfile.is_open())
+                outfile << line << std::endl;
+            else
+            std::cout << "\033[1m\033[31m" << "outfile can't be opened" << "\033[0m" << std::endl;
         }
-    }
+    } else
+        std::cout << "\033[1m\033[31m" << "infile can't be opened" << "\033[0m" << std::endl;
     infile.close();
     outfile.close();
 }

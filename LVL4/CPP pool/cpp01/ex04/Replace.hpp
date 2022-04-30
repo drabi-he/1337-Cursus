@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 22:35:46 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/28 23:11:30 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/04/30 00:37:10 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define _REPLACE_
 
 # include <fstream>
+# include <iostream>
 
 class Replace
 {
