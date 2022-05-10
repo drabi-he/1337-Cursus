@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   PhoneBook.hpp                                      :+:      :+:    :+:   */
+/*   C.hpp                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/27 15:27:22 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/10 13:04:24 by hdrabi           ###   ########.fr       */
+/*   Created: 2022/05/09 18:18:07 by hdrabi            #+#    #+#             */
+/*   Updated: 2022/05/09 18:18:53 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _PHONEBOOK_
-# define _PHONEBOOK_
+#ifndef C_HPP
+# define C_HPP
 
-#include <iostream>
-#include <iomanip>
-#include "Contact.hpp"
+#include "Base.hpp"
+# include <iostream>
+# include <string>
 
-class PhoneBook
+class C : public Base
 {
-	private:
-		Contact phoneBook[8];
-		static int cp;
+
 	public:
-		PhoneBook();
-		void	addContact(int index, Contact contact);
-		void	showAll();
-		void	search(int index);
+
+		C();
+		~C();
+		
+	private:
+
 };
 
 
-#endif
+#endif /* *************************************************************** C_H */

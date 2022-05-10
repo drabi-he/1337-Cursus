@@ -1,33 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   PhoneBook.hpp                                      :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/27 15:27:22 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/10 13:04:24 by hdrabi           ###   ########.fr       */
+/*   Created: 2022/05/10 10:52:33 by hdrabi            #+#    #+#             */
+/*   Updated: 2022/05/10 15:30:51 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _PHONEBOOK_
-# define _PHONEBOOK_
+#include "iter.hpp"
 
-#include <iostream>
-#include <iomanip>
-#include "Contact.hpp"
+template <typename T>
+void display(T &i){
+    std::cout << i << std::endl;
+}
 
-class PhoneBook
-{
-	private:
-		Contact phoneBook[8];
-		static int cp;
-	public:
-		PhoneBook();
-		void	addContact(int index, Contact contact);
-		void	showAll();
-		void	search(int index);
-};
-
-
-#endif
+int main( void ) {
+    int a[10] = {0,1,2,3,4,5,6,7,8,9};
+    float f[10] = {0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9};
+    char c[10] = {'a','b','c','d','e','f','g','h','i','j'};
+    
+    iter(a, 10, &display);
+    iter(f, 10, &display);
+    iter(c, 10, &display);
+    return 0;
+}

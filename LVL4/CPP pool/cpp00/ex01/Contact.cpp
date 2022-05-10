@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 15:26:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/29 22:56:05 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/10 12:59:22 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,41 @@ void Contact::displayAll()
                 << "|" << std::setw(10) << (this->lastName.length() > 10 ? this->lastName.substr(0, 9) + "." : this->lastName) 
                 << "|" << std::setw(10) << (this->nickName.length() > 10 ? this->nickName.substr(0, 9) + "." : this->nickName) 
                 << "|" << "\033[0m" << std::endl ;
+}
+
+int Contact::getIndex() const{
+    return this->index;
+}
+std::string Contact::getFirstName() const{
+    return this->firstName;
+}
+std::string Contact::getLastName() const{
+    return this->lastName;
+}
+std::string Contact::getNickName() const{
+    return this->nickName;
+}
+std::string Contact::getPhoneNumber() const{
+    return this->phoneNumber;
+}
+std::string Contact::getDarkSecret() const{
+    return this->darkSecret;
+}
+void Contact::setIndex(int i) {
+    this->index = i;
+}
+void Contact::setFirstName(std::string fn){
+    this->firstName = fn;
+}
+void Contact::setLastName(std::string ln){
+    this->lastName = ln;
+}
+void Contact::setNickName(std::string nn){
+    this->nickName = nn;
+}
+void Contact::setPhoneNumber(std::string pn){
+    this->phoneNumber = pn;
+}
+void Contact::setDarkSecret(std::string ds){
+    this->darkSecret = ds;
 }

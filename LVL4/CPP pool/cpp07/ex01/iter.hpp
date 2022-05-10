@@ -1,33 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   PhoneBook.hpp                                      :+:      :+:    :+:   */
+/*   iter.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/27 15:27:22 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/10 13:04:24 by hdrabi           ###   ########.fr       */
+/*   Created: 2022/05/10 10:52:36 by hdrabi            #+#    #+#             */
+/*   Updated: 2022/05/10 11:24:17 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _PHONEBOOK_
-# define _PHONEBOOK_
+#ifndef _ITER_
+# define _ITER_
 
 #include <iostream>
-#include <iomanip>
-#include "Contact.hpp"
 
-class PhoneBook
-{
-	private:
-		Contact phoneBook[8];
-		static int cp;
-	public:
-		PhoneBook();
-		void	addContact(int index, Contact contact);
-		void	showAll();
-		void	search(int index);
-};
-
+template <typename T>
+void iter(T a[], int b, void (*function)(T &)){
+    for (int i = 0; i < b; i++)
+        function(a[i]);
+}
 
 #endif
