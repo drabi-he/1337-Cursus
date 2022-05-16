@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 13:43:47 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/03 17:02:56 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/14 15:06:47 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "Point.hpp"
 
 int main( void ) {
-	Point P(Fixed(0), Fixed(1));
+	Point P(Fixed(6), Fixed(7));
 	Point a;
 	Point b(Fixed(10), Fixed(10));
 	Point c(Fixed(20), Fixed(0));

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 22:51:25 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/30 00:41:19 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/13 16:24:14 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,13 @@ void    Replace::replaceAll(){
         return ;
     }
     infile.open(this->inFile);
-    outfile.open(this->outFile);
     len = this->oldString.length();
     if (infile.is_open())
     {
+        outfile.open(this->outFile);
         while (getline(infile, line))
         {
+            if (this->oldString != this->newString)
             while((i = line.find(this->oldString)) != -1)
             {
                 line.erase(i, len);

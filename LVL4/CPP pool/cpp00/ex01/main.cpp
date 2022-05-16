@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 16:29:44 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/29 22:48:13 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/14 11:29:08 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int main()
 	int	i;
 
 	i = 0;
-	while (1)
+	while (!std::cin.fail())
 	{
 		std::cout << "**********************" << std::endl;
 		std::cout << "	OPTIONS		" << std::endl;

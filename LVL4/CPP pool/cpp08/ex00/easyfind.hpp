@@ -1,21 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   randomChump.cpp                                    :+:      :+:    :+:   */
+/*   easyfind.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/28 15:02:26 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/13 11:43:23 by hdrabi           ###   ########.fr       */
+/*   Created: 2022/05/12 11:06:16 by hdrabi            #+#    #+#             */
+/*   Updated: 2022/05/12 14:49:29 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Zombie.hpp"
 
-void randomChump(std::string name){
-    Zombie *z;
+#ifndef _EASYFIND_
+#define _EASYFIND_
 
-    z = newZombie(name);
-    z->announce();
-    delete z;
+#include <iostream>
+#include <stdexcept>
+#include <algorithm>
+
+template <typename T>
+typename T::iterator easyfind(T a, int b){
+    typename T::iterator rst;
+
+    rst = std::find(a.begin(), a.end(), b);
+    if (rst == a.end())
+        throw std::logic_error("item not found");
+    return rst;
 }
+
+#endif

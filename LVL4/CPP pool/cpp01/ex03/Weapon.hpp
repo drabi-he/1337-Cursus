@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 17:04:49 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/28 21:27:01 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/13 12:11:08 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ class Weapon
         Weapon();
         Weapon(std::string type);
         ~Weapon();
-        std::string    getType();
+        std::string    getType() const ;
         void    setType(std::string type);
 };
 

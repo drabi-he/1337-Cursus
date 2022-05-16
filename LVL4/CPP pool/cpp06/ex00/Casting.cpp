@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 13:38:26 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/09 17:48:25 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/11 15:26:42 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int detectI(char *str){
 void Casting::printResult(char *str){
 	this->convertResult(str);
 	
-	if (this->doubleValue < CHAR_MIN || this->doubleValue > CHAR_MAX)
+	if (this->doubleValue < CHAR_MIN || this->doubleValue > CHAR_MAX || this->doubleValue != this->doubleValue)
 		std::cout << "char Value : " << "can't be measured" << std::endl;
 	else if (!std::isprint(this->charValue))
 		std::cout << "char Value : " << "non printable" << std::endl;

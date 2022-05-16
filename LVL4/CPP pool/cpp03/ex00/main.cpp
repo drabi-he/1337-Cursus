@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 11:07:25 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/03 14:33:42 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/16 13:21:34 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void gameplay(ClapTrap C[5])
     int target;
     std::string name;
 
-    while (1)
+    while (!std::cin.fail())
     {
         target  = -1;
         std::cout << "\033[1m" << std::setw(10) << "ID" << " | " 

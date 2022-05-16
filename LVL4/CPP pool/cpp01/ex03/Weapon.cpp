@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 17:02:55 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/29 22:31:30 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/13 12:11:01 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ Weapon::Weapon(std::string type){
 
 Weapon::~Weapon(){}
 
-std::string Weapon::getType(){
+std::string Weapon::getType() const {
     return this->type;
 }
 
