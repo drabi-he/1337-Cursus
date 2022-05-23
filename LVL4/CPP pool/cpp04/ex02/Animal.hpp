@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 10:51:05 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/04 17:09:21 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/17 14:52:15 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class Animal
         Animal &operator=(const Animal &A);
         virtual ~Animal();
         std::string getType() const;
-        virtual void    makeSound() const;
+        virtual void    makeSound() const = 0;
         virtual Brain *getBrain() const = 0;
 };
 

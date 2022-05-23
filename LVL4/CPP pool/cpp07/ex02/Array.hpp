@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 15:32:39 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/10 17:24:58 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/23 12:13:52 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <iostream>
 # include <exception>
 
-template <class T>
+template <typename T>
 class Array
 {
 	private:
@@ -29,6 +29,7 @@ class Array
 		Array(const Array<T> & src );
 		~Array();
 		Array &	operator=( Array const & src );	
+		const T &	operator[]( int index ) const;	
 		T &	operator[]( int index );	
 		unsigned int size() const;
 	
@@ -40,25 +41,31 @@ class Array
 	};
 };
 
-template <class T>
-Array<T>::Array() : array(NULL), len(0)
+template <typename T>
+Array<T>::Array()
 {
+	this->array = nullptr;
+	this->len = 0;
 }
 
-template <class T>
+template <typename T>
 Array<T>::Array(unsigned int size)
 {
-	this->array = new T[size];
+	if (size > 0)
+		this->array = new T[size];
+	else
+		this->array = nullptr;
 	this->len = size;
 }
 
-template <class T>
+template <typename T>
 Array<T>::Array( const Array<T> & src )
 {
+	this->len = 0;
 	*this = src;
 }
 
-template <class T>
+template <typename T>
 Array<T> &	Array<T>::operator=( Array<T> const & src )
 {
 	if (this != &src)
@@ -66,14 +73,27 @@ Array<T> &	Array<T>::operator=( Array<T> const & src )
 		if (this->len > 0)
 			delete [] this->array;
 		this->len = src.len;
-		this->array = new T[src.len];
-		for (int i = 0; i < (int)this->len; i++)
-			this->array[i] = src.array[i];
+		if (this->len > 0){
+			this->array = new T[src.len];
+			for (int i = 0; i < (int)this->len; i++)
+			{
+				this->array[i] = src.array[i];
+			}
+		} else 
+			this->array = nullptr;
 	}
 	return *this;
 }
 
-template <class T>
+template <typename T>
+const T& Array<T>::operator[](int index) const
+{
+    if (index < 0 || index >= (int)this->len)
+        throw Array<T>::ArrayException();
+    return this->array[index];
+}
+
+template <typename T>
 T& Array<T>::operator[](int index)
 {
     if (index < 0 || index >= (int)this->len)
@@ -82,13 +102,13 @@ T& Array<T>::operator[](int index)
 }
 
 
-template <class T>
+template <typename T>
 unsigned int Array<T>::size() const{
 	return this->len;
 }
 
 
-template <class T>
+template <typename T>
 Array<T>::~Array()
 {
 	if (this->len > 0)

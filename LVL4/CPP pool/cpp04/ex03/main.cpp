@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 11:30:06 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/07 12:44:26 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/17 15:02:16 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ int main(){
         ICharacter* bob = new Character("bob");
         me->use(0, *bob);
         me->use(1, *bob);
+
+        delete src;
+        delete bob;
+        delete me;
     }
     
 }

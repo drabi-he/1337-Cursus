@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 10:51:13 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/04 16:46:25 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/17 14:29:08 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ Dog &Dog::operator=(const Dog &D){
     if (this != &D)
     {
         this->type = D.type;
+        *this->brain = *D.getBrain();
     }
     return *this;
 }

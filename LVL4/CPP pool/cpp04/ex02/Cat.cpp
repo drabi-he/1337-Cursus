@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 10:51:08 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/04 16:45:00 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/17 14:28:58 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ Cat &Cat::operator=(const Cat &C){
     if (this != &C)
     {
         this->type = C.type;
-        this->brain = C.brain;
+        *this->brain = *C.getBrain();
     }
     return *this;
 }

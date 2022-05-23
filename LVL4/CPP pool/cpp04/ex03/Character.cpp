@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 12:50:50 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/06 11:17:02 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/17 15:15:17 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ Character::~Character(){
             delete this->storage[2];
         if (this->storage[3] != nullptr)
             delete this->storage[3];
-    std::cout << "Destructor for Character" << std::endl;
+    // std::cout << "Destructor for Character" << std::endl;
 }
 
 std::string const & Character::getName() const {

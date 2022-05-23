@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 15:32:47 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/06 17:39:32 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/18 12:48:37 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,22 @@ void ShrubberyCreationForm::execute(Bureaucrat const &B) const{
 
 void ShrubberyCreationForm::valid(Bureaucrat const &B) const{
     (void)B;
+    std::ofstream	myfile;
+	std::string		fileName = this->target + "_shrubbery";
+	myfile.open(fileName.c_str(), std::ios::out);
+	myfile << "      ,.," << std::endl;
+	myfile << "      MMMM_    ,..," << std::endl;
+	myfile << "        \"_ \"__\"MMMMM          ,...,," << std::endl;
+	myfile << " ,..., __.\" --\"    ,.,     _-\"MMMMMMM" << std::endl;
+	myfile << "MMMMMM\"___ \"_._   MMM\"_.\"\" _ \"\"\"\"\"\"" << std::endl;
+	myfile << " \"\"\"\"\"    \"\" , \\_.   \"_. .\"" << std::endl;
+	myfile << "        ,., _\"__ \\__./ .\"" << std::endl;
+	myfile << "       MMMMM_\"  \"_    ./" << std::endl;
+	myfile << "        ''''      (    )" << std::endl;
+	myfile << " ._______________.-'____\"---._." << std::endl;
+	myfile << "  \\                          /" << std::endl;
+	myfile << "   \\________________________/" << std::endl;
+	myfile << "   (_)                    (_)" << std::endl;
+	myfile.close();
 	std::cout << "Tree created in " << this->target << "_shrubbery" << std::endl;
 }

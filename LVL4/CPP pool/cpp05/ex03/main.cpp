@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 12:12:12 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/06 18:35:58 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/18 12:48:03 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int main()
             SCF.beSigned(M);
             std::cout << SCF << std::endl;
             SCF.execute(I);
-            // SCF.execute(M);
+            SCF.execute(M);
         }
         catch(const std::exception& e)
         {
@@ -62,11 +62,11 @@ int main()
             std::cout << I << std::endl;
             std::cout << RRF << std::endl;
 
-            // M.promotion();
-            // std::cout << M << std::endl;
-            // RRF.beSigned(M);
-            // std::cout << RRF << std::endl;
-            // RRF.execute(M);
+            M.promotion();
+            std::cout << M << std::endl;
+            RRF.beSigned(M);
+            std::cout << RRF << std::endl;
+            RRF.execute(M);
             RRF.execute(I);
         }
         catch(const std::exception& e)
@@ -89,13 +89,13 @@ int main()
             std::cout << I << std::endl;
             std::cout << PPF << std::endl;
 
-            // I.promotion();
-            // std::cout << I << std::endl;
-            // PPF.beSigned(M);
-            // std::cout << PPF << std::endl;
-            // PPF.execute(M);
-            // M.demotion();
-            // std::cout << M << std::endl;
+            I.promotion();
+            std::cout << I << std::endl;
+            PPF.beSigned(M);
+            std::cout << PPF << std::endl;
+            PPF.execute(M);
+            M.demotion();
+            std::cout << M << std::endl;
             PPF.execute(M);
         }
         catch(const std::exception& e)
@@ -116,21 +116,25 @@ int main()
 
         try
         {
-             F = In.makeForm("PresidentialPardonForm", "home");
+             F = In.makeForm("shrubbery request", "home");
 
             std::cout << M << std::endl;
             std::cout << I << std::endl;
-            std::cout << *F << std::endl;
 
-            // I.promotion();
-            // std::cout << I << std::endl;
-            // F->beSigned(M);
-            // std::cout << *F << std::endl;
-            // F->execute(M);
-            // M.demotion();
-            F->execute(M);
-            std::cout << M << std::endl;
-            delete F;
+            if (F != nullptr){
+                std::cout << *F << std::endl;
+                I.promotion();
+                std::cout << I << std::endl;
+                F->beSigned(M);
+                std::cout << *F << std::endl;
+                F->execute(M);
+                M.demotion();
+                std::cout << M << std::endl;
+                F->execute(M);
+                std::cout << M << std::endl;
+                delete F;
+            }
+
         }
         catch(const std::exception& e)
         {

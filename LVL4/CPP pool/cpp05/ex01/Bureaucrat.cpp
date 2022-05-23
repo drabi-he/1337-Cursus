@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:10:44 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/06 15:23:05 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/18 11:27:34 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ Bureaucrat::Bureaucrat(){
     std::cout << "Default contructor for Bureaucrat" << std::endl;
 }
 
-Bureaucrat::Bureaucrat(const std::string &name, const int &grade): name(name) , grade(grade){
+Bureaucrat::Bureaucrat(const std::string &name, const int &grade): name(name){
     std::cout << "Initialise contructor for Bureaucrat" << std::endl;
-    if (this->grade < 1)
+    if (grade < 1)
         throw Bureaucrat::GradeTooHighException();
-    if (this->grade > 150)
+    if (grade > 150)
         throw Bureaucrat::GradeTooLowException();
+    this->grade = grade;
 }
 
 Bureaucrat::Bureaucrat(const Bureaucrat &B){
@@ -61,14 +62,14 @@ void    Bureaucrat::signForm(Form &F){
 }
 
 void    Bureaucrat::promotion(){
-    this->grade--;
-    if (this->grade < 1)
+    if (this->grade == 1)
         throw Bureaucrat::GradeTooHighException();
+    this->grade--;
 }
 void    Bureaucrat::demotion(){
-    this->grade++;
-    if (this->grade > 150)
+    if (this->grade == 150)
         throw Bureaucrat::GradeTooLowException();
+    this->grade++;
 }
 
 std::ostream & operator << (std::ostream &out, const Bureaucrat &B)

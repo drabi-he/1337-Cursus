@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 10:51:13 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/04 16:46:25 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/17 14:06:05 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ Dog::Dog(){
 
 Dog::Dog(const Dog &D){
     std::cout << "Copy evolution to Dog" << std::endl;
+    this->brain = new Brain();
     *this = D;
 }
 
@@ -28,6 +29,7 @@ Dog &Dog::operator=(const Dog &D){
     if (this != &D)
     {
         this->type = D.type;
+        *this->brain = *D.getBrain();
     }
     return *this;
 }

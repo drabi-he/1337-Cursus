@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 12:12:12 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/06 17:34:43 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/18 12:32:00 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int main()
             SCF.beSigned(M);
             std::cout << SCF << std::endl;
             SCF.execute(I);
-            // SCF.execute(M);
+            SCF.execute(M);
         }
         catch(const std::exception& e)
         {
@@ -62,11 +62,11 @@ int main()
             std::cout << I << std::endl;
             std::cout << RRF << std::endl;
 
-            // M.promotion();
-            // std::cout << M << std::endl;
-            // RRF.beSigned(M);
-            // std::cout << RRF << std::endl;
-            // RRF.execute(M);
+            M.promotion();
+            std::cout << M << std::endl;
+            RRF.beSigned(M);
+            std::cout << RRF << std::endl;
+            RRF.execute(M);
             RRF.execute(I);
         }
         catch(const std::exception& e)
@@ -89,13 +89,13 @@ int main()
             std::cout << I << std::endl;
             std::cout << PPF << std::endl;
 
-            // I.promotion();
-            // std::cout << I << std::endl;
-            // PPF.beSigned(M);
-            // std::cout << PPF << std::endl;
-            // PPF.execute(M);
-            // M.demotion();
-            // std::cout << M << std::endl;
+            I.promotion();
+            std::cout << I << std::endl;
+            PPF.beSigned(M);
+            std::cout << PPF << std::endl;
+            PPF.execute(M);
+            M.demotion();
+            std::cout << M << std::endl;
             PPF.execute(M);
         }
         catch(const std::exception& e)

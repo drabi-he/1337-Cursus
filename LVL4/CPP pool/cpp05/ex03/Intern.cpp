@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 17:43:24 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/06 18:36:55 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/18 12:41:55 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ Form    *Intern::makeForm(const std::string &name, const std::string &target){
         new PresidentialPardonForm(target),
     };
     std::string choice[3] = {
-        "ShrubberyCreationForm",
-        "RobotomyRequestForm",
-        "PresidentialPardonForm",
+        "shrubbery request",
+        "robotomy request",
+        "presidential request",
     };
     for (int i = 0; i < 3; i++)
     {

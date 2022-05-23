@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 11:10:44 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/06 17:03:56 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/18 12:26:31 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void    Bureaucrat::signForm(const Form &F)const {
     else {
         if (this->grade > F.getSignGrade())
             std::cout << this->name + " couldn’t sign " + F.getName() + " because his grade is low" << std::endl;
-        if (F.getSigned())
+        else if (F.getSigned())
             std::cout << this->name + " couldn’t sign " + F.getName() + " because it's already Signed" << std::endl;
     }
 }
@@ -66,7 +66,7 @@ void    Bureaucrat::executeForm(const Form &F) const {
     else {
         if (this->grade > F.getExecGrade())
             std::cout << this->name + " couldn’t execute " + F.getName() + " because his grade is low" << std::endl;
-        if (!F.getSigned())
+        else if (!F.getSigned())
             std::cout << this->name + " couldn’t execute " + F.getName() + " because it's not Signed" << std::endl;
     }
 }

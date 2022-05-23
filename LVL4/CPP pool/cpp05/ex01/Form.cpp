@@ -6,13 +6,13 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 14:51:53 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/06 15:20:17 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/18 11:32:24 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Form.hpp"
 
-Form::Form(): signGrade(150) , execGrade(150){
+Form::Form(): name("Form") ,signGrade(150) , execGrade(150){
     std::cout << "Default constructor for Form" << std::endl;
     this->_signed = false;
 }

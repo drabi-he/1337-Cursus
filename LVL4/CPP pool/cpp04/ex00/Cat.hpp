@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 10:51:10 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/04 12:34:03 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/17 14:33:00 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ class Cat : public Animal
         Cat(const Cat &C);
         Cat &operator=(const Cat &C);
         ~Cat();
-        void makeSound() const;
+        virtual void makeSound() const;
 };
 
 #endif

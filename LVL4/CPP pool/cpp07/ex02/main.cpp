@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 10:52:33 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/10 17:27:27 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/23 12:21:08 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@ int main( void ) {
     Array<int>			intArray;
 	Array<std::string>	stringArray(10);
 	Array<std::string>	otherStringArray;
+	Array<int> const	test1(10);
+
+	std::cout << test1[0] << std::endl;
+	// test1[0] = 1;
+	std::cout << test1[0] << std::endl;
 
 	stringArray[0] = "Hi";
 	stringArray[1] = "Hello";
@@ -46,20 +51,82 @@ int main( void ) {
 	{
 		std::cout << e.what() << std::endl;
 	}
-    { 
-        // Array<std::string>	test;
-        // test = stringArray;
-        // test[2] = "haha";
-        // std::cout << stringArray[2] << std::endl;
-        // std::cout << test[2] << std::endl;
-    }
-    { 
-        Array<std::string>	test(stringArray);
+    std::cout <<"-------------------------------------" << std::endl;
+    try { 
+        Array<std::string>	test(5);
+        test = stringArray;
         test[2] = "haha";
         std::cout << stringArray[2] << std::endl;
         std::cout << test[2] << std::endl;
     }
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+    std::cout <<"-------------------------------------" << std::endl;
+    try { 
+        Array<std::string>	test2(stringArray);
+        test2[2] = "haha";
+        std::cout << stringArray[2] << std::endl;
+        std::cout << test2[2] << std::endl;
+    }
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+    std::cout <<"-------------------------------------" << std::endl;
 
 
 	return 0;
 }
+
+// #define MAX_VAL 750
+// int main(int, char**)
+// {
+//     Array<int> numbers(MAX_VAL);
+//     int* mirror = new int[MAX_VAL];
+//     srand(time(NULL));
+//     for (int i = 0; i < MAX_VAL; i++)
+//     {
+//         const int value = rand();
+//         numbers[i] = value;
+//         mirror[i] = value;
+//     }
+//     //SCOPE
+//     {
+//         Array<int> tmp = numbers;
+//         Array<int> test(tmp);
+//     }
+
+//     for (int i = 0; i < MAX_VAL; i++)
+//     {
+//         if (mirror[i] != numbers[i])
+//         {
+//             std::cerr << "didn't save the same value!!" << std::endl;
+//             return 1;
+//         }
+//     }
+//     try
+//     {
+//         numbers[-2] = 0;
+//     }
+//     catch(const std::exception& e)
+//     {
+//         std::cerr << e.what() << '\n';
+//     }
+//     try
+//     {
+//         numbers[MAX_VAL] = 0;
+//     }
+//     catch(const std::exception& e)
+//     {
+//         std::cerr << e.what() << '\n';
+//     }
+
+//     for (int i = 0; i < MAX_VAL; i++)
+//     {
+//         numbers[i] = rand();
+//     }
+//     delete [] mirror;//
+//     return 0;
+// }

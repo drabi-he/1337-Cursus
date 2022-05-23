@@ -16,7 +16,7 @@
 #include <iostream>
 
 template <typename T>
-void iter(T a[], int b, void (*function)(T &)){
+void iter(T *a, int b, void (*function)(T const &)){
     for (int i = 0; i < b; i++)
         function(a[i]);
 }
