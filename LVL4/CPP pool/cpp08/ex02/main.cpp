@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 16:54:30 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/12 17:31:02 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/24 12:16:59 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int main(){
         }
         std::stack<int> s(mstack);
     }
+    std::cout << "-------------------------------------------" << std::endl;
     {
         std::vector<int> mstack;
         mstack.push_back(5);
@@ -57,6 +58,29 @@ int main(){
         {
         std::cout << *it << std::endl;
         ++it;
+        }
+    }
+    std::cout << "-------------------------------------------" << std::endl;
+    {
+        MutantStack<int> gquiz;
+        gquiz.push(1);
+        gquiz.push(2);
+        gquiz.push(3);
+        gquiz.push(4);
+        gquiz.push(5);
+        gquiz.push(6);
+        
+        try
+        {
+            for (MutantStack<int>::iterator i = gquiz.begin(); i < gquiz.end() ; i++)
+                 std::cout << *i << std::endl;
+            std::cout << "++++++++++++++++++++++++++++++++++" << std::endl;
+            for (MutantStack<int>::r_iterator i = gquiz.rbegin(); i < gquiz.rend() ; i++)
+                 std::cout << *i << std::endl;      
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
         }
     }
     return 0;

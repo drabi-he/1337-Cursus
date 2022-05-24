@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 15:23:20 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/12 14:49:53 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/24 11:58:00 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ int main()
         
         try
         {
-            std::cout << *easyfind(ar1, 1) << std::endl;
-            std::cout << *easyfind(ar1, 5) << std::endl;
-            std::cout << *easyfind(ar1, 7) << std::endl;
+            std::cout << *easyfind(ar1, 2) << std::endl;
+            std::cout << *easyfind(ar1, 4) << std::endl;
+            std::cout << *easyfind(ar1, 0) << std::endl;
         }
         catch(const std::exception& e)
         {
@@ -63,8 +63,8 @@ int main()
         
         try
         {
-            std::cout << *easyfind(gquiz, 1) << std::endl;
-            std::cout << *easyfind(gquiz, 5) << std::endl;
+            std::cout << *easyfind(gquiz, 3) << std::endl;
+            std::cout << *easyfind(gquiz, 6) << std::endl;
             std::cout << *easyfind(gquiz, 7) << std::endl;
         }
         catch(const std::exception& e)
@@ -72,6 +72,4 @@ int main()
             std::cerr << e.what() << '\n';
         }
     }
-    
-    
 }
