@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/27 11:56:36 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/28 17:57:18 by hdrabi           ###   ########.fr       */
+/*   Created: 2022/05/31 10:36:59 by hdrabi            #+#    #+#             */
+/*   Updated: 2022/05/31 19:52:16 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,285 +15,302 @@
 
 # include <iostream>
 # include <string>
-# include <stdexcept>
+# include "stdexcept"
 
-// # include <memory>
+#include "../iterators/iterator.hpp"
+#include "../xtra/enable_if.hpp"
+#include "../xtra/is_integral.hpp"
 
 namespace ft {
+	
 	template < class T, class Alloc = std::allocator<T> >
 	class vector
 	{
-		
 		public:
 		
-			typedef T* iterator;
-			typedef const T* c_iterator;
-			typedef T* r_iterator;
-			typedef const T* c_r_iterator;
+			typedef T value_type;
+			typedef Alloc allocator_type;
+			typedef typename allocator_type::reference reference;
+			typedef typename allocator_type::const_reference const_reference;
+			typedef typename allocator_type::pointer pointer;
+			typedef typename allocator_type::const_pointer const_pointer;
+			
+			typedef iterators<pointer> iterator;
+			typedef iterators<const_pointer> const_iterator;	
+			typedef reverse_iterator<const_iterator> const_reverse_iterator;
+			typedef reverse_iterator<iterator> reverse_iterator;
+			
+			typedef std::size_t size_type;
 			
 			// * Constructors
-			vector(){
+			vector(const allocator_type& alloc = allocator_type())
+			{
+				_data = nullptr;
 				_size = 0;
 				_capacity = 0;
-				_data = nullptr;
+				_alloc = alloc;
 				std::cout << "\e[0;33mDefault Constructor called of vector\e[0m" << std::endl;
 			}
-			
-			vector(const vector &copy){
+
+			vector(const vector &copy)
+			{
 				std::cout << "\e[0;33mCopy Constructor called of vector\e[0m" << std::endl;
 				*this = copy;
 			}
-			
-			vector(std::size_t size){
-				_size = size;
-				_capacity = _size;
-				_data = alloc.allocate(size);
-				for (std::size_t i = 0; i < this->_size ; i++)
-					*(this->_data + i) = 0;
+
+			vector(size_type size, const value_type& val = value_type())
+			{
 				std::cout << "\e[0;33mFields Constructor called of vector\e[0m" << std::endl;
+				_size = size;
+				_capacity = size;
+				_data = _alloc.allocate(_capacity);
+				for (size_type i = 0; i < _capacity ; i++)
+					_data[i] = val;
 			}
 			
+			template <class InputIterator>
+			vector (InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value , InputIterator>::type last,
+					const allocator_type& alloc = allocator_type())
+			{
+				std::cout << "\e[0;33mRange Constructor called of vector\e[0m" << std::endl;
+				_size = last - first;
+				_capacity = last - first;
+				_alloc = alloc;
+				_data = _alloc.allocate(_capacity);
+				int i = 0;
+				for (InputIterator it = first ; it != last ; it++)
+					_data[i++] = *it;
+			}
+
 			// ! Destructor
-			~vector(){
+			~vector()
+			{
 				std::cout << "\e[0;31mDestructor called of vector\e[0m" << std::endl;
-				this->alloc.deallocate(this->_data, this->_size);
+				_alloc.deallocate(_data, _capacity);
+				_data->~value_type();
+				_capacity.~size_type();
+				_size.~size_type();
+				_alloc.~allocator_type();
 			}
-			
-			// Operators
-			vector & operator=(const vector &assign){
-				_size = assign._size;
-				_capacity = assign._capacity;
-				_data = assign._data;
+
+
+			// ? Operators
+			vector & operator=(const vector &assign)
+			{
+				if (this != &assign){
+					_alloc.deallocate(_data, _capacity);
+					_size = assign._size;
+					_capacity = assign._capacity;
+					_alloc = assign._alloc;
+					_data = _alloc.allocate(_capacity);
+					for (size_type i = 0; i < _size ;  i++)
+						_data[i] = assign._data[i];
+				}
 				return *this;
 			}
 
-			// ? iterators
+
+			// ? Iterators
 			iterator begin(){
-				return this->_data;
+				return _data;
+			}
+
+			const_iterator cbegin() const {
+				return _data;
 			}
 
 			iterator end(){
-				return this->_data + this->_size;
+				return _data + _size;
 			}
 
-			c_iterator cbegin() const{
-				return this->_data;
+			const_iterator cend() const {
+				return _data + _size;
 			}
 
-			c_iterator cend() const{
-				return this->_data + this->_size;
+			reverse_iterator rbegin(){
+				return _data + _size - 1;
+			}
+
+			const_reverse_iterator crbegin() const {
+				return _data + _size - 1;
+			}
+
+			reverse_iterator rend(){
+				return _data - 1;
+			}
+
+			const_reverse_iterator crend() const {
+				return _data - 1;
 			}
 			
-			r_iterator rbegin(){
-				return this->end() - 1;
-			}
-
-			r_iterator rend(){
-				return this->begin() - 1;
-			}
-
-			c_r_iterator crbegin() const{
-				return this->cend() - 1;
-			}
-
-			c_r_iterator crend() const{
-				return this->cbegin() - 1;
-			}
-
+			
 			// ? Capacity
-			std::size_t size(){
-				return this->_size;
-			}
-			
-			std::size_t max_size(){
-				return this->alloc.max_size();
+			size_type size() const {
+				return _size;
 			}
 
-			void resize(size_t n, T val = static_cast<T>(0)){
-				T *tmp;
-				if (n == this->_size)
+			size_type max_size() const {
+				return _alloc.max_size();
+			}
+			
+			void resize (size_type n, value_type val = value_type()) {
+				if (_size == n)
 					return ;
-				else if (n < this->_size)
-					this->_size = n;
-				else {
+				else if (n < _size) {
+					for (size_type i = n ; i < _size ; i++)
+						_data[i].~value_type();
+					_size = n;
+				} else {
 					if (this->_capacity * 2 <= n)
 						this->_capacity = n;
 					else if (this->_capacity < n && this->_capacity * 2 > n)
 						this->_capacity *= 2;
-					tmp = this->_data;
-					this->_data = alloc.allocate(this->_capacity);
-					for (std::size_t i = 0; i < this->_size ; i++)
-						*(this->_data + i) = *(tmp + i);
-					for (std::size_t i = this->_size ; i < n ; i++)
-						*(this->_data + i) = val;
-					this->alloc.deallocate(tmp, this->_size);
-					this->_size = n;
+					copy(n, val);
 				}
 			}
 
-			std::size_t capacity(){
-				return this->_capacity;
+			size_type capacity() const {
+				return _capacity;
 			}
-
+			
 			bool empty() const {
-				if (this->_size == 0)
-					return (true);
-				return (false);
-			}
-			
-			void reserve(size_t n){
-				if (n <= this->_capacity)
-					return ;
-					
-				T *tmp;
-				this->_capacity = n;
-				tmp = this->_data;
-				this->_data = this->alloc.allocate(this->_capacity);
-				for (std::size_t i = 0; i < this->_size ; i++)
-					*(this->_data + i) = *(tmp + i);
-				this->alloc.deallocate(tmp, this->_size);
+				return _size == 0 ;
 			}
 
-			void shrink_to_fit(){
-				if (this->_size == this->_capacity)
+			void reserve (size_type n) {
+				if (n <= _capacity)
 					return ;
-				T *tmp;
-				this->_capacity = this->_size;
-				tmp = this->_data;
-				this->_data = this->alloc.allocate(this->_capacity);
-				for (std::size_t i = 0; i < this->_size ; i++)
-					*(this->_data + i) = *(tmp + i);
-				this->alloc.deallocate(tmp, this->_size);
+				_capacity = n;
+				copy(_size);
 			}
-			
+
+			void shrink_to_fit() {
+				if (_size == _capacity)
+					return ;
+				_capacity = _size;
+				copy(_size);
+			}
+
+
 			// ? Element access
-			T& operator[](int index) {
-				// if (index < 0 || index >= (int)this->_size)
-        		// 	throw std::logic_error("out of bound");
-				return this->_data[index];
+			reference operator[] (size_type n){
+				// if (n < 0 || n >= _size)
+				// 	throw std::range_error("Index out of bound");
+				return _data[n];
 			}
 			
-			const T& operator[](int index) const {
-				// if (index < 0 || index >= (int)this->_size)
-        		// 	throw std::logic_error("out of bound");
-				return this->_data[index];
-			}
-			
-			T& at(int index) {
-				if (index < 0 || index >= (int)this->_size)
-        			throw std::logic_error("vector");
-				return *(this->_data + index);
-			}
-			
-			const T& at(int index) const {
-				if (index < 0 || index >= (int)this->_size)
-        			throw std::logic_error("vector");
-				return *(this->_data + index);
-			}
-			
-			T& front() {
-				// if (this->_data == nullptr)
-        		// 	throw std::logic_error("vector not allocated");
-				return *(this->_data);
-			}
-			
-			const T& front() const {
-				// if (this->_data == nullptr)
-        		// 	throw std::logic_error("vector not allocated");
-				return *(this->_data);
+			const_reference operator[] (size_type n) const {
+				// if (n < 0 || n >= _size)
+				// 	throw std::range_error("Index out of bound");
+				return _data[n];
 			}
 
-			T& back() {
-				// if (this->_data == nullptr)
-        		// 	throw std::logic_error("vector not allocated");
-				return *(this->_data + this->_size - 1);
+			reference at (size_type n){
+				if (n < 0 || n >= _size)
+					throw std::range_error("vector");
+				return _data[n];
 			}
 			
-			const T& back() const {
-				// if (this->_data == nullptr)
-        		// 	throw std::logic_error("vector not allocated");
-				return *(this->_data + this->_size - 1);
+			const_reference at (size_type n) const {
+				if (n < 0 || n >= _size)
+					throw std::range_error("vector");
+				return _data[n];
 			}
 
-			T* data() {
-				if (this->_data == nullptr)
-        			throw std::logic_error("vector not allocated");
-				return this->_data;
+			reference front (){
+				if (_data == nullptr)
+					throw std::range_error("Index out of bound");
+				return _data[0];
 			}
 			
-			const T* data() const {
-				if (this->_data == nullptr)
-        			throw std::logic_error("vector not allocated");
-				return this->_data;
+			const_reference front () const {
+				if (_data == nullptr)
+					throw std::range_error("Index out of bound");
+				return _data[0];
+			}
+
+			reference back (){
+				if (_data == nullptr)
+					throw std::range_error("Index out of bound");
+				return _data[_size - 1];
 			}
 			
+			const_reference back () const {
+				if (_data == nullptr)
+					throw std::range_error("Index out of bound");
+				return _data[_size - 1];
+			}
+			
+
 			// ? Modifiers
-
-			void assign(std::size_t n, const std::size_t &val){
-				if (this->_capacity >= n){
-					for (std::size_t i = 0 ; i < n ; i++)
-						*(this->_data + i) = val;
-				} else {
-					this->_capacity = n;
-					this->alloc.deallocate(this->_data, this->_size);
-					this->_data = this->alloc.allocate(this->_capacity);
-					for (std::size_t i = 0; i < n ; i++)
-						*(this->_data + i) = val;
-				}
-				this->_size = n;
-			}
-			
-			void assign(iterator first, iterator last){
+			template <class InputIterator>
+  			void assign (InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value , InputIterator>::type last) {
 				int j = 0;
-				if (this->_capacity >= (std::size_t)(last - first)){
-					for (iterator i = first ; i < last ; i++){
-						*(this->_data + j) = *i;
-						j++;
-					}
+				if ((long long)_capacity >= last - first){
+					for (InputIterator it = first ; it < last ; it++)
+						_data[j++] = *it;
 				} else {
-					this->_capacity = last - first;
-					this->alloc.deallocate(this->_data, this->_size);
-					this->_data = this->alloc.allocate(this->_capacity);
-					for (iterator i = first ; i < last ; i++){
-						*(this->_data + j) = *i;
-						j++;
-					}
+					_capacity = last - first;
+					_alloc.deallocate(_data, _size);
+					_data = _alloc.allocate(_capacity);
+					for (InputIterator it = first ; it < last ; it++)
+						_data[j++] = *it;
 				}
-				this->_size = last - first;
+				_size = last - first;
 			}
-			
-			void push_back(const T &val){
-				if (this->_size < this->_capacity){
-					*(this->_data + this->_size) = val;
-					this->_size++;	
+
+			void assign (size_type n, const value_type& val) {
+				if (_capacity >= n) {
+					for (size_type i = 0 ; i < n ; i++)
+						_data[i] = val;
 				} else {
-					T *tmp;
-					if (this->_capacity == 0)
-						this->_capacity++;
+					_capacity = n;
+					_alloc.deallocate(_data, _size);
+					_data = _alloc.allocate(_capacity);
+					for (size_type i = 0; i < n ; i++)
+						_data[i] = val;
+				}
+				_size = n;
+			}
+  
+			void push_back (const value_type& val){
+				if (_size < _capacity) 
+					_data[_size++] = val;
+				else {
+					if (_capacity == 0)
+						_capacity++;
 					else
-						this->_capacity *= 2;
-					tmp = this->_data;
-					this->_data = this->alloc.allocate(this->_capacity);
-					for (std::size_t i = 0; i < this->_size ; i++)
-						*(this->_data + i) = *(tmp + i);
-					*(this->_data + this->_size) = val;
-					this->alloc.deallocate(tmp, this->_size);
-					this->_size++;
+						_capacity *= 2;
+					copy(_size + 1, val);
 				}
 			}
-			
-			void pop_back(){
-				if (this->_size == 0)
-					return ;
-				this->_size--;
+
+			void pop_back() {
+				_data[_size].~value_type();
+				_size--;
 			}
+			
 		private:
-			std::size_t _size;
-			std::size_t _capacity;
-			T* _data;
-			Alloc alloc;
+			value_type* _data;
+			size_type _size;
+			size_type _capacity;
+			Alloc _alloc;
+
+			void	copy(size_type n, const value_type& val = value_type()) {
+				value_type* tmp;
+
+				tmp = _alloc.allocate(_capacity);
+				for (size_type i = 0; i < _size ; i++)
+					tmp[i] = _data[i];
+				for (size_type i = _size; i < n ; i++)
+					tmp[i] = val;
+				_alloc.deallocate(_data, _size);
+				_size = n;
+				_data = tmp;
+			}
 			
 	};
 }
+
 
 #endif

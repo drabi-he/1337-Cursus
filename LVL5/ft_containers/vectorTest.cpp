@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 14:56:18 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/28 18:01:52 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/05/31 19:58:37 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,81 @@
 #include "./vector/vector.hpp"
 
 int main (){
-    std::cout << "****************** test 1 < max_size > ******************" << std::endl;
+    std::cout << "****************** test 0 < constructors , iterators > ******************" << std::endl;
+    {
+        ft::vector<int> v1;
+        ft::vector<int> v2(5, 5);
+        ft::vector<int> v3(v2.begin(), v2.end());
+        ft::vector<int> v4(v3);
+        
+
+        std::cout << "*********** v1 < normal > ************" << std::endl;
+        for (ft::vector<int>::iterator it = v1.begin() ; it != v1.end(); it++)
+            std::cout << "\t" << *it ;
+        std::cout << std::endl;
+        
+        std::cout << "*********** v1 < reverse > ************" << std::endl;
+        for (ft::vector<int>::reverse_iterator it = v1.rbegin() ; it != v1.rend(); it++)
+            std::cout << "\t" << *it;
+        std::cout << std::endl;
+
+        std::cout << "*********** v2 < normal > ************" << std::endl;
+        for (ft::vector<int>::iterator it = v2.begin() ; it != v2.end(); it++)
+            std::cout << "\t" << *it ;
+        std::cout << std::endl;
+        
+        std::cout << "*********** v2 < reverse > ************" << std::endl;
+        for (ft::vector<int>::reverse_iterator it = v2.rbegin() ; it != v2.rend(); it++)
+            std::cout << "\t" << *it;
+        std::cout << std::endl;
+
+        std::cout << "*********** v3 < normal > ************" << std::endl;
+        for (ft::vector<int>::iterator it = v3.begin() ; it != v3.end(); it++)
+            std::cout << "\t" << *it ;
+        std::cout << std::endl;
+        
+        std::cout << "*********** v3 < reverse > ************" << std::endl;
+        for (ft::vector<int>::reverse_iterator it = v3.rbegin() ; it != v3.rend(); it++)
+            std::cout << "\t" << *it;
+        std::cout << std::endl;
+
+        std::cout << "*********** v4 < normal > ************" << std::endl;
+        for (ft::vector<int>::iterator it = v4.begin() ; it != v4.end(); it++)
+            std::cout << "\t" << *it ;
+        std::cout << std::endl;
+        
+        std::cout << "*********** v4 < reverse > ************" << std::endl;
+        for (ft::vector<int>::reverse_iterator it = v4.rbegin() ; it != v4.rend(); it++)
+            std::cout << "\t" << *it;
+        std::cout << std::endl;
+    }
+    
+    std::cout << std::endl << "****************** test 1 < max_size > ******************" << std::endl;
     {
         try
         {
-            std::vector<int> v(10);
+            std::vector<int> v(10, 3);
             
-
             std::cout << v.max_size() << std::endl;
 
+            for (std::vector<int>::iterator it = v.begin() ; it != v.end(); it++)
+                std::cout << "\t" << *it ;
+            std::cout << std::endl;
+            
             // * resize
             std::cout << "size = " << v.size() << std::endl;
             std::cout << "capacity = " << v.capacity() << std::endl;
-            v.resize(1);
+            v.resize(5);
+            for (std::vector<int>::iterator it = v.begin() ; it != v.end(); it++)
+                std::cout << "\t" << *it ;
+            std::cout << std::endl;  
             std::cout << "size = " << v.size() << std::endl;
             std::cout << "capacity = " << v.capacity() << std::endl;
+            
             v.resize(11);
+            for (std::vector<int>::iterator it = v.begin() ; it != v.end(); it++)
+                std::cout << "\t" << *it ;
+            std::cout << std::endl;
             std::cout << "size = " << v.size() << std::endl;
             std::cout << "capacity = " << v.capacity() << std::endl;
 
@@ -43,18 +102,28 @@ int main (){
         std::cout << "----------------------------------------" << std::endl;
         try
         {
-            ft::vector<int> v(10);
+            ft::vector<int> v(10, 3);
             
-
             std::cout << v.max_size() << std::endl;
 
+            for (ft::vector<int>::iterator it = v.begin() ; it != v.end(); it++)
+                std::cout << "\t" << *it ;
+            std::cout << std::endl;
+            
             // * resize
             std::cout << "size = " << v.size() << std::endl;
             std::cout << "capacity = " << v.capacity() << std::endl;
-            v.resize(1 );
+            v.resize(5);
+            for (ft::vector<int>::iterator it = v.begin() ; it != v.end(); it++)
+                std::cout << "\t" << *it ;
+            std::cout << std::endl;
             std::cout << "size = " << v.size() << std::endl;
             std::cout << "capacity = " << v.capacity() << std::endl;
+            
             v.resize(11);
+            for (ft::vector<int>::iterator it = v.begin() ; it != v.end(); it++)
+                std::cout << "\t" << *it ;
+            std::cout << std::endl;
             std::cout << "size = " << v.size() << std::endl;
             std::cout << "capacity = " << v.capacity() << std::endl;
 
@@ -65,61 +134,7 @@ int main (){
         }
     }
     
-    std::cout << "****************** test 2 < push_back > ******************" << std::endl;
-    {
-        int values = 10;
-        try
-        {
-            std::vector<int> v;
-            
-            for (int i = 0; i < values ; i++)
-                v.push_back(i);
-            
-            for (std::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
-                std::cout << "\t" << *i << std::endl;
-                
-            v.resize(0);
-            std::cout << "size = " << v.size() << std::endl;
-            std::cout << "capacity = " << v.capacity() << std::endl;
-            
-            v.resize(10);
-            for (std::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
-                std::cout << "\t" << *i << std::endl;
-            std::cout << "size = " << v.size() << std::endl;
-            std::cout << "capacity = " << v.capacity() << std::endl;
-        }
-        catch(const std::exception& e)
-        {
-            std::cerr << e.what() << '\n';
-        }
-        std::cout << "----------------------------------------" << std::endl;
-        try
-        {
-            ft::vector<int> v;
-            
-            for (int i = 0; i < values ; i++)
-                v.push_back(i);
-                
-            for (ft::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
-                std::cout << "\t" << *i << std::endl;
-                
-            v.resize(0);
-            std::cout << "size = " << v.size() << std::endl;
-            std::cout << "capacity = " << v.capacity() << std::endl;
-            
-            v.resize(10);
-            for (ft::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
-                std::cout << "\t" << *i << std::endl;
-            std::cout << "size = " << v.size() << std::endl;
-            std::cout << "capacity = " << v.capacity() << std::endl;
-        }
-        catch(const std::exception& e)
-        {
-            std::cerr << e.what() << '\n';
-        }
-    }
-    
-    std::cout << "****************** test 3 < size , capacity > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 2 < size , capacity > ******************" << std::endl;
     {
         int values = 10;
         try
@@ -128,7 +143,7 @@ int main (){
 
             // * size & capacity
             for (int i = 0; i < values ; i++){
-                std::cout << "size = " << v.size() << std::endl;
+                std::cout << "size = " << v.size() << " | ";
                 std::cout << "capacity = " << v.capacity() << std::endl;
                 v.push_back(i);
             }
@@ -144,7 +159,7 @@ int main (){
 
             // * size & capacity
             for (int i = 0; i < values ; i++){
-                std::cout << "size = " << v.size() << std::endl;
+                std::cout << "size = " << v.size() << " | ";
                 std::cout << "capacity = " << v.capacity() << std::endl;
                 v.push_back(i);
             }
@@ -154,8 +169,8 @@ int main (){
             std::cerr << e.what() << '\n';
         }
     }
-    
-    std::cout << "****************** test 4 < resize > ******************" << std::endl;
+
+    std::cout << std::endl << "****************** test 3 < resize > ******************" << std::endl;
     {
         int values = 10;
         try
@@ -213,7 +228,7 @@ int main (){
         }
     }
 
-    std::cout << "****************** test 5 < empty > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 4 < empty > ******************" << std::endl;
     {
         int values = 10;
         try
@@ -254,6 +269,7 @@ int main (){
             for (ft::vector<int>::iterator i = v.begin() ; i < v.end() ; i++){
                 std::cout << "\t" << *i << std::endl;
             }
+
             std::cout << "after pushing the vector" << (v.empty() ? " is empty " : " isn't empty ") << std::endl;
         }
         catch(const std::exception& e)
@@ -262,7 +278,7 @@ int main (){
         }
     }
 
-    std::cout << "****************** test 6 < reserve > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 5 < reserve > ******************" << std::endl;
     {
         int value = 5;
         try
@@ -325,10 +341,9 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        
     }
 
-    std::cout << "****************** test 7 < shrink_to_fit > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 6 < shrink_to_fit > ******************" << std::endl;
     {
         int value = 10;
         try
@@ -372,7 +387,7 @@ int main (){
         }
     }
 
-    std::cout << "****************** test 8 < operator [] > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 7 < operator [] > ******************" << std::endl;
     {
         try
         {
@@ -400,7 +415,7 @@ int main (){
         
     }
 
-    std::cout << "****************** test 9 < at > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 8 < at > ******************" << std::endl;
     {
         try
         {
@@ -432,7 +447,7 @@ int main (){
         
     }
 
-    std::cout << "****************** test 10 < front , back > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 9 < front , back > ******************" << std::endl;
     {
         try
         {
@@ -480,50 +495,7 @@ int main (){
         }
     }
 
-    std::cout << "****************** test 11 < data > ******************" << std::endl;
-    {
-        try
-        {
-            std::vector<int> v(5);
-
-            int* p = v.data();
-
-            *p = 10;
-            ++p;
-            *p = 20;
-            p[2] = 100;
-
-            std::cout << "my vector contains : " << std::endl;
-            for (unsigned i = 0; i < v.size() ; ++i)
-                std::cout << '\t' << v[i] << std::endl;
-        }
-        catch(const std::exception& e)
-        {
-            std::cerr << e.what() << '\n';
-        }
-        std::cout << "----------------------------------------" << std::endl;
-        try
-        {
-            ft::vector<int> v(5);
-
-            int* p = v.data();
-
-            *p = 10;
-            ++p;
-            *p = 20;
-            p[2] = 100;
-
-            std::cout << "my vector contains : " << std::endl;
-            for (unsigned i = 0; i < v.size() ; ++i)
-                std::cout << '\t' << v[i] << std::endl;
-        }
-        catch(const std::exception& e)
-        {
-            std::cerr << e.what() << '\n';
-        }
-    }
-
-    std::cout << "****************** test 12 < assign > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 10 < assign > ******************" << std::endl;
     {
         try
         {
@@ -559,6 +531,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
+        
         std::cout << "----------------------------------------" << std::endl;
         try
         {
@@ -596,7 +569,61 @@ int main (){
         }  
     }
 
-    std::cout << "****************** test 13 < pop_back > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 11 < push_back > ******************" << std::endl;
+    {
+        int values = 10;
+        try
+        {
+            std::vector<int> v;
+            
+            for (int i = 0; i < values ; i++)
+                v.push_back(i);
+            
+            for (std::vector<int>::iterator i = v.begin(); i != v.end() ; i++)
+                std::cout << "\t" << *i << std::endl;
+                
+            v.resize(0);
+            std::cout << "size = " << v.size() << std::endl;
+            std::cout << "capacity = " << v.capacity() << std::endl;
+            
+            v.resize(10);
+            for (std::vector<int>::iterator i = v.begin(); i != v.end() ; i++)
+                std::cout << "\t" << *i << std::endl;
+            std::cout << "size = " << v.size() << std::endl;
+            std::cout << "capacity = " << v.capacity() << std::endl;
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        std::cout << "----------------------------------------" << std::endl;
+        try
+        {
+            ft::vector<int> v;
+            
+            for (int i = 0; i < values ; i++)
+                v.push_back(i);
+                
+            for (ft::vector<int>::iterator i = v.begin(); i != v.end() ; i++)
+                std::cout << "\t" << *i << std::endl;
+                
+            v.resize(0);
+            std::cout << "size = " << v.size() << std::endl;
+            std::cout << "capacity = " << v.capacity() << std::endl;
+            
+            v.resize(10);
+            for (ft::vector<int>::iterator i = v.begin(); i != v.end() ; i++)
+                std::cout << "\t" << *i << std::endl;
+            std::cout << "size = " << v.size() << std::endl;
+            std::cout << "capacity = " << v.capacity() << std::endl;
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+    }
+
+    std::cout << std::endl << "****************** test 13 < pop_back > ******************" << std::endl;
     {
         int value = 5;
         try
@@ -616,6 +643,7 @@ int main (){
                 std::cout << "\t" << *i ;
             std::cout << std::endl;
             std::cout << "capacity = " << v.capacity() << std::endl;
+            std::cout << "capacity = " << *(v.end()) << std::endl;
         }
         catch(const std::exception& e)
         {
@@ -639,6 +667,7 @@ int main (){
                 std::cout << "\t" << *i ;
             std::cout << std::endl;
             std::cout << "capacity = " << v.capacity() << std::endl;
+            std::cout << "capacity = " << *(v.end()) << std::endl;
         }
         catch(const std::exception& e)
         {

@@ -6,19 +6,27 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/26 10:58:52 by hdrabi            #+#    #+#              #
-#    Updated: 2022/05/28 17:43:54 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/05/31 19:59:15 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC = main.cpp
 
+X_SRC = xtraTest.cpp
+
 V_SRC = vectorTest.cpp
 
-HDR = vector/vector.hpp
+HDR = xtra/enable_if.hpp \
+		xtra/is_integral.hpp \
+		xtra/equal.hpp \
+		xtra/lexicographical_compare.hpp \
+		vector/vector.hpp
 
 NAME = ft_containers
 
-VNAME = V_TEST
+XNAME = XTRA_exec
+
+VNAME = Vector_exec
 
 CC = c++
 
@@ -31,11 +39,17 @@ $(NAME) : $(SRC) $(HDR)
 
 clean :
 	rm -rf $(NAME)
+	rm -rf $(XNAME)
 	rm -rf $(VNAME)
 
 fclean : clean
 
 re : fclean all 
+
+all2 : $(XNAME) $(VNAME)
+
+$(XNAME) : $(X_SRC) $(HDR)
+	$(CC) $(CFLAGS) $(X_SRC) -o $(XNAME)
 
 $(VNAME) : $(V_SRC) $(HDR)
 	$(CC) $(CFLAGS) $(V_SRC) -o $(VNAME)
