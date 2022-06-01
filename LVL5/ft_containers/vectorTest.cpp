@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 14:56:18 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/31 19:58:37 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/06/01 12:54:16 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -675,4 +675,174 @@ int main (){
         } 
     }
 
+    std::cout << std::endl << "****************** test 14 < insert > ******************" << std::endl;
+    {
+        try
+        {
+            std::vector<int> v (3,100);
+            std::vector<int>::iterator it;
+
+            for (std::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+                    
+            it = v.begin();
+            it = v.insert ( it , 200 );
+            for (std::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+            
+            it = v.begin() + 2;
+            v.insert ( it , 6 , 10 );
+            for (std::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+            
+            it = v.begin();
+            std::vector<int> v1 (2,400);
+            v.insert (it + 2 , v1.begin() , v1.end());
+            for (std::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+
+            int myarray [] = { 501,502,503 };
+            v.insert (v.begin(), myarray, myarray+3);
+            for (std::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+            
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        std::cout << "----------------------------------------" << std::endl;
+        try
+        {
+            ft::vector<int> v (3,100);
+            ft::vector<int>::iterator it;
+
+            for (ft::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+                    
+            it = v.begin();
+            it = v.insert ( it , 200 );
+            for (ft::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+            it = v.begin() + 2;
+            v.insert ( it , 6 , 10 );
+            for (ft::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+
+            it = v.begin();
+            ft::vector<int> v1 (2,400);
+            v.insert (it + 2 , v1.begin() , v1.end());
+            for (ft::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+
+            int myarray [] = { 501,502,503 };
+            v.insert (v.begin(), myarray, myarray+3);
+            for (ft::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+    }
+
+    std::cout << std::endl << "****************** test 15 < insert > ******************" << std::endl;
+    {
+        try
+        {
+            /* code */
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        std::cout << "----------------------------------------" << std::endl;
+        try
+        {
+            /* code */
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        
+    }
+
+    std::cout << std::endl << "****************** test 16 < insert > ******************" << std::endl;
+    {
+        try
+        {
+            /* code */
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        std::cout << "----------------------------------------" << std::endl;
+        try
+        {
+            /* code */
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        
+    }
+
+    std::cout << std::endl << "****************** test 17 < insert > ******************" << std::endl;
+    {
+        try
+        {
+            /* code */
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        std::cout << "----------------------------------------" << std::endl;
+        try
+        {
+            /* code */
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        
+    }
+
+    std::cout << std::endl << "****************** test 18 < insert > ******************" << std::endl;
+    {
+        try
+        {
+            /* code */
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        std::cout << "----------------------------------------" << std::endl;
+        try
+        {
+            /* code */
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        
+    }
+
+    
 }

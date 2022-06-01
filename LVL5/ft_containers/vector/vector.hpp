@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:36:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/31 19:52:16 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/06/01 13:11:53 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,6 +289,119 @@ namespace ft {
 				_data[_size].~value_type();
 				_size--;
 			}
+
+			iterator insert (iterator position, const value_type& val){
+				size_type pos;
+				if (_size < _capacity) {
+					pos = _size - 1;
+					for (iterator it = end() - 1 ; it > position ; it--) {
+						_data[pos + 1] = _data[pos];
+						pos--;
+					}
+					_data[pos] = val;			
+				} else {
+					value_type* tmp;
+					pos = 0;
+					if (_capacity == 0)
+						_capacity++;
+					else
+						_capacity *= 2;
+					tmp = _alloc.allocate(_capacity);
+					for (iterator it = begin() ; it < position ; it++) {
+						tmp[pos] = _data[pos];
+						pos++;
+					}
+					tmp[pos] = val;
+					size_type i = pos + 1;
+					for (iterator it = position + 1 ; it <= end() ; it++) {
+						tmp[i] = _data[i - 1];
+						i++;
+					}
+					_alloc.deallocate(_data, _size);
+					_data = tmp;
+				}
+				_size++;
+				return begin() + pos;
+			}
+
+			void insert (iterator position, size_type n, const value_type& val) {
+				size_type pos;
+				if (_size + n < _capacity) {
+					pos = _size - 1;
+					for (iterator it = end() - 1 ; it > position ; it--) {
+						_data[pos + n] = _data[pos];
+						pos--;
+					}
+					for (size_type i = 0 ; i < n ; i++)
+						_data[pos + i] = val;			
+				} else {
+					value_type* tmp;
+					pos = 0;
+					if (_size + n <= _capacity * 2)
+						_capacity *= 2;
+					else
+						_capacity = _size + n;
+					tmp = _alloc.allocate(_capacity);
+					for (iterator it = begin() ; it < position ; it++) {
+						tmp[pos] = _data[pos];
+						pos++;
+					}
+					for (size_type i = 0 ; i < n ; i++)
+						tmp[pos + i] = val;
+					size_type i = pos + n;
+					for (iterator it = position + 1 ; it <= end() ; it++) {
+						tmp[i] = _data[i - n];
+						i++;
+					}
+					_alloc.deallocate(_data, _size);
+					_data = tmp;
+				}
+				_size += n;
+			}
+
+			template <class InputIterator>
+    		void insert (iterator position, InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value , InputIterator>::type last)
+			{
+				size_type pos;
+				size_type n = (last - first);
+				if (last - first < 0)
+					return ;
+				if (_size + n < _capacity) {
+					pos = _size - 1;
+					for (iterator it = end() - 1 ; it >= position ; it--) {
+						_data[pos + n] = *(it);
+						if (pos)
+							pos--;
+					}
+					iterator it = first;
+					for (size_type i = 0 ; i < n ; i++)
+						_data[pos + i] = *(it++);		
+				} else {
+					value_type* tmp;
+					pos = 0;
+					if (_size + n <= _capacity * 2)
+						_capacity *= 2;
+					else
+						_capacity = _size + n;
+					tmp = _alloc.allocate(_capacity);
+					for (iterator it = begin() ; it < position ; it++) {
+						tmp[pos] = _data[pos];
+						pos++;
+					}
+					iterator it = first;
+					for (size_type i = 0 ; i < n ; i++)
+						tmp[pos + i] = *(it++);
+					size_type i = pos + n;
+					for (iterator it = position + 1 ; it <= end() ; it++) {
+						tmp[i] = _data[i - n];
+						i++;
+					}
+					_alloc.deallocate(_data, _size);
+					_data = tmp;
+				}
+				_size += n;
+			}	
+
 			
 		private:
 			value_type* _data;
