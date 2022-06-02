@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 14:56:18 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/06/01 12:54:16 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/06/02 14:59:54 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,51 +343,7 @@ int main (){
         }
     }
 
-    std::cout << std::endl << "****************** test 6 < shrink_to_fit > ******************" << std::endl;
-    {
-        int value = 10;
-        try
-        {
-            std::vector<int> v(value);
-            
-            std::cout << "capacity = " << v.capacity() << std::endl;
-
-            v.shrink_to_fit();
-            std::cout << "capacity = " << v.capacity() << std::endl;
-            
-            v.resize(5);
-            std::cout << "capacity = " << v.capacity() << std::endl;
-
-            v.shrink_to_fit();
-            std::cout << "capacity = " << v.capacity() << std::endl;
-        }
-        catch(const std::exception& e)
-        {
-            std::cerr << e.what() << '\n';
-        }
-        std::cout << "----------------------------------------" << std::endl;
-        try
-        {
-            ft::vector<int> v(value);
-            
-            std::cout << "capacity = " << v.capacity() << std::endl;
-
-            v.shrink_to_fit();
-            std::cout << "capacity = " << v.capacity() << std::endl;
-            
-            v.resize(5);
-            std::cout << "capacity = " << v.capacity() << std::endl;
-
-            v.shrink_to_fit();
-            std::cout << "capacity = " << v.capacity() << std::endl;
-        }
-        catch(const std::exception& e)
-        {
-            std::cerr << e.what() << '\n';
-        }
-    }
-
-    std::cout << std::endl << "****************** test 7 < operator [] > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 6 < operator [] > ******************" << std::endl;
     {
         try
         {
@@ -415,7 +371,7 @@ int main (){
         
     }
 
-    std::cout << std::endl << "****************** test 8 < at > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 7 < at > ******************" << std::endl;
     {
         try
         {
@@ -447,7 +403,7 @@ int main (){
         
     }
 
-    std::cout << std::endl << "****************** test 9 < front , back > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 8 < front , back > ******************" << std::endl;
     {
         try
         {
@@ -495,7 +451,7 @@ int main (){
         }
     }
 
-    std::cout << std::endl << "****************** test 10 < assign > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 9 < assign > ******************" << std::endl;
     {
         try
         {
@@ -569,7 +525,7 @@ int main (){
         }  
     }
 
-    std::cout << std::endl << "****************** test 11 < push_back > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 10 < push_back > ******************" << std::endl;
     {
         int values = 10;
         try
@@ -623,7 +579,7 @@ int main (){
         }
     }
 
-    std::cout << std::endl << "****************** test 13 < pop_back > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 11 < pop_back > ******************" << std::endl;
     {
         int value = 5;
         try
@@ -675,7 +631,7 @@ int main (){
         } 
     }
 
-    std::cout << std::endl << "****************** test 14 < insert > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 12 < insert > ******************" << std::endl;
     {
         try
         {
@@ -756,11 +712,37 @@ int main (){
         }
     }
 
-    std::cout << std::endl << "****************** test 15 < insert > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 13 < erase > ******************" << std::endl;
     {
         try
         {
-            /* code */
+            std::vector<int> v;
+
+            for (int i=1; i<=10; i++)
+                v.push_back(i);
+            for (std::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+            
+            v.erase (v.begin()+5);
+            for (std::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+
+            v.erase (v.begin(),v.begin() + 2);
+            for (std::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+
+            std::cout << "\t" << *(v.end()) << std::endl;
+                
+            v.erase (v.begin() + 2,v.begin() + 5);
+            for (std::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+                 
+            std::cout << "\t" << *(v.end()) << std::endl;
+            
         }
         catch(const std::exception& e)
         {
@@ -769,7 +751,32 @@ int main (){
         std::cout << "----------------------------------------" << std::endl;
         try
         {
-            /* code */
+            ft::vector<int> v;
+
+            for (int i=1; i<=10; i++)
+                v.push_back(i);
+            for (ft::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+            
+            v.erase (v.begin()+5);
+            for (ft::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+
+            v.erase (v.begin(),v.begin() + 2);
+            for (ft::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+            
+            std::cout << "\t" << *(v.end()) << std::endl;
+                
+            v.erase (v.begin() + 2,v.begin() + 5);
+            for (ft::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
+                std::cout << "\t" << *i ;
+            std::cout << std::endl;
+
+            std::cout << "\t" << *(v.end()) << std::endl;
         }
         catch(const std::exception& e)
         {
@@ -778,11 +785,36 @@ int main (){
         
     }
 
-    std::cout << std::endl << "****************** test 16 < insert > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 14 < swap > ******************" << std::endl;
     {
         try
         {
-            /* code */
+            std::vector<int> foo (3,100);
+            std::vector<int> bar (5,200);
+
+            std::cout << "foo size = " << foo.size() << '\n';
+            std::cout << "foo capacity = " << foo.capacity() << '\n';
+            std::cout << "foo addr  = " << &(*foo.begin()) << '\n';
+            std::cout << "bar size = " << bar.size() << '\n';
+            std::cout << "bar capacity = " << bar.capacity() << '\n';
+            std::cout << "bar addr  = " << &(*bar.begin()) << '\n';
+            foo.swap(bar);
+
+            std::cout << "foo contains:";
+            for (unsigned i=0; i<foo.size(); i++)
+                std::cout << ' ' << foo[i];
+            std::cout << '\n';
+            std::cout << "foo size = " << foo.size() << '\n';
+            std::cout << "foo capacity = " << foo.capacity() << '\n';
+            std::cout << "foo addr  = " << &(*foo.begin()) << '\n';
+
+            std::cout << "bar contains:";
+            for (unsigned i=0; i<bar.size(); i++)
+                std::cout << ' ' << bar[i];
+            std::cout << '\n';
+            std::cout << "bar size = " << bar.size() << '\n';
+            std::cout << "bar capacity = " << bar.capacity() << '\n';
+            std::cout << "bar addr  = " << &(*bar.begin()) << '\n';
         }
         catch(const std::exception& e)
         {
@@ -791,7 +823,32 @@ int main (){
         std::cout << "----------------------------------------" << std::endl;
         try
         {
-            /* code */
+            ft::vector<int> foo (3,100);
+            ft::vector<int> bar (5,200);
+
+            std::cout << "foo size = " << foo.size() << '\n';
+            std::cout << "foo capacity = " << foo.capacity() << '\n';
+            std::cout << "foo addr  = " << &(*foo.begin()) << '\n';
+            std::cout << "bar size = " << bar.size() << '\n';
+            std::cout << "bar capacity = " << bar.capacity() << '\n';
+            std::cout << "bar addr  = " << &(*bar.begin()) << '\n';
+            foo.swap(bar);
+
+            std::cout << "foo contains:";
+            for (unsigned i=0; i<foo.size(); i++)
+                std::cout << ' ' << foo[i];
+            std::cout << '\n';
+            std::cout << "foo size = " << foo.size() << '\n';
+            std::cout << "foo capacity = " << foo.capacity() << '\n';
+            std::cout << "foo addr  = " << &(*foo.begin()) << '\n';
+
+            std::cout << "bar contains:";
+            for (unsigned i=0; i<bar.size(); i++)
+                std::cout << ' ' << bar[i];
+            std::cout << '\n';
+            std::cout << "bar size = " << bar.size() << '\n';
+            std::cout << "bar capacity = " << bar.capacity() << '\n';
+            std::cout << "bar addr  = " << &(*bar.begin()) << '\n';
         }
         catch(const std::exception& e)
         {
@@ -800,11 +857,35 @@ int main (){
         
     }
 
-    std::cout << std::endl << "****************** test 17 < insert > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 15 < clear > ******************" << std::endl;
     {
         try
         {
-            /* code */
+            std::vector<int> v;
+            v.push_back (100);
+            v.push_back (200);
+            v.push_back (300);
+
+            std::cout << "contains:";
+            for (unsigned i = 0; i < v.size() ; i++)
+                std::cout << ' ' << v[i];
+            std::cout << std::endl;
+            std::cout << "size = " << v.size() << std::endl;
+            std::cout << "capacity = " << v.capacity() << std::endl;
+
+            v.clear();
+            std::cout << "size = " << v.size() << std::endl;
+            std::cout << "capacity = " << v.capacity() << std::endl;
+            v.push_back (1101);
+            v.push_back (2202);
+
+            std::cout << "contains:";
+            for (unsigned i = 0; i < v.size() ; i++)
+                std::cout << ' ' << v[i];
+            std::cout << std::endl;
+            std::cout << "size = " << v.size() << std::endl;
+            std::cout << "capacity = " << v.capacity() << std::endl;
+            std::cout << "end = " << *v.end() << std::endl;
         }
         catch(const std::exception& e)
         {
@@ -813,7 +894,31 @@ int main (){
         std::cout << "----------------------------------------" << std::endl;
         try
         {
-            /* code */
+            ft::vector<int> v;
+            v.push_back (100);
+            v.push_back (200);
+            v.push_back (300);
+
+            std::cout << "contains:";
+            for (unsigned i = 0; i < v.size() ; i++)
+                std::cout << ' ' << v[i];
+            std::cout << std::endl;
+            std::cout << "size = " << v.size() << std::endl;
+            std::cout << "capacity = " << v.capacity() << std::endl;
+
+            v.clear();
+            std::cout << "size = " << v.size() << std::endl;
+            std::cout << "capacity = " << v.capacity() << std::endl;
+            v.push_back (1101);
+            v.push_back (2202);
+
+            std::cout << "contains:";
+            for (unsigned i = 0; i < v.size() ; i++)
+                std::cout << ' ' << v[i];
+            std::cout << std::endl;
+            std::cout << "size = " << v.size() << std::endl;
+            std::cout << "capacity = " << v.capacity() << std::endl;
+            std::cout << "end = " << *v.end() << std::endl;
         }
         catch(const std::exception& e)
         {
@@ -822,11 +927,46 @@ int main (){
         
     }
 
-    std::cout << std::endl << "****************** test 18 < insert > ******************" << std::endl;
+
+    std::cout << std::endl << "****************** test 17 < non-member functions > ******************" << std::endl;
     {
         try
         {
-            /* code */
+            std::vector<int> foo (3,100); 
+            std::vector<int> bar (2,200); 
+
+            if (foo == bar) std::cout << "foo and bar are equal\n";
+            if (foo != bar) std::cout << "foo and bar are not equal\n";
+            if (foo < bar) std::cout << "foo is less than bar\n";
+            if (foo > bar) std::cout << "foo is greater than bar\n";
+            if (foo <= bar) std::cout << "foo is less than or equal to bar\n";
+            if (foo >= bar) std::cout << "foo is greater than or equal to bar\n";
+
+            foo.swap(bar);
+            if (foo == bar) std::cout << "foo and bar are equal\n";
+            if (foo != bar) std::cout << "foo and bar are not equal\n";
+            if (foo < bar) std::cout << "foo is less than bar\n";
+            if (foo > bar) std::cout << "foo is greater than bar\n";
+            if (foo <= bar) std::cout << "foo is less than or equal to bar\n";
+            if (foo >= bar) std::cout << "foo is greater than or equal to bar\n";
+            
+            std::cout << "foo: ";
+            for (unsigned i = 0; i < foo.size() ; i++)
+                std::cout << ' ' << foo[i];
+            std::cout << std::endl;
+            std::cout << "bar: ";
+            for (unsigned i = 0; i < bar.size() ; i++)
+                std::cout << ' ' << bar[i];
+            std::cout << std::endl;
+            std::swap(foo, bar);
+            std::cout << "foo: ";
+            for (unsigned i = 0; i < foo.size() ; i++)
+                std::cout << ' ' << foo[i];
+            std::cout << std::endl;
+            std::cout << "bar: ";
+            for (unsigned i = 0; i < bar.size() ; i++)
+                std::cout << ' ' << bar[i];
+            std::cout << std::endl;
         }
         catch(const std::exception& e)
         {
@@ -835,7 +975,42 @@ int main (){
         std::cout << "----------------------------------------" << std::endl;
         try
         {
-            /* code */
+            ft::vector<int> foo (3,100); 
+            ft::vector<int> bar (2,200);
+
+
+            if (foo == bar) std::cout << "foo and bar are equal\n";
+            if (foo != bar) std::cout << "foo and bar are not equal\n";
+            if (foo < bar) std::cout << "foo is less than bar\n";
+            if (foo > bar) std::cout << "foo is greater than bar\n";
+            if (foo <= bar) std::cout << "foo is less than or equal to bar\n";
+            if (foo >= bar) std::cout << "foo is greater than or equal to bar\n";
+            
+            foo.swap(bar);
+            if (foo == bar) std::cout << "foo and bar are equal\n";
+            if (foo != bar) std::cout << "foo and bar are not equal\n";
+            if (foo < bar) std::cout << "foo is less than bar\n";
+            if (foo > bar) std::cout << "foo is greater than bar\n";
+            if (foo <= bar) std::cout << "foo is less than or equal to bar\n";
+            if (foo >= bar) std::cout << "foo is greater than or equal to bar\n";
+
+            std::cout << "foo: ";
+            for (unsigned i = 0; i < foo.size() ; i++)
+                std::cout << ' ' << foo[i];
+            std::cout << std::endl;
+            std::cout << "bar: ";
+            for (unsigned i = 0; i < bar.size() ; i++)
+                std::cout << ' ' << bar[i];
+            std::cout << std::endl;
+            ft::swap(foo, bar);
+            std::cout << "foo: ";
+            for (unsigned i = 0; i < foo.size() ; i++)
+                std::cout << ' ' << foo[i];
+            std::cout << std::endl;
+            std::cout << "bar: ";
+            for (unsigned i = 0; i < bar.size() ; i++)
+                std::cout << ' ' << bar[i];
+            std::cout << std::endl;
         }
         catch(const std::exception& e)
         {
