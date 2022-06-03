@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/26 10:58:52 by hdrabi            #+#    #+#              #
-#    Updated: 2022/05/31 19:59:15 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/06/03 12:34:51 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,17 +16,22 @@ X_SRC = xtraTest.cpp
 
 V_SRC = vectorTest.cpp
 
+S_SRC = stackTest.cpp
+
 HDR = xtra/enable_if.hpp \
 		xtra/is_integral.hpp \
 		xtra/equal.hpp \
 		xtra/lexicographical_compare.hpp \
-		vector/vector.hpp
+		vector/vector.hpp \
+		stack/stack.hpp
 
 NAME = ft_containers
 
 XNAME = XTRA_exec
 
 VNAME = Vector_exec
+
+SNAME = Stack_exec
 
 CC = c++
 
@@ -41,15 +46,19 @@ clean :
 	rm -rf $(NAME)
 	rm -rf $(XNAME)
 	rm -rf $(VNAME)
+	rm -rf $(SNAME)
 
 fclean : clean
 
 re : fclean all 
 
-all2 : $(XNAME) $(VNAME)
+all2 : $(XNAME) $(VNAME) $(SNAME)
 
 $(XNAME) : $(X_SRC) $(HDR)
 	$(CC) $(CFLAGS) $(X_SRC) -o $(XNAME)
 
 $(VNAME) : $(V_SRC) $(HDR)
 	$(CC) $(CFLAGS) $(V_SRC) -o $(VNAME)
+
+$(SNAME) : $(S_SRC) $(HDR)
+	$(CC) $(CFLAGS) $(S_SRC) -o $(SNAME)
