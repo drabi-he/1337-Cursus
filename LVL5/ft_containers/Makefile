@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/26 10:58:52 by hdrabi            #+#    #+#              #
-#    Updated: 2022/06/03 12:34:51 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/06/13 17:45:15 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,8 @@ HDR = xtra/enable_if.hpp \
 		xtra/equal.hpp \
 		xtra/lexicographical_compare.hpp \
 		vector/vector.hpp \
-		stack/stack.hpp
+		stack/stack.hpp \
+		redBlackTree/RedBlackTree.hpp
 
 NAME = ft_containers
 

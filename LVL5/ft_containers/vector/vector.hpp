@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:36:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/06/02 14:56:17 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/06/13 17:20:10 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,12 @@ namespace ft {
 				*this = copy;
 			}
 
-			vector(size_type size, const value_type& val = value_type())
+			vector(size_type size, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
 			{
 				std::cout << "\e[0;33mFields Constructor called of vector\e[0m" << std::endl;
 				_size = size;
 				_capacity = size;
+				_alloc = alloc;
 				_data = _alloc.allocate(_capacity);
 				for (size_type i = 0; i < _capacity ; i++)
 					_data[i] = val;
@@ -101,12 +102,15 @@ namespace ft {
 			vector & operator=(const vector &assign)
 			{
 				if (this != &assign){
-					if (_capacity != 0)
-						_alloc.deallocate(_data, _capacity);
+					if (_capacity < assign._capacity)
+					{
+						if (_capacity > 0)
+							_alloc.deallocate(_data, _capacity);
+						_alloc = assign._alloc;
+						_data = _alloc.allocate(assign._size);
+						_capacity = assign._size;
+					}
 					_size = assign._size;
-					_capacity = assign._capacity;
-					_alloc = assign._alloc;
-					_data = _alloc.allocate(_capacity);
 					for (size_type i = 0; i < _size ;  i++)
 						_data[i] = assign._data[i];
 				}
@@ -211,7 +215,7 @@ namespace ft {
 
 			reference at (size_type n){
 				if (n < 0 || n >= _size)
-					throw std::range_error("vector");
+					throw std::out_of_range("vector");
 				return _data[n];
 			}
 			
