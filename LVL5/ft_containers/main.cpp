@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 10:58:40 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/06/15 11:06:05 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/06/17 16:26:05 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,17 @@ int main(){
     
     ft::RedBlackTree<int, int> test;
 
-    std::cout << std::boolalpha;
-    std::cout << test._null_node->value.first << std::endl;
-    std::cout << test._null_node->value.second << std::endl;
-    std::cout << test._null_node->isBlack << std::endl;
-
-    std::pair<int, int> p1;
-    p1.first = 10;
-    p1.second = 10;
-
-    ft::pair<int, int> p2;
-    p2.first = 10;
-    p2.second = 10;
+    test.add(10, 0);
+    test.add(18, 0);
+    test.add(7, 0);
+    test.add(15, 0);
+    test.add(16, 0);
+    test.add(30, 0);
+    test.add(25, 0);
+    test.add(40, 0);
+    test.add(60, 0);
+    test.add(2, 0);
+    test.add(1, 0);
+    test.add(70, 0);
+    test.printTree(test._root, 0, 3);
 }
