@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/26 10:58:52 by hdrabi            #+#    #+#              #
-#    Updated: 2022/06/17 15:07:11 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/07/02 13:50:01 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,8 @@ HDR = xtra/enable_if.hpp \
 		xtra/is_integral.hpp \
 		xtra/equal.hpp \
 		xtra/lexicographical_compare.hpp \
+		iterators/iterator.hpp\
+		iterators/iterator_traits.hpp\
 		vector/vector.hpp \
 		stack/stack.hpp \
 		redBlackTree/RedBlackTree.hpp
@@ -36,7 +38,7 @@ SNAME = Stack_exec
 
 CC = c++
 
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+# CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 all : $(NAME)
 

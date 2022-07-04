@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 14:56:18 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/06/13 17:22:45 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/06/28 12:04:09 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <vector>
 #include <iterator>
 #include "./vector/vector.hpp"
+#include "./iterators/iterator.hpp"
 
 int main (){
     std::cout << "****************** test 0 < constructors , iterators > ******************" << std::endl;

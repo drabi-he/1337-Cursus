@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 17:32:38 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/06/15 11:10:43 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/02 13:53:25 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,8 @@ namespace ft {
                 std::cout << "\e[0;33mField Constructor called of pair\e[0m" << std::endl;
             }
 
-            pair(const pair &copy){
+            pair(const pair &copy) : first(copy.first) , second(copy.second) {
                 std::cout << "\e[0;33mCopy Constructor called of pair\e[0m" << std::endl;
-                *this = copy;
             }
 
             template <class U, class V>
@@ -47,7 +46,7 @@ namespace ft {
             }
 
             // Operators
-            pair & operator=(const pair &assign){
+            pair & operator=(const pair &assign) {
                 if (this !=  &assign){
                     first = assign.first;
                     second = assign.second;

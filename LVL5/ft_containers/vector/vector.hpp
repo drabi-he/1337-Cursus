@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:36:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/06/13 17:20:10 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/06/28 12:15:57 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,20 +136,13 @@ namespace ft {
 			}
 
 			reverse_iterator rbegin(){
-				return _data + _size - 1;
+				return reverse_iterator(end());
 			}
-
-			// const_reverse_iterator crbegin() const {
-			// 	return _data + _size - 1;
-			// }
 
 			reverse_iterator rend(){
-				return _data - 1;
+				return reverse_iterator(begin());
 			}
 
-			// const_reverse_iterator crend() const {
-			// 	return _data - 1;
-			// }
 			
 			
 			// ? Capacity

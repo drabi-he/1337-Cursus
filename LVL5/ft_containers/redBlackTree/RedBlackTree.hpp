@@ -6,9 +6,12 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 10:38:28 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/06/17 15:44:59 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/04 13:56:47 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef REDBLACKTREE_HPP
+# define REDBLACKTREE_HPP
 
 #include <iostream>
 #include "../xtra/pair.hpp"
@@ -16,65 +19,76 @@
 namespace ft {
     
     template <class T>
-    struct Node {
-        T value;
+    struct Node
+    {
+        T data;
         bool isBlack;
         bool isLeftChild;
-        Node *parent;
-        Node *left;
-        Node *right;
+        Node<T> *left;
+        Node<T> *right;
+        Node<T> *parent;
         
-        Node () {
-            value = T();
-            isBlack = false;
-            parent = nullptr;
-            left = nullptr;
-            right = nullptr;
-            isLeftChild = false;
-        }
+        Node(T data) : data(data), isBlack(false), isLeftChild(false),
+                left(nullptr), right(nullptr), parent(nullptr) {}
+        
     };
-    
-    template <class Key, class Value, class Alloc = std::allocator< Node< ft::pair< Key, Value > > > >
+
+    template <class Key, class Value, class Alloc = std::allocator< Node < ft::pair < const Key, Value> > > >
     class RedBlackTree
     {
-        typedef std::size_t size_type;
-        typedef Key key_type;
-        typedef Value mapped_type;
-        typedef Alloc allocator_type;
-        typedef ft::pair< key_type, mapped_type> value_type;
-        typedef Node<value_type> Node;
-        typedef Node* nodePtr;
-        typedef Node& nodeRef;
-        
-        public: // TODO : change to private 
-            nodePtr _root;
-            nodePtr _null_node;
+        public:
+            typedef std::size_t size_type;
+            typedef Key key_type;
+            typedef Value mapped_type;
+            typedef ft::pair<const key_type , mapped_type> value_type;
+            typedef Node<value_type> node_type;
+            typedef node_type* node_pointer;
+            typedef node_type& node_reference;
+            typedef Alloc allocator_type;
+            
+
+        private:
+            node_pointer _root;
             size_type _size;
             allocator_type _alloc;
-            
-            nodePtr newNode(Key key, Value value) {
-                nodePtr _new = _alloc.allocate(1);
-                _new->value.first = key;
-                _new->value.second = value;
-                _new->isBlack = false;
-                _new->parent = nullptr;
-                _new->left = _null_node;
-                _new->right = _null_node;
-                _new->isLeftChild = false;
-                return _new;
+
+            int height () {
+                if (_root == nullptr)
+                    return 0;
+                return height(_root) - 1;
             }
 
-            void leftRotate(nodePtr node) {
-                nodePtr tmp = node->right;
+            int height (node_pointer node) {
+                if (node == nullptr)
+                    return 0;
+                int left = height(node->left) + 1;
+                int right = height(node->right) + 1;
+                return (left > right ? left : right);
+            }
+
+            int blackHeight (node_pointer node) {
+                if (node == nullptr)
+                    return 1;
+                int left = blackHeight(node->left);
+                int right = blackHeight(node->right);
+                if (left != right)
+                    throw std::logic_error("Tree is not balanced");
+                if (node->isBlack)
+                    left++;
+                return left;
+            }
+            
+            void rotateLeft(node_pointer node) {
+                node_pointer tmp = node->right;
                 node->right = tmp->left;
-                if (node->right != _null_node) {
+                if (node->right != nullptr) {
                     node->right->parent = node;
                     node->right->isLeftChild = false;
                 }
                 tmp->parent = node->parent;
-                if (node->parent == nullptr)
+                if (node->parent == nullptr) {
                     _root = tmp;
-                else {          
+                } else {
                     if (node->isLeftChild) {
                         tmp->isLeftChild = true;
                         node->parent->left = tmp;
@@ -84,21 +98,21 @@ namespace ft {
                     }
                 }
                 tmp->left = node;
+                node->isLeftChild = true;
                 node->parent = tmp;
-                node->isLeftChild = true; 
             }
 
-            void rightRotate(nodePtr node) {
-                nodePtr tmp = node->left;
+            void rotateRight(node_pointer node) {
+                node_pointer tmp = node->left;
                 node->left = tmp->right;
-                if (node->left != _null_node) {
+                if (node->left != nullptr) {
                     node->left->parent = node;
                     node->left->isLeftChild = true;
                 }
                 tmp->parent = node->parent;
-                if (node->parent == nullptr)
+                if (node->parent == nullptr) {
                     _root = tmp;
-                else {
+                } else {
                     if (node->isLeftChild) {
                         tmp->isLeftChild = true;
                         node->parent->left = tmp;
@@ -108,75 +122,77 @@ namespace ft {
                     }
                 }
                 tmp->right = node;
-                node->parent = tmp;
                 node->isLeftChild = false;
+                node->parent = tmp;
             }
 
-            void leftRightRotate(nodePtr node) {
-                leftRotate(node->left);
-                rightRotate(node);
+            void rotateLeftRight(node_pointer node) {
+                rotateLeft(node->left);
+                rotateRight(node);
+            }
+            
+            void rotateRightLeft(node_pointer node) {
+                rotateRight(node->right);
+                rotateLeft(node);
             }
 
-            void rightLeftRotate(nodePtr node) {
-                rightRotate(node->right);
-                leftRotate(node);
-            }
-
-            void rotate(nodePtr node) {
+            void rotate(node_pointer node) {
                 if (node->isLeftChild) {
-                    if (node->parent->isLeftChild) {
-                        rightRotate(node->parent->parent);
+                    if (node->parent->isLeftChild){
+                        rotateRight(node->parent->parent);
                         node->isBlack = false;
                         node->parent->isBlack = true;
-                        if (node->parent->right != _null_node)
+                        if (node->parent->right != nullptr)
                             node->parent->right->isBlack = false;
-                    } else {
-                        rightLeftRotate(node->parent->parent);
+                    }
+                    else {
+                        rotateRightLeft(node->parent->parent);
                         node->isBlack = true;
                         node->right->isBlack = false;
                         node->left->isBlack = false;
                     }
                 } else {
-                    if (!node->parent->isLeftChild) {
-                        leftRotate(node->parent->parent);
+                    if (!node->parent->isLeftChild){
+                        rotateLeft(node->parent->parent);
                         node->isBlack = false;
                         node->parent->isBlack = true;
-                        if(node->parent->left != _null_node)
+                        if (node->parent->left != nullptr)
                             node->parent->left->isBlack = false;
-                    } else {
-                        leftRightRotate(node->parent->parent);
+                    }
+                    else {
+                        rotateLeftRight(node->parent->parent);
                         node->isBlack = true;
-                        node->right->isBlack = false;
                         node->left->isBlack = false;
+                        node->right->isBlack = false;
                     }
                 }
             }
 
-            void correctTree(nodePtr node) {
-                if (node->parent->isLeftChild) {
-                    if (node->parent->parent->right->isBlack)
+            void correctTree(node_pointer node){
+                if (node->parent->isLeftChild){
+                    if (node->parent->parent->right == nullptr || node->parent->parent->right->isBlack)
                         rotate(node);
                     else {
-                        if (node->parent->parent->right != _null_node)
+                        if (node->parent->parent->right != nullptr)
                             node->parent->parent->right->isBlack = true;
-                        if (_root != node->parent->parent)
+                        if (node->parent->parent != _root)
                             node->parent->parent->isBlack = false;
                         node->parent->isBlack = true;
                     }
                 } else {
-                    if (node->parent->parent->left->isBlack)
+                    if (node->parent->parent->left == nullptr || node->parent->parent->left->isBlack)
                         rotate(node);
                     else {
-                        if (node->parent->parent->left != _null_node)
+                        if (node->parent->parent->left != nullptr)
                             node->parent->parent->left->isBlack = true;
-                        if (_root != node->parent->parent)
+                        if (node->parent->parent != _root)
                             node->parent->parent->isBlack = false;
                         node->parent->isBlack = true;
                     }
                 }
             }
-
-            void checkColor(nodePtr node) {
+            
+            void checkColor(node_pointer node) {
                 if (node == _root)
                     return ;
                 if (!node->isBlack && !node->parent->isBlack)
@@ -184,92 +200,74 @@ namespace ft {
                 checkColor(node->parent);
             }
             
-            void add (nodePtr parent, nodePtr newNode) {
-                if (newNode->value > parent->value) {
-                    if (parent->right == _null_node) {
-                        parent->right = newNode;
-                        newNode->parent = parent;
-                        newNode->isLeftChild = false;
-                    } else {
-                        add(parent->right, newNode);
+            void add (node_pointer parent, node_pointer new_node) {
+                if(new_node->data >= parent->data) {
+                    if(parent->right == nullptr) {
+                        parent->right = new_node;
+                        new_node->parent = parent;
+                        new_node->isLeftChild = false;
                     }
-                } else {
-                    if (parent->left == _null_node) {
-                        parent->left = newNode;
-                        newNode->parent = parent;
-                        newNode->isLeftChild = true;
-                    } else {
-                        add(parent->left, newNode);
+                    else { 
+                        add(parent->right, new_node);
                     }
                 }
-                checkColor(newNode);
-            };
-
-            int height(){
-                if (_root == nullptr)
-                    return 0;
-                return (height(_root) - 1);
+                else {
+                    if(parent->left == nullptr) {
+                        parent->left = new_node;
+                        new_node->parent = parent; 
+                        new_node->isLeftChild = true;
+                    }
+                    else {
+                        add(parent->left, new_node);
+                    }
+                }
+                checkColor(new_node);
             }
 
-            int height(nodePtr node){
-                if (node == nullptr)
-                    return 0;
-                int left = height(node->left) + 1;
-                int right = height(node->right) + 1;
-                return (left > right ? left : right);
-            }
-
-            int blackNodes(nodePtr node){
-                if (node == _null_node)
-                    return 1;
-                int left = blackNodes(node->left);
-                int right = blackNodes(node->right);
-                if (left != right)
-                    std::cout << "Tree is not balanced" << std::endl;
-                if (node->isBlack)
-                    left++;
-                return (left);
-            }
-            
         public:
-            RedBlackTree() : _root(nullptr), _size(0) {
-                _null_node = _alloc.allocate(1);
-                _null_node->isBlack = true;
-                _null_node->left = nullptr;
-                _null_node->right = nullptr;
-                _null_node->parent = nullptr;
-                _null_node->isLeftChild = false;
+            RedBlackTree(/* args */) {
+                _root = nullptr;
+                _size = 0;
             };
             
-            ~RedBlackTree() {
-                _alloc.deallocate(_null_node, 1);
-            };
+            ~RedBlackTree() {};
             
-            void add (Key key, Value value) {
-                nodePtr _new = newNode(key, value);
+            void add(const key_type &key, const mapped_type &value) {
+                value_type new_value (key, value);
+                node_pointer new_node = _alloc.allocate(1);
+                _alloc.construct(new_node, Node<value_type>(new_value));
 
                 if (_root == nullptr) {
-                    _root = _new;
+                    _root = new_node;
                     _root->isBlack = true;
                     _size++;
-                    return ;
+                    return;
                 }
-                add (_root, _new);
+                add (_root, new_node);
                 _size++;
-                this->blackNodes(_root);
+                blackHeight(_root);
             }
 
-            void printTree(nodePtr root, int space, int count){
-                (void)root;
-                if (root == _null_node)
+            void printTree(int count, node_pointer root = nullptr, int space = 0){
+                if (_root == nullptr)
                     return;
+                if (root == nullptr) {
+                    if (space == 0)
+                        root = _root;
+                    else
+                        return;
+                }
                 space += count;
-                printTree(root->right, space, count);
+                printTree(count ,root->right, space);
                 for (int i = count; i < space; i++)
                     std::cout << "\t";
-                std::cout << "[ " << root->value.first << " , " << root->value.second << " ]" << " (" << (root->isBlack ? "BLACK" : "RED") << ")" << "\n";
-                printTree(root->left, space, count);
+                std::cout << "[ " << root->data.first << " , " << root->data.second << " ]" << " (" << (root->isBlack ? "BLACK" : "RED") << ")" << "\n";
+                printTree(count ,root->left, space);
             }
     };
     
+    
+    
 }
+
+#endif // RED_BLACK_TREE_HPP_INCLUDED

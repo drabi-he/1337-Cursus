@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 16:08:47 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/06/03 14:34:23 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/06/28 12:01:52 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 #include "./xtra/equal.hpp"
 #include "./xtra/lexicographical_compare.hpp"
 #include "./xtra/pair.hpp"
+#include "./iterators/iterator.hpp"
+#include "./vector/vector.hpp"
+#include "./iterators/iterator_traits.hpp"
 
 template <class T>
 typename ft::enable_if<std::is_integral<T>::value,bool>::type
@@ -27,7 +30,7 @@ typename ft::enable_if<std::is_integral<T>::value,bool>::type
     is_even (T i) {return !bool(i%2);}
 
 bool mypredicate (int i, int j) {
-  return (i == j);
+    return (i == j);
 }
 bool mycomp (char c1, char c2){
     return std::tolower(c1)<std::tolower(c2);
@@ -57,7 +60,7 @@ int main (){
     std::cout << std::endl << "****************** test 3 < equal > ******************" << std::endl;
     {
         int myints[] = {20,40,60,80,100};               
-        std::vector<int>myvector (myints,myints+5);     
+        std::vector<int>myvector (myints ,myints+5);     
 
         if ( ft::equal (myvector.begin(), myvector.end(), myints) )
             std::cout << "The contents of both sequences are equal.\n";
@@ -100,6 +103,66 @@ int main (){
 
         std::cout << "foo: " << foo.first << ", " << foo.second << '\n';
         std::cout << "bar: " << bar.first << ", " << bar.second << '\n';
+    }
+    
+    
+    std::cout << std::endl << "****************** test 5 < reverse_iterators > ******************" << std::endl;
+    {
+        {
+            std::vector<int> test;
+            test.push_back(1);
+            test.push_back(2);
+            test.push_back(3);
+            test.push_back(4);
+            test.push_back(5);
+            test.push_back(6);
+            std::reverse_iterator<std::vector<int>::iterator> rit(test.end());
+
+            std::cout << *(rit) << std::endl;
+            std::cout << *(rit.base()) << std::endl;
+            std::cout << *(rit + 1) << std::endl;
+            std::cout << *(++rit) << std::endl;
+            std::cout << *(rit++) << std::endl;
+            rit += 1;
+            std::cout << *(rit) << std::endl;
+            std::cout << *(rit.base()) << std::endl;
+            std::cout << *(rit - 1) << std::endl;
+            std::cout << *(--rit) << std::endl;
+            std::cout << *(rit--) << std::endl;
+            rit -= 1;
+            std::cout << *(rit) << std::endl;
+            std::cout << *(rit.base()) << std::endl;
+            std::cout << rit[1] << std::endl;
+            std::cout << rit[4] << std::endl;
+        }
+            std::cout << "----------------------------------------------------" << std::endl;
+        {
+            ft::vector<int> test;
+            test.push_back(1);
+            test.push_back(2);
+            test.push_back(3);
+            test.push_back(4);
+            test.push_back(5);
+            test.push_back(6);
+            ft::reverse_iterator<ft::vector<int>::iterator> rit(test.end());
+
+            std::cout << *(rit) << std::endl;
+            std::cout << *(rit.base()) << std::endl;
+            std::cout << *(rit + 1) << std::endl;
+            std::cout << *(++rit) << std::endl;
+            std::cout << *(rit++) << std::endl;
+            rit += 1;
+            std::cout << *(rit) << std::endl;
+            std::cout << *(rit.base()) << std::endl;
+            std::cout << *(rit - 1) << std::endl;
+            std::cout << *(--rit) << std::endl;
+            std::cout << *(rit--) << std::endl;
+            rit -= 1;
+            std::cout << *(rit) << std::endl;
+            std::cout << *(rit.base()) << std::endl;
+            std::cout << rit[1] << std::endl;
+            std::cout << rit[4] << std::endl;
+        }
     }
 
 }
