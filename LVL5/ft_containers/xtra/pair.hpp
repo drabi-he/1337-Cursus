@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 17:32:38 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/02 13:53:25 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/04 17:53:34 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,25 @@ namespace ft {
         public:
             // Constructors
             pair() : first() , second() {
-                std::cout << "\e[0;33mDefault Constructor called of pair\e[0m" << std::endl;
+                // std::cout << "\e[0;33mDefault Constructor called of pair\e[0m" << std::endl;
             }
 
             pair(const T1 &a, const T2 &b) : first(a) , second(b) {
-                std::cout << "\e[0;33mField Constructor called of pair\e[0m" << std::endl;
+                // std::cout << "\e[0;33mField Constructor called of pair\e[0m" << std::endl;
             }
 
             pair(const pair &copy) : first(copy.first) , second(copy.second) {
-                std::cout << "\e[0;33mCopy Constructor called of pair\e[0m" << std::endl;
+                // std::cout << "\e[0;33mCopy Constructor called of pair\e[0m" << std::endl;
             }
 
             template <class U, class V>
             pair(const pair< U , V > &copy): first(copy.first), second(copy.second){
-                std::cout << "\e[0;33mField Constructor called of pair\e[0m" << std::endl;
+                // std::cout << "\e[0;33mField Constructor called of pair\e[0m" << std::endl;
             }
 
             // Destructor
             ~pair(){
-                std::cout << "\e[0;31mDestructor called of pair\e[0m" << std::endl;
+                // std::cout << "\e[0;31mDestructor called of pair\e[0m" << std::endl;
             }
 
             // Operators
