@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/26 10:58:52 by hdrabi            #+#    #+#              #
-#    Updated: 2022/07/02 13:50:01 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/07/16 12:09:24 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,8 @@ V_SRC = vectorTest.cpp
 
 S_SRC = stackTest.cpp
 
+M_SRC = mapTest.cpp
+
 HDR = xtra/enable_if.hpp \
 		xtra/is_integral.hpp \
 		xtra/equal.hpp \
@@ -26,7 +28,8 @@ HDR = xtra/enable_if.hpp \
 		iterators/iterator_traits.hpp\
 		vector/vector.hpp \
 		stack/stack.hpp \
-		redBlackTree/RedBlackTree.hpp
+		redBlackTree/RedBlackTree.hpp \
+		map/map.hpp \
 
 NAME = ft_containers
 
@@ -35,6 +38,8 @@ XNAME = XTRA_exec
 VNAME = Vector_exec
 
 SNAME = Stack_exec
+
+MNAME = Map_exec
 
 CC = c++
 
@@ -55,7 +60,7 @@ fclean : clean
 
 re : fclean all 
 
-all2 : $(XNAME) $(VNAME) $(SNAME)
+all2 : $(XNAME) $(VNAME) $(SNAME) $(MNAME)
 
 $(XNAME) : $(X_SRC) $(HDR)
 	$(CC) $(CFLAGS) $(X_SRC) -o $(XNAME)
@@ -65,3 +70,6 @@ $(VNAME) : $(V_SRC) $(HDR)
 
 $(SNAME) : $(S_SRC) $(HDR)
 	$(CC) $(CFLAGS) $(S_SRC) -o $(SNAME)
+
+$(MNAME) : $(M_SRC) $(HDR)
+	$(CC) $(CFLAGS) $(M_SRC) -o $(MNAME)

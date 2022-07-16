@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 10:38:28 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/13 12:58:37 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/16 13:12:42 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define REDBLACKTREE_HPP
 
 #include <iostream>
+#include <functional>
 #include "../xtra/pair.hpp"
 
 namespace ft {
@@ -23,30 +24,34 @@ namespace ft {
     {
         T data;
         bool isBlack;
-        bool isLeftChild;
         Node<T> *left;
         Node<T> *right;
         Node<T> *parent;
         
-        Node(T data) : data(data), isBlack(false), isLeftChild(false),
+        Node(T data) : data(data), isBlack(false),
                 left(nullptr), right(nullptr), parent(nullptr) {}
         
     };
 
-    template <class Key, class Value, class Alloc = std::allocator< Node < ft::pair < const Key, Value> > > >
+    template <class T>
+    class TreeIterator;
+
+    template <class Iterator>
+    class TreeReverseIterator;
+
+    template <class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
     class RedBlackTree
     {
         public:
             typedef std::size_t size_type;
-            typedef Key key_type;
-            typedef Value mapped_type;
-            typedef ft::pair<const key_type , mapped_type> value_type;
+            typedef T value_type;
             typedef Node<value_type> node_type;
             typedef node_type* node_pointer;
             typedef node_type& node_reference;
             typedef Alloc allocator_type;
-            typedef TreeIterator<key_type, mapped_type> iterator;
-            typedef TreeIterator<key_type, mapped_type> const_iterator;
+            typedef std::allocator<node_type> node_allocator_type;
+            typedef TreeIterator<value_type> iterator;
+            typedef TreeIterator<value_type> const_iterator;
             typedef TreeReverseIterator<iterator> reverse_iterator;
             typedef TreeReverseIterator<const_iterator> const_reverse_iterator;
             
@@ -56,6 +61,8 @@ namespace ft {
             node_pointer _null;
             size_type _size;
             allocator_type _alloc;
+            node_allocator_type _node_alloc;
+            Compare _comp;
 
             void rotateLeft(node_pointer node) {
                 node_pointer tmp = node->right;
@@ -104,44 +111,6 @@ namespace ft {
                     old->parent->right = newNode;
                 }
                 newNode->parent = old->parent;
-            }
-
-            node_pointer min(node_pointer node) {
-                while (node->left != _null) {
-                    node = node->left;
-                }
-                return node;
-            }
-
-            node_pointer max(node_pointer node) {
-                while (node->right != _null) {
-                    node = node->right;
-                }
-                return node;
-            }
-
-            node_pointer successor(node_pointer node) {
-                if (node->right != _null) {
-                    return min(node->right);
-                }
-                node_pointer tmp = node->parent;
-                while (tmp != _null && node == tmp->right) {
-                    node = tmp;
-                    tmp = tmp->parent;
-                }
-                return tmp;
-            }
-
-            node_pointer predecessor(node_pointer node) {
-                if (node->left != _null) {
-                    return max(node->left);
-                }
-                node_pointer tmp = node->parent;
-                while (tmp != _null && node == tmp->left) {
-                    node = tmp;
-                    tmp = tmp->parent;
-                }
-                return tmp;
             }
 
             int blacks(node_pointer node) {
@@ -262,20 +231,116 @@ namespace ft {
             
         public:
             RedBlackTree(/* args */) {
-                value_type new_value(0, 0);
-                _null = _alloc.allocate(1);
-                _alloc.construct(_null, Node<value_type>(new_value));
+                _null = _node_alloc.allocate(1);
+                _node_alloc.construct(_null, Node<value_type>(value_type()));
                 _null->isBlack = true;
                 _root = _null;
                 _size = 0;
             };
 
+            RedBlackTree &operator=(const RedBlackTree &other) {
+                if (this != &other) {
+                    _size = other._size;
+                    _root = copy(other._root, other._null);
+                }
+                return *this;
+            }
+
+            node_pointer copy(node_pointer node, node_pointer null) {
+                if (node == null)
+                    return _null;
+                node_pointer newNode = _node_alloc.allocate(1);
+                _node_alloc.construct(newNode, Node<value_type>(node->data));
+                newNode->isBlack = node->isBlack;
+                newNode->left = copy(node->left, null);
+                newNode->right = copy(node->right, null);
+                newNode->parent = _null;
+                if (newNode->left != _null)
+                    newNode->left->parent = newNode;
+                if (newNode->right != _null)
+                    newNode->right->parent = newNode;
+                return newNode;
+            }
+
             ~RedBlackTree() {};
 
-            void add(key_type key, mapped_type value) {
-                value_type new_value(key, value);
-                node_pointer new_node = _alloc.allocate(1);
-                _alloc.construct(new_node, Node<value_type>(new_value));
+            static node_pointer min(node_pointer node) {
+                if (!node || !node->left)
+                    return nullptr;
+                while (node->left->parent) {
+                    node = node->left;
+                }
+                return node;
+            }
+
+            static node_pointer max(node_pointer node) {
+                if (!node || !node->right)
+                    return nullptr;
+                while (node->right->parent) {
+                    node = node->right;
+                }
+                return node;
+            }
+
+            static node_pointer successor(node_pointer node) {
+                if (node->right && node->right->parent) {
+                    return min(node->right);
+                }
+                node_pointer tmp = node->parent;
+                while (tmp && node == tmp->right) {
+                    node = tmp;
+                    tmp = tmp->parent;
+                }
+                return tmp;
+            }
+
+            static node_pointer predecessor(node_pointer node) {
+                if (node->left && node->left->parent) {
+                    return max(node->left);
+                }
+                node_pointer tmp = node->parent;
+                while (tmp && node == tmp->left) {
+                    node = tmp;
+                    tmp = tmp->parent;
+                }
+                return tmp;
+            }
+
+            node_pointer find(const value_type &value) {
+                node_pointer node = _root;
+                std::cout << "find: " << node->data.first << " | " <<  node->data.second << std::endl;
+                while (node != _null) {
+                    if (!(_comp(node->data, value) || _comp(value, node->data))){
+                        return node;
+                    }
+                    if (_comp(value, node->data))
+                        node = node->left;
+                    else
+                        node = node->right;
+                }
+                // std::cout << "not found"<< std::endl;
+                return nullptr;
+            }
+
+            node_pointer begin() {
+                return min(_root);
+            }
+
+            node_pointer end() {
+                return max(_root);
+            }
+
+            size_type size() const{
+                return _size;
+            }
+
+            size_type max_size() const {
+                return _node_alloc.max_size();
+            }
+
+            void add(value_type value) {
+                node_pointer new_node = _node_alloc.allocate(1);
+                _node_alloc.construct(new_node, Node<value_type>(value));
                 new_node->left = _null;
                 new_node->right = _null;
 
@@ -284,7 +349,7 @@ namespace ft {
                 
                 while (current != _null) {
                     parent = current;
-                    if (new_node->data < current->data) {
+                    if (_comp(new_node->data, current->data)) {
                         current = current->left;
                     } else {
                         current = current->right;
@@ -294,7 +359,7 @@ namespace ft {
                 new_node->parent = parent;
                 if (parent == nullptr) {
                     _root = new_node;
-                } else if (new_node->data < parent->data) {
+                } else if (_comp(new_node->data, parent->data)) {
                     parent->left = new_node;
                 } else {
                     parent->right = new_node;
@@ -315,15 +380,15 @@ namespace ft {
                 blacks(_root);
             }
             
-            void deleteNode(key_type key) {
+            void deleteNode(value_type key) {
                 node_pointer current = _root;
                 node_pointer tmp1, tmp2;
                 
                 while (current != _null) {
-                    if (current->data.first == key) {
+                    if (!(_comp(current->data, key) || _comp(key, current->data))) {
                         break;
                     }
-                    if (key < current->data.first) {
+                    if (_comp(key, current->data)) {
                         current = current->left;
                     } else {
                         current = current->right;
@@ -361,8 +426,8 @@ namespace ft {
                     tmp2->isBlack = current->isBlack;
                 }
                 
-                _alloc.destroy(current);
-                _alloc.deallocate(current, 1);
+                _node_alloc.destroy(current);
+                _node_alloc.deallocate(current, 1);
                 
                 if (isBlack) {
                     fixDelete(tmp1);
@@ -386,25 +451,22 @@ namespace ft {
                 printTree(count ,root->right, space);
                 for (int i = count; i < space; i++)
                     std::cout << "\t";
-                std::cout << "[ " << root->data.first << " , " << root->data.second << " ]" << " (" << (root->isBlack ? "BLACK" : "RED") << ")" << "\n";
+                std::cout << "[ " << root->data.first << "," << root->data.second << " ]" << " (" << (root->isBlack ? "BLACK" : "RED") << ")" << "\n";
                 printTree(count ,root->left, space);
             }
     };
     
 
-    template < class Key, class Value>
-    class TreeIterator : public ft::iterator <std::bidirectional_iterator_tag, T> {
+    template < class T>
+    class TreeIterator {
         
         public:
 			typedef std::size_t size_type;
-            typedef Key key_type;
-            typedef Value mapped_type;
-            typedef ft::pair<key_type, mapped_type> value_type;
-			typedef typename ft::iterator_traits<value_type>::difference_type difference_type;
-			typedef typename ft::iterator_traits<value_type>::value_type value_type;
-			typedef typename ft::iterator_traits<value_type>::pointer pointer;
-			typedef typename ft::iterator_traits<value_type>::reference reference;
-			typedef typename ft::iterator_traits<value_type>::iterator_category iterator_category;
+            typedef T value_type;
+			typedef std::ptrdiff_t difference_type;
+			typedef value_type* pointer;
+			typedef value_type& reference;
+			typedef std::bidirectional_iterator_tag iterator_category;
             typedef Node<value_type>* node_pointer;
 
             private :
@@ -426,6 +488,7 @@ namespace ft {
                 ~TreeIterator() {}
 
                 reference operator*() {
+                    std::cout << "operator*" << std::endl;
                     return (_node->data);
                 }
 
@@ -434,7 +497,7 @@ namespace ft {
                 }
                 
                 TreeIterator& operator++() {
-                    _node = RedBlackTree<key_type, mapped_type>::successor(_node);
+                    _node = RedBlackTree<value_type>::successor(_node);
                     return *this;
                 }
 
@@ -445,7 +508,7 @@ namespace ft {
                 }
 
                 TreeIterator& operator--() {
-                    _node = RedBlackTree<key_type, mapped_type>::predecessor(_node);
+                    _node = RedBlackTree<value_type>::predecessor(_node);
                     return *this;
                 }
 
@@ -505,7 +568,7 @@ namespace ft {
                 }
 
                 reference operator*() {
-                    return *(_it - 1);
+                    return *(_it);
                 }
 
                 pointer operator->() {

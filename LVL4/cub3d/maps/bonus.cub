@@ -3,8 +3,8 @@ F 84,84,84
 
 NO ./assets/lavawall1.xpm
 SO ./assets/lavawall4.xpm
-EA ./assets/lavawall2.xpm
 WE ./assets/lavawall3.xpm
+EA ./assets/lavawall2.xpm
 
 111111111111111
 100000100000001
