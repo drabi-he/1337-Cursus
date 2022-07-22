@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 10:38:28 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/16 13:12:42 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/22 19:49:46 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,36 @@ namespace ft {
     template <class T>
     struct Node
     {
-        T data;
+
         bool isBlack;
-        Node<T> *left;
-        Node<T> *right;
-        Node<T> *parent;
-        
-        Node(T data) : data(data), isBlack(false),
-                left(nullptr), right(nullptr), parent(nullptr) {}
-        
+        T* data;
+        Node *parent;
+        Node *left;
+        Node *right;
+
+        explicit Node() : isBlack(false), data(nullptr), parent(nullptr), left(nullptr), right(nullptr) {}
+
+        explicit Node(T* v) : isBlack(false), data(v), parent(nullptr), left(nullptr), right(nullptr) {}
+
+        Node(const Node &other)
+        {
+            *this = other;
+        }
+
+        Node &operator=(const Node &N)
+        {
+            if (this != &N)
+            {
+                isBlack = N.isBlack;
+                data = N.data;
+                parent = N.parent;
+                left = N.left;
+                right = N.right;
+            }
+            return *this;
+        }
+
+        ~Node() {}
     };
 
     template <class T>
@@ -39,78 +60,79 @@ namespace ft {
     template <class Iterator>
     class TreeReverseIterator;
 
-    template <class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
+    template < class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
     class RedBlackTree
     {
         public:
             typedef std::size_t size_type;
             typedef T value_type;
-            typedef Node<value_type> node_type;
-            typedef node_type* node_pointer;
-            typedef node_type& node_reference;
             typedef Alloc allocator_type;
-            typedef std::allocator<node_type> node_allocator_type;
+            typedef Compare key_compare;
+            typedef Node<value_type> node_type;
+            typedef std::allocator<node_type> allocator_type_2;
+            typedef node_type* node_pointer;
             typedef TreeIterator<value_type> iterator;
             typedef TreeIterator<value_type> const_iterator;
             typedef TreeReverseIterator<iterator> reverse_iterator;
             typedef TreeReverseIterator<const_iterator> const_reverse_iterator;
-            
 
-        private:
+
+        private :
             node_pointer _root;
             node_pointer _null;
             size_type _size;
             allocator_type _alloc;
-            node_allocator_type _node_alloc;
-            Compare _comp;
+            allocator_type_2 _alloc_node;
+            key_compare _comp;
 
             void rotateLeft(node_pointer node) {
                 node_pointer tmp = node->right;
-                
+
                 node->right = tmp->left;
-                if (tmp->left != _null) {
+                if (tmp->left != _null)
                     tmp->left->parent = node;
-                }
+
                 tmp->parent = node->parent;
-                if (node->parent == nullptr) {
+                if (node->parent == nullptr)
                     _root = tmp;
-                } else if (node == node->parent->left) {
+                else if (node == node->parent->left)
                     node->parent->left = tmp;
-                } else {
+                else
                     node->parent->right = tmp;
-                }
+
                 tmp->left = node;
                 node->parent = tmp;
             }
 
             void rotateRight(node_pointer node) {
                 node_pointer tmp = node->left;
-                
-                node->left = tmp->right;
-                if (tmp->right != _null) {
+
+                node->left = tmp->right;           
+                if (tmp->right != _null)
                     tmp->right->parent = node;
-                }
+
                 tmp->parent = node->parent;
-                if (node->parent == nullptr) {
+                if (node->parent == nullptr)
                     _root = tmp;
-                } else if (node == node->parent->right) {
+                else if (node == node->parent->right)
                     node->parent->right = tmp;
-                } else {
+                else
                     node->parent->left = tmp;
-                }
+
                 tmp->right = node;
                 node->parent = tmp;
             }
 
-            void transplant(node_pointer old, node_pointer newNode) {
-                if (old->parent == nullptr) {
-                    _root = newNode;
-                } else if (old == old->parent->left) {
-                    old->parent->left = newNode;
-                } else {
-                    old->parent->right = newNode;
-                }
-                newNode->parent = old->parent;
+            void transplant(node_pointer old, node_pointer _new) {
+                if (old->parent == nullptr)
+                    _root = _new;
+                else if (old == old->parent->left)
+                    old->parent->left = _new;
+                else
+                    old->parent->right = _new;
+
+                // if (_new->parent)
+                    _new->parent = old->parent;
             }
 
             int blacks(node_pointer node) {
@@ -126,13 +148,22 @@ namespace ft {
                     left++;
                 return left;
             }
-
-            void fixColor(node_pointer node) {
+            
+            void colorFix(node_pointer node) {
                 node_pointer tmp;
+
+                if (node->parent == nullptr) {
+                    node->isBlack = true;
+                    return;
+                }
                 
+                if (node->parent->parent == nullptr)
+                    return;
+
                 while (!node->parent->isBlack) {
                     if (node->parent == node->parent->parent->right) {
                         tmp = node->parent->parent->left;
+
                         if (!tmp->isBlack) {
                             tmp->isBlack = true;
                             node->parent->isBlack = true;
@@ -149,6 +180,7 @@ namespace ft {
                         }
                     } else {
                         tmp = node->parent->parent->right;
+
                         if (!tmp->isBlack) {
                             tmp->isBlack = true;
                             node->parent->isBlack = true;
@@ -173,16 +205,19 @@ namespace ft {
             void fixDelete(node_pointer node) {
                 node_pointer tmp;
 
-                while (node != _root && node->isBlack) {
+                while (node != _root && node->isBlack)
+                {
                     if (node == node->parent->left) {
                         tmp = node->parent->right;
-                        if (!tmp->isBlack) {
+
+                        if (!tmp->isBlack)
+                        {
                             tmp->isBlack = true;
                             node->parent->isBlack = false;
                             rotateLeft(node->parent);
                             tmp = node->parent->right;
                         }
-                        
+
                         if (tmp->left->isBlack && tmp->right->isBlack) {
                             tmp->isBlack = false;
                             node = node->parent;
@@ -193,7 +228,7 @@ namespace ft {
                                 rotateRight(tmp);
                                 tmp = node->parent->right;
                             }
-                            
+
                             tmp->isBlack = node->parent->isBlack;
                             node->parent->isBlack = true;
                             tmp->right->isBlack = true;
@@ -202,12 +237,14 @@ namespace ft {
                         }
                     } else {
                         tmp = node->parent->left;
+
                         if (!tmp->isBlack) {
                             tmp->isBlack = true;
                             node->parent->isBlack = false;
                             rotateRight(node->parent);
                             tmp = node->parent->left;
                         }
+
                         if (tmp->left->isBlack && tmp->right->isBlack) {
                             tmp->isBlack = false;
                             node = node->parent;
@@ -218,6 +255,7 @@ namespace ft {
                                 rotateLeft(tmp);
                                 tmp = node->parent->left;
                             }
+
                             tmp->isBlack = node->parent->isBlack;
                             node->parent->isBlack = true;
                             tmp->left->isBlack = true;
@@ -228,214 +266,265 @@ namespace ft {
                 }
                 node->isBlack = true;
             }
-            
-        public:
-            RedBlackTree(/* args */) {
-                _null = _node_alloc.allocate(1);
-                _node_alloc.construct(_null, Node<value_type>(value_type()));
-                _null->isBlack = true;
-                _root = _null;
-                _size = 0;
-            };
-
-            RedBlackTree &operator=(const RedBlackTree &other) {
-                if (this != &other) {
-                    _size = other._size;
-                    _root = copy(other._root, other._null);
+        
+        
+        public :
+            explicit RedBlackTree(
+                const key_compare &comp = key_compare(),
+                const allocator_type &alloc = allocator_type()) : _alloc(alloc), _comp(comp) {
+                    value_type *data = _alloc.allocate(1);
+                    _alloc.construct(data, value_type());
+                    _null = _alloc_node.allocate(1);
+                    _alloc_node.construct(_null, node_type(data));
+                    _null->isBlack = true;
+                    _root = _null;
+                    _size = 0;
                 }
-                return *this;
+
+            RedBlackTree(const RedBlackTree &other) : _null(nullptr), _root(nullptr) {
+                *this = other;
+            }
+            
+            RedBlackTree &operator=(const RedBlackTree &rhs) {
+                if (this != &rhs) {
+                    _alloc = rhs._alloc;
+                    _comp = rhs._comp;
+                    _size = rhs._size;
+                    _alloc_node = rhs._alloc_node;
+                    _root = copy(rhs._root, rhs._null);
+                }
+                return (*this);
             }
 
             node_pointer copy(node_pointer node, node_pointer null) {
                 if (node == null)
                     return _null;
-                node_pointer newNode = _node_alloc.allocate(1);
-                _node_alloc.construct(newNode, Node<value_type>(node->data));
-                newNode->isBlack = node->isBlack;
-                newNode->left = copy(node->left, null);
-                newNode->right = copy(node->right, null);
-                newNode->parent = _null;
-                if (newNode->left != _null)
-                    newNode->left->parent = newNode;
-                if (newNode->right != _null)
-                    newNode->right->parent = newNode;
-                return newNode;
+                    
+                value_type *data = _alloc.allocate(1);
+                _alloc.construct(data, *node->data);
+                node_pointer new_node = _alloc_node.allocate(1);
+                _alloc_node.construct(new_node, node_type(data));
+
+                new_node->isBlack = node->isBlack;
+                new_node->left = copy(node->left, null);
+                new_node->right = copy(node->right, null);
+                new_node->parent = nullptr;
+                if (new_node->left != _null)
+                    new_node->left->parent = new_node;
+                if (new_node->right != _null)
+                    new_node->right->parent = new_node;
+                return new_node;
             }
 
-            ~RedBlackTree() {};
+            ~RedBlackTree() {
+                clear();
+                _alloc_node.destroy(_null);
+                _alloc_node.deallocate(_null, 1);
+            }
 
-            static node_pointer min(node_pointer node) {
+            node_pointer getRoot() const {
+                return _root;
+            }
+
+            node_pointer getNull() const {
+                return _null;
+            }
+
+            static node_pointer min(node_pointer node)
+            {
                 if (!node || !node->left)
                     return nullptr;
-                while (node->left->parent) {
+
+                while (node->left->parent){
+                    
+                // std::cout << "1 - node : " << *node->data << " | left : " << *node->left->data << " | parent : " << *node->left->parent->data << std::endl;
                     node = node->left;
+                // std::cout << "2 - node : " << (node ? *node->data : -1)  << " | left : " << (node->left ? *node->left->data : -1) << " | parent : " << (node->left->parent ? *node->left->parent->data : -1) << std::endl;
                 }
+
                 return node;
             }
 
-            static node_pointer max(node_pointer node) {
+            static node_pointer max(node_pointer node)
+            {
                 if (!node || !node->right)
                     return nullptr;
-                while (node->right->parent) {
+
+                while (node->right->parent)
                     node = node->right;
-                }
+
                 return node;
             }
 
-            static node_pointer successor(node_pointer node) {
-                if (node->right && node->right->parent) {
+            static node_pointer successor(node_pointer node)
+            {
+                if (node->right && node->right->parent)
                     return min(node->right);
-                }
+
                 node_pointer tmp = node->parent;
                 while (tmp && node == tmp->right) {
                     node = tmp;
                     tmp = tmp->parent;
                 }
+
                 return tmp;
             }
 
-            static node_pointer predecessor(node_pointer node) {
-                if (node->left && node->left->parent) {
+            static node_pointer predecessor(node_pointer node)
+            {
+                if (node->left && node->left->parent) 
                     return max(node->left);
-                }
+
                 node_pointer tmp = node->parent;
                 while (tmp && node == tmp->left) {
                     node = tmp;
                     tmp = tmp->parent;
                 }
+
                 return tmp;
             }
 
-            node_pointer find(const value_type &value) {
-                node_pointer node = _root;
-                std::cout << "find: " << node->data.first << " | " <<  node->data.second << std::endl;
-                while (node != _null) {
-                    if (!(_comp(node->data, value) || _comp(value, node->data))){
-                        return node;
-                    }
-                    if (_comp(value, node->data))
-                        node = node->left;
+            node_pointer find(const value_type &key) const
+            {
+                node_pointer current = _root;
+                node_pointer tmp = nullptr;
+
+                while (current != _null)
+                {
+                    if (!(_comp(*current->data, key) || _comp(key, *current->data)))
+                        tmp = current;
+                    if (_comp(*current->data, key))
+                        current = current->right;
                     else
-                        node = node->right;
+                        current = current->left;
                 }
-                // std::cout << "not found"<< std::endl;
-                return nullptr;
+                return (tmp);
             }
 
-            node_pointer begin() {
+            node_pointer begin() const
+            {
                 return min(_root);
             }
 
-            node_pointer end() {
+            node_pointer end() const
+            {
                 return max(_root);
             }
 
-            size_type size() const{
+            void add(const value_type &key)
+            {
+                value_type *data = _alloc.allocate(1);
+                _alloc.construct(data, key);
+                node_pointer new_node = _alloc_node.allocate(1);
+                _alloc_node.construct(new_node, node_type(data));
+                new_node->parent = nullptr;
+                new_node->left = _null;
+                new_node->right = _null;
+
+                node_pointer parent = nullptr;
+                node_pointer current = _root;
+
+                while (current != _null)
+                {
+                    parent = current;
+                    if (_comp(*(new_node->data), *(current->data)))
+                        current = current->left;
+                    else
+                        current = current->right;
+                }
+
+                new_node->parent = parent;
+                if (parent == nullptr)
+                    _root = new_node;
+                else if (_comp(*(new_node->data), *(parent->data)))
+                    parent->left = new_node;
+                else
+                    parent->right = new_node;
+                colorFix(new_node);
+                blacks(_root);
+                _size++;
+            }
+
+
+            void erase(const value_type &key)
+            {
+                node_pointer node = find(key);
+                node_pointer tmp1, tmp2;
+                
+                if (!node)
+                    return ;
+                tmp2 = node;
+                bool isBlack = node->isBlack;
+
+                if (node->left == _null) {
+                    tmp1 = node->right;
+                    transplant(node, node->right);
+                } else if (node->right == _null) {
+                    tmp1 = node->left;
+                    transplant(node, node->left);
+                } else {
+                    tmp2 = min(node->right);
+                    isBlack = tmp2->isBlack;
+                    tmp1 = tmp2->right;
+                    if (tmp2->parent == node && tmp1 != _null)
+                        tmp1->parent = tmp2;
+                    else
+                    {
+                        transplant(tmp2, tmp2->right);
+                        tmp2->right = node->right;
+                        if (tmp2->right != _null)
+                            tmp2->right->parent = tmp2;
+                    }
+                    transplant(node, tmp2);
+                    tmp2->left = node->left;
+                    if (tmp2->left != _null)
+                        tmp2->left->parent = tmp2;
+                    tmp2->isBlack = node->isBlack;
+                }
+                freeNode(node);
+                if (isBlack)
+                    fixDelete(tmp1);
+                blacks(_root);
+                _null->parent = nullptr;
+                _size--;
+            }
+
+            // ****************************** map ************************************ //
+            
+            size_type size() const {
                 return _size;
             }
 
             size_type max_size() const {
-                return _node_alloc.max_size();
+                return _alloc_node.max_size();
             }
 
-            void add(value_type value) {
-                node_pointer new_node = _node_alloc.allocate(1);
-                _node_alloc.construct(new_node, Node<value_type>(value));
-                new_node->left = _null;
-                new_node->right = _null;
-
-                node_pointer current = _root;
-                node_pointer parent = nullptr;
-                
-                while (current != _null) {
-                    parent = current;
-                    if (_comp(new_node->data, current->data)) {
-                        current = current->left;
-                    } else {
-                        current = current->right;
-                    }
-                }
-
-                new_node->parent = parent;
-                if (parent == nullptr) {
-                    _root = new_node;
-                } else if (_comp(new_node->data, parent->data)) {
-                    parent->left = new_node;
-                } else {
-                    parent->right = new_node;
-                }
-
-                if (new_node->parent == nullptr) {
-                    new_node->isBlack = true;
-                    _size++;
-                    return ;
-                }
-                
-                if (new_node->parent->parent == nullptr) {
-                    _size++;
-                    return ;
-                }
-
-                fixColor(new_node);
-                blacks(_root);
+            void freeNode(node_pointer node) {
+                if (node == _null)
+                    return;
+                _alloc.destroy(node->data);
+                _alloc.deallocate(node->data, 1);
+                _alloc_node.destroy(node);
+                _alloc_node.deallocate(node, 1);
             }
+
+            void freeAll(node_pointer node) {
+                if (node == _null)
+                    return;
+                freeAll(node->left);
+                freeAll(node->right);
+                freeNode(node);
+            }
+
+            void clear() {
+                if (_root == _null)
+                    return;
+                freeAll(_root);
+                _root = _null;
+                _size = 0;
+            }
+
             
-            void deleteNode(value_type key) {
-                node_pointer current = _root;
-                node_pointer tmp1, tmp2;
-                
-                while (current != _null) {
-                    if (!(_comp(current->data, key) || _comp(key, current->data))) {
-                        break;
-                    }
-                    if (_comp(key, current->data)) {
-                        current = current->left;
-                    } else {
-                        current = current->right;
-                    }
-                }
-                
-                if (current == _null) {
-                    std::cout << "Key not found" << std::endl;
-                    return ;
-                }
-                
-                tmp2 = current;
-                bool isBlack = current->isBlack;
-                if (current->left == _null) {
-                    tmp1 = current->right;
-                    transplant(current, current->right);
-                } else if (current->right == _null) {
-                    tmp1 = current->left;
-                    transplant(current, current->left);
-                } else {
-                    tmp2 = min(current->right);
-                    isBlack = tmp2->isBlack;
-                    tmp1 = tmp2->right;
-                    if (tmp2->parent == current) {
-                        tmp1->parent = tmp2;
-                    } else {
-                        transplant(tmp2, tmp2->right);
-                        tmp2->right = current->right;
-                        tmp2->right->parent = tmp2;
-                    }
-                    
-                    transplant(current, tmp2);
-                    tmp2->left = current->left;
-                    tmp2->left->parent = tmp2;
-                    tmp2->isBlack = current->isBlack;
-                }
-                
-                _node_alloc.destroy(current);
-                _node_alloc.deallocate(current, 1);
-                
-                if (isBlack) {
-                    fixDelete(tmp1);
-                }
-                _size--;
-                blacks(_root);
-            }
-
             void printTree(int count, node_pointer root = nullptr, int space = 0){
                 if (root == _null)
                     return ;
@@ -451,160 +540,157 @@ namespace ft {
                 printTree(count ,root->right, space);
                 for (int i = count; i < space; i++)
                     std::cout << "\t";
-                std::cout << "[ " << root->data.first << "," << root->data.second << " ]" << " (" << (root->isBlack ? "BLACK" : "RED") << ")" << "\n";
+                std::cout << "[ " << *root->data << "," << *root->data << " ]" << " (" << (root->isBlack ? "BLACK" : "RED") << ")" << "( " << (root->parent ? *root->parent->data : - 1) << " ) \n";
                 printTree(count ,root->left, space);
             }
     };
-    
 
-    template < class T>
-    class TreeIterator {
-        
+    template <class T>
+    class TreeIterator
+    {
         public:
-			typedef std::size_t size_type;
+            typedef std::size_t size_type;
             typedef T value_type;
-			typedef std::ptrdiff_t difference_type;
-			typedef value_type* pointer;
-			typedef value_type& reference;
-			typedef std::bidirectional_iterator_tag iterator_category;
+            typedef value_type& reference;
+            typedef value_type* pointer;
+            typedef std::ptrdiff_t difference_type;
+            typedef std::bidirectional_iterator_tag iterator_category;
             typedef Node<value_type>* node_pointer;
 
-            private :
-                node_pointer _node;
+        
+        private:
+            node_pointer _node;
 
-            public :
-                TreeIterator(node_pointer node = nullptr) : _node(node) {}
+        public:
+            TreeIterator(node_pointer node = nullptr) : _node(node) {}
 
-                TreeIterator(const TreeIterator& other) {
-                    *this = other;
-                }
+            TreeIterator(const TreeIterator &other) {
+                *this = other;
+            }
 
-                TreeIterator& operator=(const TreeIterator& other) {
-                    if (this != &other)
-                        this->_node = other._node;
-                    return *this;
-                }
+            TreeIterator &operator=(const TreeIterator &other) {
+                if (this != &other)
+                    _node = other._node;
 
-                ~TreeIterator() {}
+                return *this;
+            }
 
-                reference operator*() {
-                    std::cout << "operator*" << std::endl;
-                    return (_node->data);
-                }
+            ~TreeIterator() {}
 
-                pointer operator->() {
-                    return &(_node->data);
-                }
-                
-                TreeIterator& operator++() {
-                    _node = RedBlackTree<value_type>::successor(_node);
-                    return *this;
-                }
+            reference operator*() const {
+                return *(_node->data);
+            }
 
-                TreeIterator operator++(int) {
-                    TreeIterator tmp(*this);
-                    ++*this;
-                    return tmp;
-                }
+            pointer operator->() const {
+                return (_node->data);
+            }
 
-                TreeIterator& operator--() {
-                    _node = RedBlackTree<value_type>::predecessor(_node);
-                    return *this;
-                }
+            TreeIterator &operator++() {
+                _node = RedBlackTree<value_type>::successor(_node);
+                return (*this);
+            }
 
-                TreeIterator operator--(int) {
-                    TreeIterator tmp(*this);
-                    --*this;
-                    return tmp;
-                }
+            TreeIterator operator++(int) {
+                TreeIterator old = *this;
+                ++*this;
+                return (old);
+            }
 
-                node_pointer base() const {
-                    return _node;
-                }
-                
-                bool operator==(const TreeIterator& other) {
-                    return (_node == other._node);
-                }
+            TreeIterator &operator--() {
+                _node = RedBlackTree<value_type>::predecessor(_node);
+                return (*this);
+            }
 
-                bool operator!=(const TreeIterator& other) {
-                    return (_node != other._node);
-                }
+            TreeIterator operator--(int) {
+                TreeIterator old = *this;
+                operator--();
+                return (old);
+            }
+
+            node_pointer base() const {
+                return _node;
+            }
+
+            bool operator==(const TreeIterator &rhs) const {
+                return (_node == rhs._node);
+            }
+
+            bool operator!=(const TreeIterator &rhs) const {
+                return _node != rhs._node;
+            }
     };
 
     template <class Iterator>
-    class TreeReverseIterator {
-        
-        public :
+    class TreeReverseIterator
+    {
+
+        public:
             typedef Iterator iterator_type;
-            typedef typename iterator_traits<iterator_type>::iterator_category iterator_category;
-            typedef typename iterator_traits<iterator_type>::value_type value_type;
-            typedef typename iterator_traits<iterator_type>::difference_type difference_type;
-            typedef typename iterator_traits<iterator_type>::pointer pointer;
-            typedef typename iterator_traits<iterator_type>::reference reference;
+            typedef typename iterator_traits<Iterator>::iterator_category iterator_category;
+            typedef typename iterator_traits<Iterator>::value_type value_type;
+            typedef typename iterator_traits<Iterator>::difference_type difference_type;
+            typedef typename iterator_traits<Iterator>::pointer pointer;
+            typedef typename iterator_traits<Iterator>::reference reference;
 
-            private :
-                iterator_type _it;
-                
-            public :
-            
-                TreeReverseIterator() {}
 
-                TreeReverseIterator(iterator_type it) : _it(it) {}
+        private:
+            iterator_type _base;
 
-                TreeReverseIterator(const TreeReverseIterator& other) {
-                    *this = other;
-                }
+        public:
+            TreeReverseIterator() {}
 
-                TreeReverseIterator& operator=(const TreeReverseIterator& other) {
-                    if (this != &other)
-                        this->_it = other._it;
-                    return *this;
-                }
+            explicit TreeReverseIterator(iterator_type it) : _base(it) {}
 
-                ~TreeReverseIterator() {}
+            template <class Iter>
+            TreeReverseIterator(const TreeReverseIterator<Iter> &rev_it) : _base(rev_it._base) {}
 
-                iterator_type base() const {
-                    return _it;
-                }
+            iterator_type base() const {
+                return _base;
+            }
 
-                reference operator*() {
-                    return *(_it);
-                }
+            reference operator*() const {
+                return *(_base);
+            }
 
-                pointer operator->() {
-                    return &(operator*());
-                }
+            pointer operator->() const {
+                return &(operator*());
+            }
 
-                TreeReverseIterator& operator++() {
-                    --_it;
-                    return *this;
-                }
+            TreeReverseIterator &operator++() {
+                --_base;
+                return *this;
+            }
 
-                TreeReverseIterator operator++(int) {
-                    TreeReverseIterator tmp(*this);
-                    ++*this;
-                    return tmp;
-                }
+            TreeReverseIterator operator++(int) {
+                TreeReverseIterator tmp(*this);
+                ++*this;
+                return (tmp);
+            }
 
-                TreeReverseIterator& operator--() {
-                    ++_it;
-                    return *this;
-                }
+            TreeReverseIterator &operator--()
+            {
+                ++_base;
+                return (*this);
+            }
 
-                TreeReverseIterator operator--(int) {
-                    TreeReverseIterator tmp(*this);
-                    --*this;
-                    return tmp;
-                }
+            TreeReverseIterator operator--(int) {
+                TreeReverseIterator tmp(*this);
+                --*this;
+                return (tmp);
+            }
 
-                bool operator==(const TreeReverseIterator& other) {
-                    return (_it == other._it);
-                }
+            bool operator==(const TreeReverseIterator &rhs) const
+            {
+                return (_base == rhs._base);
+            }
 
-                bool operator!=(const TreeReverseIterator& other) {
-                    return (_it != other._it);
-                }
+            bool operator!=(const TreeReverseIterator &rhs) const
+            {
+                return _base != rhs._base;
+            }
+        
     };
+
 }
 
 #endif // RED_BLACK_TREE_HPP_INCLUDED

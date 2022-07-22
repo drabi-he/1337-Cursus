@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/26 10:58:52 by hdrabi            #+#    #+#              #
-#    Updated: 2022/07/16 12:09:24 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/07/22 13:40:04 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ clean :
 
 fclean : clean
 
-re : fclean all 
+re : fclean all all2
 
 all2 : $(XNAME) $(VNAME) $(SNAME) $(MNAME)
 

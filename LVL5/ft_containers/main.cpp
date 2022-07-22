@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 10:58:40 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/16 13:16:04 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/22 18:10:16 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ int main(){
     {
         // ft::RedBlackTree<int> RBT;
 
-        // std::cout << (RBT.find(10) != nullptr ? "true" : "false" ) << std::endl;
         // RBT.add(10);
-        // std::cout << (RBT.find(10) != nullptr ? "true" : "false" ) << std::endl;
         // RBT.add(18);
         // RBT.add(7);
         // RBT.add(15);
@@ -46,32 +44,16 @@ int main(){
         // RBT.add(1);
         // RBT.add(70);
 
-        // ft::RedBlackTree<int> RBT2;
-        // RBT2 = RBT;
-
-        // ft::RedBlackTree<int>::reverse_iterator it(RBT.end());
-        // ft::RedBlackTree<int>::reverse_iterator it2(RBT.begin());
-        
-        // for ( ; it != it2 ; it++)
-        // {
-            // std::cout << *it << std::endl;
-        // }
-        // RBT.deleteNode(10);
-        // RBT.deleteNode(18);
+        // RBT.erase(18);
+        // RBT.erase(0);
+        // ft::RedBlackTree<int>::iterator it;
+        // it = RBT.begin();
+        // std::cout << *it << std::endl;
+        // RBT.erase(1);
+        // it = RBT.begin();
+        // std::cout << *it << std::endl;
         // RBT.printTree(3);
 
-        // std::cout << "-----------------------------------------------------------------------------------------" << std::endl;
-        // RBT2.printTree(3);
-        /* code */
-
-        ft::map<int, int> map;
-
-        // std::cout << "size : "  << map.size() << std::endl;
-        map[1] = 1;
-        // std::cout << "size : "  << map.size() << std::endl;
-
-        std::cout << "here\n"  << map[1] << std::endl;
-        // std::cout << "size : "  << map.size() << std::endl;
 
     }
     catch(const std::exception& e)
