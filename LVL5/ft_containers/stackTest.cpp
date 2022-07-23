@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 15:05:52 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/06/03 18:10:58 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/23 18:23:23 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@
 #include "stack/stack.hpp"
 
 int main() {
-    
-    std::cout << "****************** test 1 < empty > ******************" << std::endl;
+    // TODO: DOUBLE FREE ERROR
+    std::cout << std::endl << "\033[36m" << "************************************ test 1 < empty > ************************************ " << "\033[0m" << std::endl;
     {
         
         
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v1 ;          
@@ -46,7 +47,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v1 ;          
@@ -71,8 +72,9 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "****************** test 2 < size > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 2 < size > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v1 ;          
@@ -94,7 +96,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v1 ;          
@@ -118,8 +120,9 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "****************** test 3 < top > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 3 < top > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v1 ;          
@@ -141,7 +144,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v1 ;          
@@ -165,8 +168,9 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "****************** test 4 < push > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 4 < push > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v1 ;          
@@ -175,7 +179,6 @@ int main() {
             std::stack<int,ft::vector<int> > s1 (v1);  
             std::stack<int,std::vector<int> > s2 (v2);
 
-            std:: cout << "s1 top = " << s1.top() << std::endl;
             std:: cout << "s2 top = " << s2.top() << std::endl;
 
             s1.push(1);
@@ -187,7 +190,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v1 ;          
@@ -196,7 +199,6 @@ int main() {
             ft::stack<int,ft::vector<int> > s1 (v1);  
             ft::stack<int,std::vector<int> > s2 (v2);
 
-            std:: cout << "s1 top = " << s1.top() << std::endl;
             std:: cout << "s2 top = " << s2.top() << std::endl;
 
             s1.push(1);
@@ -210,8 +212,9 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "****************** test 5 < pop > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 5 < pop > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v1 ;          
@@ -242,7 +245,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v1 ;          
@@ -275,8 +278,9 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "****************** test 6 < non-member functions > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 6 < non-member functions > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> foo1 (2,200); 
@@ -310,7 +314,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> foo1 (2,200); 

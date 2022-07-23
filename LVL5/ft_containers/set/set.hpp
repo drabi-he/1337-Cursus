@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 13:30:00 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/23 15:48:04 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/23 19:20:54 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ namespace ft {
 
         public :
 
+            // *************************************** Constructor *************************************** //
             explicit set (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(comp, alloc), _alloc(alloc), _comp(comp) {}
     
             template <class InputIterator>
@@ -64,20 +65,26 @@ namespace ft {
                     _tree.add(*first);
             }
 
-            set (const set& other){
-                *this = other;
+            set (const set& x){
+                *this = x;
             }
 
-            set& operator= (const set& other){
-                if (this != &other) {
-                    _tree = other._tree;
-                    _alloc = other._alloc;
-                    _comp = other._comp;
+
+            // *************************************** Assign *************************************** //
+            set& operator= (const set& x){
+                if (this != &x) {
+                    _tree = x._tree;
+                    _alloc = x._alloc;
+                    _comp = x._comp;
                 }
                 return *this;
             }
 
-            ~set (){}
+
+            // *************************************** Destructor *************************************** //
+            ~set (){
+            }
+
 
             // *************************************** Iterators *************************************** //
             iterator begin() {
@@ -111,7 +118,8 @@ namespace ft {
             const_reverse_iterator rend() const {
                 return const_reverse_iterator(NULL);
             }
-    
+
+
             // *************************************** Capacity *************************************** //
             bool empty() const {
                 return _tree.size() == 0;
@@ -124,6 +132,7 @@ namespace ft {
             size_type max_size() const {
                 return _tree.max_size();
             }
+
 
             // *************************************** Modifiers *************************************** //
             ft::pair<iterator,bool> insert (const value_type& val) {
@@ -139,6 +148,7 @@ namespace ft {
             }
 
             iterator insert (iterator position, const value_type& val) {
+                (void)position;
                 typename RBT::node_pointer node = _tree.find(val);
 
                 if (!node) {
@@ -149,7 +159,7 @@ namespace ft {
             }
 
             template <class InputIterator>
-            void insert (InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value , InputIterator>::type last) {
+            void insert (InputIterator first, InputIterator last) {
                 
                 typename RBT::node_pointer node;
                 
@@ -179,15 +189,16 @@ namespace ft {
                 }
             }
 
-            void swap (set& other) {
-                set tmp = other;
-                other = *this;
+            void swap (set& x) {
+                set tmp = x;
+                x = *this;
                 *this = tmp;
             }
 
             void clear() {
                 _tree.clear();
             }
+
 
             // *************************************** Observers *************************************** //
             value_compare value_comp() const {
@@ -198,6 +209,7 @@ namespace ft {
                 return _comp;
             }
 
+
             // *************************************** Operations *************************************** //
             iterator find (const value_type& val) const {
                 typename RBT::node_pointer node = _tree.find(val);                
@@ -206,7 +218,7 @@ namespace ft {
                 return end();
             }
 
-            size_type count (const key_type& val) const {
+            size_type count (const value_type& val) const {
                 typename RBT::node_pointer node = _tree.find(val);
                 return node ? 1 : 0;
             }

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 16:08:47 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/06/28 12:01:52 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/23 17:27:45 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ bool mycomp (char c1, char c2){
 
 int main (){
     
-    std::cout << "****************** test 1 < enable_if > ******************" << std::endl;
+    std::cout << "\033[36m" << "************************************ test 1 < enable_if > ************************************ " << "\033[0m" << std::endl;
     {
         int i = 1;    
 
@@ -47,7 +47,7 @@ int main (){
         std::cout << "i is even: " << is_even(i) << std::endl;
     }
 
-    std::cout << std::endl << "****************** test 2 < is_integral > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 2 < is_integral > ******************" << "\033[0m" << std::endl;
     {
         std::cout << std::boolalpha;
         std::cout << "is_integral:" << std::endl;
@@ -57,7 +57,7 @@ int main (){
         
     }
 
-    std::cout << std::endl << "****************** test 3 < equal > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 3 < equal > ************************************ " << "\033[0m" << std::endl;
     {
         int myints[] = {20,40,60,80,100};               
         std::vector<int>myvector (myints ,myints+5);     
@@ -75,7 +75,7 @@ int main (){
             std::cout << "The contents of both sequences differ.\n";
     }
 
-    std::cout << std::endl << "****************** test 4 < lexicographical_compare > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 4 < lexicographical_compare > ************************************ " << "\033[0m" << std::endl;
     {
         char foo[]="Apple";
         char bar[]="apartment";
@@ -93,7 +93,7 @@ int main (){
         std::cout << '\n';
     }
 
-    std::cout << std::endl << "****************** test 5 < pair > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 5 < pair > ************************************ " << "\033[0m" << std::endl;
     {
         ft::pair <int,int> foo;
         ft::pair <int,int> bar;
@@ -106,7 +106,7 @@ int main (){
     }
     
     
-    std::cout << std::endl << "****************** test 5 < reverse_iterators > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 5 < reverse_iterators > ************************************ " << "\033[0m" << std::endl;
     {
         {
             std::vector<int> test;

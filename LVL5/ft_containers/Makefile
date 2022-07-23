@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/26 10:58:52 by hdrabi            #+#    #+#              #
-#    Updated: 2022/07/23 14:02:51 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/07/23 19:15:56 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ STNAME = Set_exec
 
 CC = c++
 
-# CFLAGS = -Wall -Wextra -Werror -std=c++98
+CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 all : $(NAME)
 

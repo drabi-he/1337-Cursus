@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 14:56:18 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/06/28 12:04:09 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/23 17:56:44 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,57 +17,121 @@
 #include "./iterators/iterator.hpp"
 
 int main (){
-    std::cout << "****************** test 0 < constructors , iterators > ******************" << std::endl;
+    std::cout << "\033[36m" << "************************************ test 0 < constructors , iterators > ************************************ " << "\033[0m" << std::endl;
     {
-        ft::vector<int> v1;
-        ft::vector<int> v2(5, 5);
-        ft::vector<int> v3(v2.begin(), v2.end());
-        ft::vector<int> v4(v3);
-        
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
+        try
+        {
+            std::vector<int> v1;
+            std::vector<int> v2(5, 5);
+            std::vector<int> v3(v2.begin(), v2.end());
+            std::vector<int> v4(v3);
+            
 
-        std::cout << "*********** v1 < normal > ************" << std::endl;
-        for (ft::vector<int>::iterator it = v1.begin() ; it != v1.end(); it++)
-            std::cout << "\t" << *it ;
-        std::cout << std::endl;
-        
-        std::cout << "*********** v1 < reverse > ************" << std::endl;
-        for (ft::vector<int>::reverse_iterator it = v1.rbegin() ; it != v1.rend(); it++)
-            std::cout << "\t" << *it;
-        std::cout << std::endl;
+            std::cout << "*********** v1 < normal > ************" << std::endl;
+            for (std::vector<int>::iterator it = v1.begin() ; it != v1.end(); it++)
+                std::cout << "\t" << *it ;
+            std::cout << std::endl;
+            
+            std::cout << "*********** v1 < reverse > ************" << std::endl;
+            for (std::vector<int>::reverse_iterator it = v1.rbegin() ; it != v1.rend(); it++)
+                std::cout << "\t" << *it;
+            std::cout << std::endl;
 
-        std::cout << "*********** v2 < normal > ************" << std::endl;
-        for (ft::vector<int>::iterator it = v2.begin() ; it != v2.end(); it++)
-            std::cout << "\t" << *it ;
-        std::cout << std::endl;
-        
-        std::cout << "*********** v2 < reverse > ************" << std::endl;
-        for (ft::vector<int>::reverse_iterator it = v2.rbegin() ; it != v2.rend(); it++)
-            std::cout << "\t" << *it;
-        std::cout << std::endl;
+            std::cout << "*********** v2 < normal > ************" << std::endl;
+            for (std::vector<int>::iterator it = v2.begin() ; it != v2.end(); it++)
+                std::cout << "\t" << *it ;
+            std::cout << std::endl;
+            
+            std::cout << "*********** v2 < reverse > ************" << std::endl;
+            for (std::vector<int>::reverse_iterator it = v2.rbegin() ; it != v2.rend(); it++)
+                std::cout << "\t" << *it;
+            std::cout << std::endl;
 
-        std::cout << "*********** v3 < normal > ************" << std::endl;
-        for (ft::vector<int>::iterator it = v3.begin() ; it != v3.end(); it++)
-            std::cout << "\t" << *it ;
-        std::cout << std::endl;
-        
-        std::cout << "*********** v3 < reverse > ************" << std::endl;
-        for (ft::vector<int>::reverse_iterator it = v3.rbegin() ; it != v3.rend(); it++)
-            std::cout << "\t" << *it;
-        std::cout << std::endl;
+            std::cout << "*********** v3 < normal > ************" << std::endl;
+            for (std::vector<int>::iterator it = v3.begin() ; it != v3.end(); it++)
+                std::cout << "\t" << *it ;
+            std::cout << std::endl;
+            
+            std::cout << "*********** v3 < reverse > ************" << std::endl;
+            for (std::vector<int>::reverse_iterator it = v3.rbegin() ; it != v3.rend(); it++)
+                std::cout << "\t" << *it;
+            std::cout << std::endl;
 
-        std::cout << "*********** v4 < normal > ************" << std::endl;
-        for (ft::vector<int>::iterator it = v4.begin() ; it != v4.end(); it++)
-            std::cout << "\t" << *it ;
-        std::cout << std::endl;
+            std::cout << "*********** v4 < normal > ************" << std::endl;
+            for (std::vector<int>::iterator it = v4.begin() ; it != v4.end(); it++)
+                std::cout << "\t" << *it ;
+            std::cout << std::endl;
+            
+            std::cout << "*********** v4 < reverse > ************" << std::endl;
+            for (std::vector<int>::reverse_iterator it = v4.rbegin() ; it != v4.rend(); it++)
+                std::cout << "\t" << *it;
+            std::cout << std::endl;
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
+        try
+        {
+            ft::vector<int> v1;
+            ft::vector<int> v2(5, 5);
+            ft::vector<int> v3(v2.begin(), v2.end());
+            ft::vector<int> v4(v3);
+            
+
+            std::cout << "*********** v1 < normal > ************" << std::endl;
+            for (ft::vector<int>::iterator it = v1.begin() ; it != v1.end(); it++)
+                std::cout << "\t" << *it ;
+            std::cout << std::endl;
+            
+            std::cout << "*********** v1 < reverse > ************" << std::endl;
+            for (ft::vector<int>::reverse_iterator it = v1.rbegin() ; it != v1.rend(); it++)
+                std::cout << "\t" << *it;
+            std::cout << std::endl;
+
+            std::cout << "*********** v2 < normal > ************" << std::endl;
+            for (ft::vector<int>::iterator it = v2.begin() ; it != v2.end(); it++)
+                std::cout << "\t" << *it ;
+            std::cout << std::endl;
+            
+            std::cout << "*********** v2 < reverse > ************" << std::endl;
+            for (ft::vector<int>::reverse_iterator it = v2.rbegin() ; it != v2.rend(); it++)
+                std::cout << "\t" << *it;
+            std::cout << std::endl;
+
+            std::cout << "*********** v3 < normal > ************" << std::endl;
+            for (ft::vector<int>::iterator it = v3.begin() ; it != v3.end(); it++)
+                std::cout << "\t" << *it ;
+            std::cout << std::endl;
+            
+            std::cout << "*********** v3 < reverse > ************" << std::endl;
+            for (ft::vector<int>::reverse_iterator it = v3.rbegin() ; it != v3.rend(); it++)
+                std::cout << "\t" << *it;
+            std::cout << std::endl;
+
+            std::cout << "*********** v4 < normal > ************" << std::endl;
+            for (ft::vector<int>::iterator it = v4.begin() ; it != v4.end(); it++)
+                std::cout << "\t" << *it ;
+            std::cout << std::endl;
+            
+            std::cout << "*********** v4 < reverse > ************" << std::endl;
+            for (ft::vector<int>::reverse_iterator it = v4.rbegin() ; it != v4.rend(); it++)
+                std::cout << "\t" << *it;
+            std::cout << std::endl;
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
         
-        std::cout << "*********** v4 < reverse > ************" << std::endl;
-        for (ft::vector<int>::reverse_iterator it = v4.rbegin() ; it != v4.rend(); it++)
-            std::cout << "\t" << *it;
-        std::cout << std::endl;
+        
     }
     
-    std::cout << std::endl << "****************** test 1 < max_size > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 1 < max_size > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> v(10, 3);
@@ -100,7 +164,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v(10, 3);
@@ -135,9 +199,10 @@ int main (){
         }
     }
     
-    std::cout << std::endl << "****************** test 2 < size , capacity > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 2 < size , capacity > ************************************ " << "\033[0m" << std::endl;
     {
         int values = 10;
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> v;
@@ -153,7 +218,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v;
@@ -171,9 +236,10 @@ int main (){
         }
     }
 
-    std::cout << std::endl << "****************** test 3 < resize > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 3 < resize > ************************************ " << "\033[0m" << std::endl;
     {
         int values = 10;
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> v;
@@ -200,7 +266,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v;
@@ -229,9 +295,10 @@ int main (){
         }
     }
 
-    std::cout << std::endl << "****************** test 4 < empty > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 4 < empty > ************************************ " << "\033[0m" << std::endl;
     {
         int values = 10;
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> v(5);
@@ -254,7 +321,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v(5);
@@ -279,9 +346,10 @@ int main (){
         }
     }
 
-    std::cout << std::endl << "****************** test 5 < reserve > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 5 < reserve > ************************************ " << "\033[0m" << std::endl;
     {
         int value = 5;
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> v(value);
@@ -312,7 +380,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v(value);
@@ -344,8 +412,9 @@ int main (){
         }
     }
 
-    std::cout << std::endl << "****************** test 6 < operator [] > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 6 < operator [] > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> v(10);
@@ -357,7 +426,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v(10);
@@ -372,8 +441,9 @@ int main (){
         
     }
 
-    std::cout << std::endl << "****************** test 7 < at > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 7 < at > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> v(10);
@@ -387,7 +457,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v(10);
@@ -404,8 +474,9 @@ int main (){
         
     }
 
-    std::cout << std::endl << "****************** test 8 < front , back > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 8 < front , back > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> v;
@@ -428,7 +499,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v;
@@ -452,8 +523,9 @@ int main (){
         }
     }
 
-    std::cout << std::endl << "****************** test 9 < assign > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 9 < assign > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> v(10);
@@ -489,7 +561,7 @@ int main (){
             std::cerr << e.what() << '\n';
         }
         
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v(10);
@@ -526,9 +598,10 @@ int main (){
         }  
     }
 
-    std::cout << std::endl << "****************** test 10 < push_back > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 10 < push_back > ************************************ " << "\033[0m" << std::endl;
     {
         int values = 10;
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> v;
@@ -553,7 +626,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v;
@@ -580,9 +653,10 @@ int main (){
         }
     }
 
-    std::cout << std::endl << "****************** test 11 < pop_back > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 11 < pop_back > ************************************ " << "\033[0m" << std::endl;
     {
         int value = 5;
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> v;
@@ -606,7 +680,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v;
@@ -632,8 +706,9 @@ int main (){
         } 
     }
 
-    std::cout << std::endl << "****************** test 12 < insert > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 12 < insert > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> v (3,100);
@@ -673,7 +748,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v (3,100);
@@ -713,8 +788,9 @@ int main (){
         }
     }
 
-    std::cout << std::endl << "****************** test 13 < erase > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 13 < erase > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> v;
@@ -741,7 +817,7 @@ int main (){
             for (std::vector<int>::iterator i = v.begin(); i < v.end() ; i++)
                 std::cout << "\t" << *i ;
             std::cout << std::endl;
-                 
+
             std::cout << "\t" << *(v.end()) << std::endl;
             
         }
@@ -749,7 +825,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v;
@@ -786,8 +862,9 @@ int main (){
         
     }
 
-    std::cout << std::endl << "****************** test 14 < swap > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 14 < swap > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> foo (3,100);
@@ -821,7 +898,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> foo (3,100);
@@ -858,8 +935,9 @@ int main (){
         
     }
 
-    std::cout << std::endl << "****************** test 15 < clear > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 15 < clear > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> v;
@@ -892,7 +970,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> v;
@@ -928,9 +1006,9 @@ int main (){
         
     }
 
-
-    std::cout << std::endl << "****************** test 17 < non-member functions > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 16 < non-member functions > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::vector<int> foo (3,100); 
@@ -973,7 +1051,7 @@ int main (){
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::vector<int> foo (3,100); 

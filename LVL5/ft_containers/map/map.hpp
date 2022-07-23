@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 16:12:21 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/23 15:32:46 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/23 19:20:06 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ namespace ft {
             
         public :
         
+            // *************************************** Iterators *************************************** //
             explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(value_compare(comp), alloc), _alloc(alloc), _comp(comp) {}
     
             template <class InputIterator>
@@ -65,20 +66,25 @@ namespace ft {
                     _tree.add(*first);
             }
 
-            map(const map& other) {
-                *this = other;
+            map(const map& x) {
+                *this = x;
             }
 
-            map& operator=(const map& other) {
-                if (this != &other){
-                    _tree = other._tree;
-                    _alloc = other._alloc;
-                    _comp = other._comp;
+
+            // *************************************** Iterators *************************************** //
+            map& operator=(const map& x) {
+                if (this != & x){
+                    _tree = x._tree;
+                    _alloc = x._alloc;
+                    _comp = x._comp;
                 }
                 return *this;
             }
 
-            ~map() {}
+
+            // *************************************** Destructor *************************************** //
+            ~map() {
+            }
 
             class value_compare : std::binary_function<value_type, value_type, bool>
             {
@@ -95,6 +101,7 @@ namespace ft {
                     }
                     value_compare(const key_compare &c = key_compare()) : comp(c) {}
             };
+
 
             // *************************************** Iterators *************************************** //
             iterator begin() {
@@ -129,6 +136,7 @@ namespace ft {
                 return const_reverse_iterator(NULL);
             }
 
+
             // *************************************** Capacity *************************************** //
             bool empty() const {
                 return _tree.size() == 0;
@@ -141,7 +149,8 @@ namespace ft {
             size_type max_size() const {
                 return _tree.max_size();
             }
-            
+
+
             // *************************************** Element access *************************************** //
             mapped_type& operator[] (const key_type& k) {
                 value_type v(k, mapped_type());
@@ -153,6 +162,7 @@ namespace ft {
                 }
                 return node->data.second;
             }
+
 
             // *************************************** Modifiers *************************************** //
             ft::pair<iterator,bool> insert (const value_type& val) {
@@ -168,8 +178,9 @@ namespace ft {
             }
 
             iterator insert (iterator position, const value_type& val) {
+                (void)position;
                 typename RBT::node_pointer node = _tree.find(val);
-
+                
                 if (!node) {
                     _tree.add(val);
                     node = _tree.find(val);
@@ -178,7 +189,7 @@ namespace ft {
             }
 
             template <class InputIterator>
-            void insert (InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value , InputIterator>::type last) {
+            void insert (InputIterator first, InputIterator last) {
                 
                 typename RBT::node_pointer node;
                 
@@ -208,16 +219,17 @@ namespace ft {
                     erase(first++);
                 }
             }
-            
-            void swap (map& other) {
-                map tmp = other;
-                other = *this;
+
+            void swap (map& x) {
+                map tmp = x;
+                x = *this;
                 *this = tmp;
             }
 
             void clear() {
                 _tree.clear();
             }
+
 
             // *************************************** Observers *************************************** //
             value_compare value_comp() const {
@@ -228,13 +240,14 @@ namespace ft {
                 return _comp;
             }
 
+
             // *************************************** Operations *************************************** //
             iterator find (const key_type& k) {
                 value_type v(k, mapped_type());
                 typename RBT::node_pointer node = _tree.find(v);
                 return iterator(node);
             }
-            
+
             const_iterator find (const key_type& k) const {
                 value_type v(k, mapped_type());
                 typename RBT::node_pointer node = _tree.find(v);
@@ -262,7 +275,7 @@ namespace ft {
                 }
                 return iterator(node);
             }
-            
+
             const_iterator lower_bound (const key_type& k) const {
                 typename RBT::node_pointer tmp = _tree.getRoot();
                 typename RBT::node_pointer node = NULL;
@@ -295,7 +308,7 @@ namespace ft {
                 }
                 return iterator(node);
             }
-            
+
             const_iterator upper_bound (const key_type& k) const {
                 typename RBT::node_pointer tmp = _tree.getRoot();
                 typename RBT::node_pointer node = NULL;
@@ -317,7 +330,7 @@ namespace ft {
                 return ft::pair<const_iterator,const_iterator>(lower_bound(k), upper_bound(k));
             }
             
-            ft::pair<iterator,iterator>             equal_range (const key_type& k) {
+            ft::pair<iterator,iterator> equal_range (const key_type& k) {
                 return ft::pair<iterator,iterator>(lower_bound(k), upper_bound(k));
             }
 

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 12:05:19 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/23 14:31:33 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/23 18:01:13 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 
 int main() {
     
-    std::cout << "****************** test 0 < constructors , iterators > ******************" << std::endl;
+    std::cout << "\033[36m" << "************************************ test 0 < constructors , iterators > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::map<std::string, int> m1;
@@ -67,7 +68,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
 
@@ -118,8 +119,9 @@ int main() {
         
     }
 
-    std::cout << std::endl << "****************** test 1 < empty , size , max_size > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 1 < empty , size , max_size > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::map<std::string, int> m1;
@@ -146,7 +148,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::map<std::string, int> m1;
@@ -176,8 +178,9 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "****************** test 2 < insert > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 2 < insert > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::map<std::string, int> m1;
@@ -240,7 +243,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::map<std::string, int> m1;
@@ -304,8 +307,9 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "****************** test 3 < erase > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 3 < erase > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::map<std::string, int> m1;
@@ -346,7 +350,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::map<std::string, int> m1;
@@ -389,8 +393,9 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "****************** test 4 < swap > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 4 < swap > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::map<char,int> foo,bar;
@@ -429,7 +434,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::map<char,int> foo,bar;
@@ -470,8 +475,9 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "****************** test 5 < clear > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 5 < clear > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::map<char,int> m1;
@@ -504,7 +510,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::map<char,int> m1;
@@ -539,8 +545,9 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "****************** test 6 < key_comp , value_comp > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 6 < key_comp , value_comp > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             {
@@ -586,7 +593,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             {
@@ -634,8 +641,9 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "****************** test 7 < find > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 7 < find > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::map<char,int> m1;
@@ -660,7 +668,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::map<char,int> m1;
@@ -687,8 +695,9 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "****************** test 8 < count > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 8 < count > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::map<char,int> m1;
@@ -712,7 +721,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::map<char,int> m1;
@@ -738,8 +747,9 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "****************** test 9 < lower_bound , upper_bound , equal_range > ******************" << std::endl;
+    std::cout << std::endl << "\033[36m" << "************************************ test 9 < lower_bound , upper_bound , equal_range > ************************************ " << "\033[0m" << std::endl;
     {
+        std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
         try
         {
             std::map<char,int> m1;
@@ -793,7 +803,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "\033[33m" << "----------------------- RECREATED -----------------------" << "\033[0m" << std::endl;
         try
         {
             ft::map<char,int> m1;
