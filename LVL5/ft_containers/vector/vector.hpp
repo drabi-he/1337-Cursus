@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:36:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/06/28 12:15:57 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/23 16:16:08 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ namespace ft {
 			typedef iterators<const_pointer> const_iterator;	
 			typedef reverse_iterator<const_iterator> const_reverse_iterator;
 			typedef reverse_iterator<iterator> reverse_iterator;
-			
+			typedef std::ptrdiff_t difference_type;
 			typedef std::size_t size_type;
 			
-			// * Constructors
-			vector(const allocator_type& alloc = allocator_type())
+            // *************************************** Constructors *************************************** //
+			explicit vector (const allocator_type& alloc = allocator_type())
 			{
 				_data = nullptr;
 				_size = 0;
@@ -54,18 +54,18 @@ namespace ft {
 				std::cout << "\e[0;33mDefault Constructor called of vector\e[0m" << std::endl;
 			}
 
-			vector(const vector &copy)
+			vector(const vector &x)
 			{
 				std::cout << "\e[0;33mCopy Constructor called of vector\e[0m" << std::endl;
 				_capacity = 0;
-				*this = copy;
+				*this = x;
 			}
 
-			vector(size_type size, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
+			explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
 			{
 				std::cout << "\e[0;33mFields Constructor called of vector\e[0m" << std::endl;
-				_size = size;
-				_capacity = size;
+				_size = n;
+				_capacity = n;
 				_alloc = alloc;
 				_data = _alloc.allocate(_capacity);
 				for (size_type i = 0; i < _capacity ; i++)
@@ -86,44 +86,40 @@ namespace ft {
 					_data[i++] = *it;
 			}
 
-			// ! Destructor
+            // *************************************** Destructor *************************************** //
 			~vector()
 			{
 				std::cout << "\e[0;31mDestructor called of vector\e[0m" << std::endl;
 				_alloc.deallocate(_data, _capacity);
-				_data->~value_type();
-				_capacity.~size_type();
-				_size.~size_type();
-				_alloc.~allocator_type();
 			}
 
 
-			// ? Operators
-			vector & operator=(const vector &assign)
+            // *************************************** Assign *************************************** //
+			vector & operator=(const vector &x)
 			{
-				if (this != &assign){
-					if (_capacity < assign._capacity)
+				if (this != &x){
+					if (_capacity < x._capacity)
 					{
 						if (_capacity > 0)
 							_alloc.deallocate(_data, _capacity);
-						_alloc = assign._alloc;
-						_data = _alloc.allocate(assign._size);
-						_capacity = assign._size;
+						_alloc = x._alloc;
+						_data = _alloc.allocate(x._size);
+						_capacity = x._size;
 					}
-					_size = assign._size;
+					_size = x._size;
 					for (size_type i = 0; i < _size ;  i++)
-						_data[i] = assign._data[i];
+						_data[i] = x._data[i];
 				}
 				return *this;
 			}
 
 
-			// ? Iterators
+            // *************************************** Iterators *************************************** //
 			iterator begin(){
 				return _data;
 			}
 
-			const_iterator cbegin() const {
+			const_iterator begin() const {
 				return _data;
 			}
 
@@ -131,7 +127,7 @@ namespace ft {
 				return _data + _size;
 			}
 
-			const_iterator cend() const {
+			const_iterator end() const {
 				return _data + _size;
 			}
 
@@ -139,13 +135,19 @@ namespace ft {
 				return reverse_iterator(end());
 			}
 
+			const_reverse_iterator rbegin() const {
+				return const_reverse_iterator(end());
+			}
+
 			reverse_iterator rend(){
 				return reverse_iterator(begin());
 			}
 
+			const_reverse_iterator rend() const {
+				return const_reverse_iterator(begin());
+			}
 			
-			
-			// ? Capacity
+            // *************************************** Capacity *************************************** //
 			size_type size() const {
 				return _size;
 			}

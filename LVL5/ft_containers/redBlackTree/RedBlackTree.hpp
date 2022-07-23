@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 10:38:28 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/22 19:49:46 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/23 13:02:19 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,33 +23,15 @@ namespace ft {
     struct Node
     {
 
+        T data;
         bool isBlack;
-        T* data;
-        Node *parent;
-        Node *left;
-        Node *right;
+        Node<T>* parent;
+        Node<T>* left;
+        Node<T>* right;
 
-        explicit Node() : isBlack(false), data(nullptr), parent(nullptr), left(nullptr), right(nullptr) {}
+        explicit Node() : data(nullptr), isBlack(false), parent(nullptr), left(nullptr), right(nullptr) {}
 
-        explicit Node(T* v) : isBlack(false), data(v), parent(nullptr), left(nullptr), right(nullptr) {}
-
-        Node(const Node &other)
-        {
-            *this = other;
-        }
-
-        Node &operator=(const Node &N)
-        {
-            if (this != &N)
-            {
-                isBlack = N.isBlack;
-                data = N.data;
-                parent = N.parent;
-                left = N.left;
-                right = N.right;
-            }
-            return *this;
-        }
+        explicit Node(T data) : data(data), isBlack(false), parent(nullptr), left(nullptr), right(nullptr) {}
 
         ~Node() {}
     };
@@ -66,11 +48,12 @@ namespace ft {
         public:
             typedef std::size_t size_type;
             typedef T value_type;
-            typedef Alloc allocator_type;
-            typedef Compare key_compare;
             typedef Node<value_type> node_type;
-            typedef std::allocator<node_type> allocator_type_2;
             typedef node_type* node_pointer;
+            typedef node_type& node_reference;
+            typedef Alloc allocator_type;
+            typedef std::allocator<node_type> node_allocator_type;
+            typedef Compare key_compare;
             typedef TreeIterator<value_type> iterator;
             typedef TreeIterator<value_type> const_iterator;
             typedef TreeReverseIterator<iterator> reverse_iterator;
@@ -82,7 +65,7 @@ namespace ft {
             node_pointer _null;
             size_type _size;
             allocator_type _alloc;
-            allocator_type_2 _alloc_node;
+            node_allocator_type _node_alloc;
             key_compare _comp;
 
             void rotateLeft(node_pointer node) {
@@ -131,7 +114,7 @@ namespace ft {
                 else
                     old->parent->right = _new;
 
-                // if (_new->parent)
+                // TODO: if (_new->parent)
                     _new->parent = old->parent;
             }
 
@@ -272,10 +255,8 @@ namespace ft {
             explicit RedBlackTree(
                 const key_compare &comp = key_compare(),
                 const allocator_type &alloc = allocator_type()) : _alloc(alloc), _comp(comp) {
-                    value_type *data = _alloc.allocate(1);
-                    _alloc.construct(data, value_type());
-                    _null = _alloc_node.allocate(1);
-                    _alloc_node.construct(_null, node_type(data));
+                    _null = _node_alloc.allocate(1);
+                    _node_alloc.construct(_null, node_type(value_type()));
                     _null->isBlack = true;
                     _root = _null;
                     _size = 0;
@@ -290,7 +271,7 @@ namespace ft {
                     _alloc = rhs._alloc;
                     _comp = rhs._comp;
                     _size = rhs._size;
-                    _alloc_node = rhs._alloc_node;
+                    _node_alloc = rhs._node_alloc;
                     _root = copy(rhs._root, rhs._null);
                 }
                 return (*this);
@@ -300,11 +281,8 @@ namespace ft {
                 if (node == null)
                     return _null;
                     
-                value_type *data = _alloc.allocate(1);
-                _alloc.construct(data, *node->data);
-                node_pointer new_node = _alloc_node.allocate(1);
-                _alloc_node.construct(new_node, node_type(data));
-
+                node_pointer new_node = _node_alloc.allocate(1);
+                _node_alloc.construct(new_node, node_type(node->data));
                 new_node->isBlack = node->isBlack;
                 new_node->left = copy(node->left, null);
                 new_node->right = copy(node->right, null);
@@ -318,8 +296,8 @@ namespace ft {
 
             ~RedBlackTree() {
                 clear();
-                _alloc_node.destroy(_null);
-                _alloc_node.deallocate(_null, 1);
+                _node_alloc.destroy(_null);
+                _node_alloc.deallocate(_null, 1);
             }
 
             node_pointer getRoot() const {
@@ -336,10 +314,7 @@ namespace ft {
                     return nullptr;
 
                 while (node->left->parent){
-                    
-                // std::cout << "1 - node : " << *node->data << " | left : " << *node->left->data << " | parent : " << *node->left->parent->data << std::endl;
                     node = node->left;
-                // std::cout << "2 - node : " << (node ? *node->data : -1)  << " | left : " << (node->left ? *node->left->data : -1) << " | parent : " << (node->left->parent ? *node->left->parent->data : -1) << std::endl;
                 }
 
                 return node;
@@ -391,9 +366,9 @@ namespace ft {
 
                 while (current != _null)
                 {
-                    if (!(_comp(*current->data, key) || _comp(key, *current->data)))
+                    if (!(_comp(current->data, key) || _comp(key, current->data)))
                         tmp = current;
-                    if (_comp(*current->data, key))
+                    if (_comp(current->data, key))
                         current = current->right;
                     else
                         current = current->left;
@@ -413,21 +388,18 @@ namespace ft {
 
             void add(const value_type &key)
             {
-                value_type *data = _alloc.allocate(1);
-                _alloc.construct(data, key);
-                node_pointer new_node = _alloc_node.allocate(1);
-                _alloc_node.construct(new_node, node_type(data));
-                new_node->parent = nullptr;
+                node_pointer new_node = _node_alloc.allocate(1);
+                _node_alloc.construct(new_node, node_type(key));
                 new_node->left = _null;
                 new_node->right = _null;
 
-                node_pointer parent = nullptr;
                 node_pointer current = _root;
+                node_pointer parent = nullptr;
 
                 while (current != _null)
                 {
                     parent = current;
-                    if (_comp(*(new_node->data), *(current->data)))
+                    if (_comp(new_node->data, current->data))
                         current = current->left;
                     else
                         current = current->right;
@@ -436,7 +408,7 @@ namespace ft {
                 new_node->parent = parent;
                 if (parent == nullptr)
                     _root = new_node;
-                else if (_comp(*(new_node->data), *(parent->data)))
+                else if (_comp(new_node->data, parent->data))
                     parent->left = new_node;
                 else
                     parent->right = new_node;
@@ -451,7 +423,7 @@ namespace ft {
                 node_pointer node = find(key);
                 node_pointer tmp1, tmp2;
                 
-                if (!node)
+                if (!node || node == _null)
                     return ;
                 tmp2 = node;
                 bool isBlack = node->isBlack;
@@ -466,18 +438,18 @@ namespace ft {
                     tmp2 = min(node->right);
                     isBlack = tmp2->isBlack;
                     tmp1 = tmp2->right;
-                    if (tmp2->parent == node && tmp1 != _null)
+                    if (tmp2->parent == node /* TODO: && tmp1 != _null */)
                         tmp1->parent = tmp2;
                     else
                     {
                         transplant(tmp2, tmp2->right);
                         tmp2->right = node->right;
-                        if (tmp2->right != _null)
+                        // TODO: if (tmp2->right != _null)
                             tmp2->right->parent = tmp2;
                     }
                     transplant(node, tmp2);
                     tmp2->left = node->left;
-                    if (tmp2->left != _null)
+                    // TODO: if (tmp2->left != _null)
                         tmp2->left->parent = tmp2;
                     tmp2->isBlack = node->isBlack;
                 }
@@ -496,16 +468,15 @@ namespace ft {
             }
 
             size_type max_size() const {
-                return _alloc_node.max_size();
+                return _node_alloc.max_size();
             }
 
             void freeNode(node_pointer node) {
                 if (node == _null)
                     return;
-                _alloc.destroy(node->data);
-                _alloc.deallocate(node->data, 1);
-                _alloc_node.destroy(node);
-                _alloc_node.deallocate(node, 1);
+
+                _node_alloc.destroy(node);
+                _node_alloc.deallocate(node, 1);
             }
 
             void freeAll(node_pointer node) {
@@ -540,7 +511,7 @@ namespace ft {
                 printTree(count ,root->right, space);
                 for (int i = count; i < space; i++)
                     std::cout << "\t";
-                std::cout << "[ " << *root->data << "," << *root->data << " ]" << " (" << (root->isBlack ? "BLACK" : "RED") << ")" << "( " << (root->parent ? *root->parent->data : - 1) << " ) \n";
+                std::cout << "[ " << root->data << "," << root->data << " ]" << " (" << (root->isBlack ? "BLACK" : "RED") << ")" << "{" << (root->parent ? root->parent->data : - 1) << "} \n";
                 printTree(count ,root->left, space);
             }
     };
@@ -578,11 +549,11 @@ namespace ft {
             ~TreeIterator() {}
 
             reference operator*() const {
-                return *(_node->data);
+                return (_node->data);
             }
 
             pointer operator->() const {
-                return (_node->data);
+                return &(_node->data);
             }
 
             TreeIterator &operator++() {
@@ -591,7 +562,7 @@ namespace ft {
             }
 
             TreeIterator operator++(int) {
-                TreeIterator old = *this;
+                TreeIterator old(*this);
                 ++*this;
                 return (old);
             }
@@ -602,8 +573,8 @@ namespace ft {
             }
 
             TreeIterator operator--(int) {
-                TreeIterator old = *this;
-                operator--();
+                TreeIterator old(*this);
+                --*this;
                 return (old);
             }
 
@@ -626,11 +597,11 @@ namespace ft {
 
         public:
             typedef Iterator iterator_type;
-            typedef typename iterator_traits<Iterator>::iterator_category iterator_category;
-            typedef typename iterator_traits<Iterator>::value_type value_type;
-            typedef typename iterator_traits<Iterator>::difference_type difference_type;
-            typedef typename iterator_traits<Iterator>::pointer pointer;
-            typedef typename iterator_traits<Iterator>::reference reference;
+            typedef typename iterator_traits<iterator_type>::iterator_category iterator_category;
+            typedef typename iterator_traits<iterator_type>::value_type value_type;
+            typedef typename iterator_traits<iterator_type>::difference_type difference_type;
+            typedef typename iterator_traits<iterator_type>::pointer pointer;
+            typedef typename iterator_traits<iterator_type>::reference reference;
 
 
         private:
@@ -643,6 +614,15 @@ namespace ft {
 
             template <class Iter>
             TreeReverseIterator(const TreeReverseIterator<Iter> &rev_it) : _base(rev_it._base) {}
+
+            TreeReverseIterator &operator=(const TreeReverseIterator &other) {
+                if (this != &other)
+                    _base = other._base;
+
+                return *this;
+            }
+
+            ~TreeReverseIterator() {}
 
             iterator_type base() const {
                 return _base;
@@ -690,7 +670,6 @@ namespace ft {
             }
         
     };
-
 }
 
 #endif // RED_BLACK_TREE_HPP_INCLUDED

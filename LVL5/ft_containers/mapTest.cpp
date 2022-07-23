@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 12:05:19 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/22 19:22:46 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/23 14:31:33 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -738,7 +738,7 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "****************** test 9 < lower_bound , upper_bound > ******************" << std::endl;
+    std::cout << std::endl << "****************** test 9 < lower_bound , upper_bound , equal_range > ******************" << std::endl;
     {
         try
         {
@@ -761,6 +761,32 @@ int main() {
 
             for (std::map<char,int>::iterator it=m1.begin(); it!=m1.end(); ++it)
                 std::cout << it->first << " => " << it->second << '\n';
+
+            std::map<char,int> m2;
+
+            m2['a']=10;
+            m2['b']=20;
+            m2['d']=30;
+
+            std::pair<std::map<char,int>::iterator,std::map<char,int>::iterator> ret;
+            ret = m2.equal_range('b');
+
+            std::cout << "\tequal_range for existing key: " << '\n';
+            std::cout << "lower bound points to: ";
+            std::cout << ret.first->first << " => " << ret.first->second << '\n';
+
+            std::cout << "upper bound points to: ";
+            std::cout << ret.second->first << " => " << ret.second->second << '\n';
+
+            ret = m2.equal_range('c');
+
+            
+            std::cout << "\tequal_range for non-existing key: " << '\n';
+            std::cout << "lower bound points to: ";
+            std::cout << ret.first->first << " => " << ret.first->second << '\n';
+
+            std::cout << "upper bound points to: ";
+            std::cout << ret.second->first << " => " << ret.second->second << '\n';
 
         }
         catch(const std::exception& e)
@@ -790,6 +816,32 @@ int main() {
             for (ft::map<char,int>::iterator it=m1.begin(); it!=m1.end(); ++it)
                 std::cout << it->first << " => " << it->second << '\n';
 
+            ft::map<char,int> m2;
+
+            m2['a']=10;
+            m2['b']=20;
+            m2['d']=30;
+
+            ft::pair<ft::map<char,int>::iterator,ft::map<char,int>::iterator> ret;
+            ret = m2.equal_range('b');
+
+            
+            std::cout << "\tequal_range for existing key: " << '\n';
+            std::cout << "lower bound points to: ";
+            std::cout << ret.first->first << " => " << ret.first->second << '\n';
+
+            std::cout << "upper bound points to: ";
+            std::cout << ret.second->first << " => " << ret.second->second << '\n';
+
+            ret = m2.equal_range('c');
+
+            
+            std::cout << "\tequal_range for non-existing key: " << '\n';
+            std::cout << "lower bound points to: ";
+            std::cout << ret.first->first << " => " << ret.first->second << '\n';
+
+            std::cout << "upper bound points to: ";
+            std::cout << ret.second->first << " => " << ret.second->second << '\n';
         }
         catch(const std::exception& e)
         {
@@ -797,26 +849,4 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "****************** test 0 < constructors , iterators > ******************" << std::endl;
-    {
-        try
-        {
-            
-
-        }
-        catch(const std::exception& e)
-        {
-            std::cerr << e.what() << '\n';
-        }
-        std::cout << "----------------------------------------" << std::endl;
-        try
-        {
-            
-
-        }
-        catch(const std::exception& e)
-        {
-            std::cerr << e.what() << '\n';
-        }
-    }
 }
