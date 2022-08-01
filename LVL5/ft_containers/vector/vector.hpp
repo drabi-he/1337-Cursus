@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:36:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/23 18:16:08 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/30 15:49:00 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,26 +215,26 @@ namespace ft {
 			}
 
 			reference front() {
-				if (_data == nullptr)
-					throw std::range_error("Index out of bound");
+				// if (_data == nullptr)
+				// 	throw std::range_error("Index out of bound");
 				return _data[0];
 			}
 			
 			const_reference front() const {
-				if (_data == nullptr)
-					throw std::range_error("Index out of bound");
+				// if (_data == nullptr)
+				// 	throw std::range_error("Index out of bound");
 				return _data[0];
 			}
 
 			reference back() {
-				if (_data == nullptr)
-					throw std::range_error("Index out of bound");
+				// if (_data == nullptr)
+				// 	throw std::range_error("Index out of bound");
 				return _data[_size - 1];
 			}
 			
 			const_reference back() const {
-				if (_data == nullptr)
-					throw std::range_error("Index out of bound");
+				// if (_data == nullptr)
+				// 	throw std::range_error("Index out of bound");
 				return _data[_size - 1];
 			}
 

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 16:31:14 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/22 14:46:02 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/30 14:55:13 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	rgb_to_int(char *line)
 	while (line[i] != ',')
 		i++;
 	if (line[++i] == ',')
-		ft_error("Error: duplicate color value\n", 1);
+		ft_error("1 - Error: duplicate color value\n", 1);
 	j = i;
 	while (line[j] != ',')
 		j++;
@@ -61,7 +61,7 @@ static int	rgb_to_int(char *line)
 void	ft_check_color(t_data *data, char c, char *line, int *cp)
 {
 	if (data->bola[(int) c] == 1)
-		ft_error("Error: duplicate color value\n", 1);
+		ft_error("2 - Error: duplicate color value\n", 1);
 	data->bola[(int) c] = 1;
 	(*cp)++;
 	if (c == 'C')

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:44:23 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/30 12:07:18 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/07/30 14:46:28 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ void	check_map_infos(int fd, t_data *data)
 void	parse_map(int ac, char *filename, t_data *data, int mode)
 {
 	int	fd;
+	int i;
 
+	i = 0;
 	if (ac != 2)
 		ft_error("Error: Wrong Arguments Count\n", 1);
 	if (ft_strcmp(".cub", filename + ft_strlen(filename) - 4))
@@ -65,6 +67,8 @@ void	parse_map(int ac, char *filename, t_data *data, int mode)
 	fd = open(filename, O_RDONLY, 0644);
 	if (fd == -1)
 		ft_error("Error: file doesn't exist or permission denied\n", 1);
+	while (i < 255)
+		data->bola[i++] = 0;
 	check_map_infos(fd, data);
 	close (fd);
 	fill_map(data, filename);
