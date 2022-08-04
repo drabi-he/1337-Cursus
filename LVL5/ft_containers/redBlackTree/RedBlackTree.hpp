@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 10:38:28 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/23 13:02:19 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/08/04 12:06:05 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -413,7 +413,7 @@ namespace ft {
                 else
                     parent->right = new_node;
                 colorFix(new_node);
-                blacks(_root);
+                // ? check if tree is balanced blacks(_root);
                 _size++;
             }
 
@@ -438,25 +438,23 @@ namespace ft {
                     tmp2 = min(node->right);
                     isBlack = tmp2->isBlack;
                     tmp1 = tmp2->right;
-                    if (tmp2->parent == node /* TODO: && tmp1 != _null */)
+                    if (tmp2->parent == node)
                         tmp1->parent = tmp2;
                     else
                     {
                         transplant(tmp2, tmp2->right);
                         tmp2->right = node->right;
-                        // TODO: if (tmp2->right != _null)
                             tmp2->right->parent = tmp2;
                     }
                     transplant(node, tmp2);
                     tmp2->left = node->left;
-                    // TODO: if (tmp2->left != _null)
                         tmp2->left->parent = tmp2;
                     tmp2->isBlack = node->isBlack;
                 }
                 freeNode(node);
                 if (isBlack)
                     fixDelete(tmp1);
-                blacks(_root);
+                // ? check if tree is balanced blacks(_root);
                 _null->parent = nullptr;
                 _size--;
             }

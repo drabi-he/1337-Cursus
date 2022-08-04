@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:36:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/30 15:49:00 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/08/04 11:31:35 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,11 @@ namespace ft {
 			~vector()
 			{
 				// std::cout << "\e[0;31mDestructor called of vector\e[0m" << std::endl;
-				// TODO: cause double free in std::stack _alloc.deallocate(_data, _capacity);
+				if (_capacity > 0)
+					_alloc.deallocate(_data, _capacity);
+				_capacity.~size_type();
+				_size.~size_type();
+				_alloc.~allocator_type();
 			}
 
 
@@ -465,7 +469,8 @@ namespace ft {
 					tmp[i] = _data[i];
 				for (size_type i = _size; i < n ; i++)
 					tmp[i] = val;
-				// TODO: cause double free in stack _alloc.deallocate(_data, _size);
+				if (_size > 0)
+					_alloc.deallocate(_data, _size);
 				_size = n;
 				_data = tmp;
 			}

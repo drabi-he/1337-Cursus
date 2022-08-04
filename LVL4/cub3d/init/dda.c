@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 00:22:53 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/04/09 15:54:04 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/08/02 13:48:41 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,7 @@ void	wall_collision(t_ray *ray, char **map)
 
 void	initial_color(t_ray *ray)
 {
-	if (ray->side == 0)
-		ray->wall_dist = ray->side_dist[X] - ray->delta_dist[X];
-	else
-		ray->wall_dist = ray->side_dist[Y] - ray->delta_dist[Y];
+	 
 	ray->line_height = (int)(SCREEN_H / ray->wall_dist);
 	ray->draw[0] = -ray->line_height / 2 + SCREEN_H / 2;
 	if (ray->draw[0] < 0)

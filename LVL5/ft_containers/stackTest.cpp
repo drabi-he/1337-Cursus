@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 15:05:52 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/23 18:23:23 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/08/04 11:33:07 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include "stack/stack.hpp"
 
 int main() {
-    // TODO: DOUBLE FREE ERROR
     std::cout << std::endl << "\033[36m" << "************************************ test 1 < empty > ************************************ " << "\033[0m" << std::endl;
     {
         
@@ -135,7 +134,8 @@ int main() {
             std::stack<int,ft::vector<int> > s3 (v3);  
             std::stack<int,std::vector<int> > s4 (v4);
 
-            std:: cout << "s1 top = " << s1.top() << std::endl;
+            // ? if you uncomment this it will segfault since the stack is empty
+            // std:: cout << "s1 top = " << s1.top() << std::endl;
             std:: cout << "s2 top = " << s2.top() << std::endl;
             std:: cout << "s3 top = " << s3.top() << std::endl;
             std:: cout << "s4 top = " << s4.top() << std::endl;
@@ -157,7 +157,8 @@ int main() {
             ft::stack<int,ft::vector<int> > s3 (v3);  
             ft::stack<int,std::vector<int> > s4 (v4);
 
-            std:: cout << "s1 top = " << s1.top() << std::endl;
+            // ? if you uncomment this it will segfault since the stack is empty
+            // std:: cout << "s1 top = " << s1.top() << std::endl;
             std:: cout << "s2 top = " << s2.top() << std::endl;
             std:: cout << "s3 top = " << s3.top() << std::endl;
             std:: cout << "s4 top = " << s4.top() << std::endl;
@@ -223,7 +224,8 @@ int main() {
             std::stack<int,ft::vector<int> > s1 (v1);  
             std::stack<int,std::vector<int> > s2 (v2);
 
-            std:: cout << "s1 top = " << s1.top() << std::endl;
+            // ? if you uncomment this it will segfault since the stack is empty
+            // std:: cout << "s1 top = " << s1.top() << std::endl;
             std:: cout << "s2 top = " << s2.top() << std::endl;
 
             s1.push(1);
@@ -254,7 +256,8 @@ int main() {
             ft::stack<int,ft::vector<int> > s1 (v1);  
             ft::stack<int,std::vector<int> > s2 (v2);
 
-            std:: cout << "s1 top = " << s1.top() << std::endl;
+            // ? if you uncomment this it should segfault since the stack is empty
+            // std:: cout << "s1 top = " << s1.top() << std::endl;
             std:: cout << "s2 top = " << s2.top() << std::endl;
 
             s1.push(1);
