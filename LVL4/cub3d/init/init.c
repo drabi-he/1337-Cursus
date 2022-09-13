@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 22:40:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/08/02 12:29:41 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/09/13 11:50:24 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	init_dir(char c, t_ray **ray)
 {
 	if (c == 'N' || c == 'S')
 	{
-		ray[0]->dir[X] = 0.5;
+		ray[0]->dir[X] = 1;
 		ray[0]->dir[Y] = 0;
 		ray[0]->plane[X] = 0;
 		ray[0]->plane[Y] = -0.66 ;

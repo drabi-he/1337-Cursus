@@ -1,5 +1,7 @@
 #!/bin/sh
-find .  \( -name '.*' -not \( -name ".git" \) -o -name "a.out" \)
+	ray->line_height = (int)(SCREEN_H / ray->wall_dist);
+	ray->line_height = (int)(SCREEN_H / ray->wall_dist);
+
 git status
 git add .
 git status
