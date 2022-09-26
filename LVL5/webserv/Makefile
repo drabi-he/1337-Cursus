@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 13:36:05 by hdrabi            #+#    #+#              #
-#    Updated: 2022/09/20 14:31:22 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/09/26 13:57:13 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,12 +15,14 @@ SRC = main.cpp \
 		Server.cpp \
 		Location.cpp \
 		utils.cpp \
+		utils2.cpp \
 
 HDR = main.hpp \
 		WebServ.hpp \
 		Server.hpp \
 		Location.hpp \
 		utils.hpp \
+		utils2.hpp \
 
 NAME = WebServ
 

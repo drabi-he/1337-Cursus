@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 11:59:51 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/09/21 14:39:55 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/09/26 18:11:12 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ bool check_brackets(std::string& str) {
 	return true;
 }
 
-std::string get_value(std::string str, std::string key , int k)
+std::string get_value(std::string str, std::string key, int dup, int k)
 {
     int i = str.find(key , k);
 
@@ -63,41 +63,63 @@ std::string get_value(std::string str, std::string key , int k)
 
     std::string value = str.substr(i + key.size(), j - i - key.size());
     i = str.find(key , j);
-    if (i != std::string::npos && key != "\nerror_page ")
-        throw std::runtime_error("Syntax error in config file {duplicate key : " + key + "}");
-    return trim(value);
+    if (i != std::string::npos && !dup)
+        throw std::runtime_error("configFile error, {duplicate directive : " + key.substr(1, key.length() - 2) + "}");
+	value = trim(value);
+	if (value.empty())
+		throw std::runtime_error("configFile error, missing arguments for directive '" + key.substr(1, key.length() - 2) + "'");
+    return value;
 }
 
-std::string decipherMethods(std::string methods)
+std::string decipherMethods(std::vector<std::string> methods)
 {
-    std::string result = "";
-	int i = 0;
-    if ((i = methods.find("GET")) != std::string::npos) {
-		methods.erase(i, 3);
-        result += "1";
+	std::string result = "0000";
+	std::string tmp[4] = {"GET", "POST", "PUT", "DELETE"};
+
+	for (std::vector<std::string>::iterator it = methods.begin() ; it < methods.end() ; it++)
+	{
+		int i = 0;
+		for (i = 0; i < 4; i++) {
+			if (*it == tmp[i]) {
+				result[i] = '1';
+				break;
+			}
+		}
+		if (i == 4) {
+			throw std::runtime_error("configFile error, unknown method found");
+		}
 	}
-    else
-        result += "0";
-    if ((i = methods.find("POST")) != std::string::npos) {
-		methods.erase(i, 4);
-        result += "1";
+	return result;
+}
+
+void check_line(std::string line) {
+	int i;
+	std::string rst;
+
+	if (line.empty())
+		return ;
+	if (line[0] == '{' || line[0] == '}') {
+		if (line.length() == 1)
+			return ;
+		else
+			throw std::runtime_error("configFile error, near '" + line + "'");
 	}
-    else
-        result += "0";
-    if ((i = methods.find("PUT")) != std::string::npos) {
-		methods.erase(i, 3);
-        result += "1";
+	i = line.find(' ');
+	if (i == std::string::npos) {
+		if (line != "SERVER" && line != "server" && line.length() != 1)
+			throw std::runtime_error("configFile error, near 'server' directive");
+	} else {
+		rst = line.substr(0, i);
+		std::vector<std::string>::iterator it;
+		it = std::find(_directives.begin(), _directives.end(), rst);
+		if (it == _directives.end())
+			throw std::runtime_error("configFile error, directive '" + rst + "' doesn't exist");
+		if (line.back() != ';') {
+			if (rst != "location" && rst != "server" && rst != "SERVER")
+				throw std::runtime_error("configFile error, missing ';' near directive '" + rst + "'");
+		} else {
+			if (rst == "location" || rst == "server" || rst == "SERVER")
+				throw std::runtime_error("configFile error, ';' near directive '" + rst + "'");
+		}
 	}
-    else
-        result += "0";
-    if ((i = methods.find("DELETE")) != std::string::npos) {
-		methods.erase(i, 6);
-        result += "1";
-	}
-    else
-        result += "0";
-	methods = trim(methods);
-	if (!methods.empty())
-		throw std::logic_error("methods format error");
-    return result;
 }
