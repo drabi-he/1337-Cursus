@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 10:48:32 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/09/26 15:59:18 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/09/30 12:12:47 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int main(int ac, char *av[]) {
 			throw std::runtime_error("configFile extension error");
 		init_directive();
 		WebServ server = WebServ(configFile);
+		server.setup();
 		server.display();
 	}
 	catch(const std::exception& e)

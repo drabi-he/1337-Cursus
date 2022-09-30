@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 11:17:44 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/09/26 17:05:55 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/09/30 12:55:14 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,11 @@ class Server
 		std::string init_locations(std::string str);
 
 	public:
-		Server();
 		Server(std::string& config);
-		Server(const Server& other);
-		Server &operator=(const Server& other);
 		~Server();
 		void display() const;
+		int getPort() const;
+		std::map<int , std::string> getListen() const;
 };
 
 #endif

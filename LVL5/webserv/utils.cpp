@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 11:59:51 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/09/26 18:11:12 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/09/27 12:06:59 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 std::string trim(std::string& str, std::string delimiter) {
 	// remove comments
-	int k = str.find("#");
+	size_t k = str.find("#");
 	if (k != std::string::npos)
 		str.erase(k, str.length());
 	// trim spaces and tabs
@@ -54,7 +54,7 @@ bool check_brackets(std::string& str) {
 
 std::string get_value(std::string str, std::string key, int dup, int k)
 {
-    int i = str.find(key , k);
+    size_t i = str.find(key , k);
 
     if (i == std::string::npos)
         return "";
@@ -93,7 +93,7 @@ std::string decipherMethods(std::vector<std::string> methods)
 }
 
 void check_line(std::string line) {
-	int i;
+	size_t i;
 	std::string rst;
 
 	if (line.empty())

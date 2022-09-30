@@ -1,36 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   WebServ.hpp                                        :+:      :+:    :+:   */
+/*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/19 13:35:58 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/09/30 12:13:18 by hdrabi           ###   ########.fr       */
+/*   Created: 2022/09/30 10:49:59 by hdrabi            #+#    #+#             */
+/*   Updated: 2022/09/30 12:20:04 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WEBSERV_HPP
-#define WEBSERV_HPP
+#ifndef SOCKET_HPP
+#define SOCKET_HPP
 
 #include <iostream>
-#include <fstream>
-#include <vector>
-#include "Server.hpp"
-#include "Socket.hpp"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include "utils.hpp"
 
-class WebServ
+class Socket
 {
 	private:
-		std::vector<Server *> _servers;
-		std::vector<Socket *> _sockets;
-		void init_servers(std::string& str);
-
+		int _socket;
+		struct sockaddr_in _address;
 	public:
-		WebServ(std::string& configFile);
-		~WebServ();
-		void setup();
-		void display() const;
+		Socket(int port, std::string host);
+		~Socket();
 };
+
 
 #endif

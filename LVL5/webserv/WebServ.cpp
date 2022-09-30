@@ -6,15 +6,11 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 13:36:01 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/09/26 16:04:17 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/09/30 14:13:41 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "WebServ.hpp"
-
-WebServ::WebServ(/* args */)
-{
-}
 
 WebServ::WebServ(std::string& configFile)
 {
@@ -39,22 +35,12 @@ WebServ::WebServ(std::string& configFile)
 	init_servers(config_str);
 }
 
-WebServ::WebServ(const WebServ& other)
-{
-}
-
-WebServ WebServ::operator=(const WebServ& other)
-{
-
-	return *this;
-}
-
 WebServ::~WebServ()
 {
 }
 
 void WebServ::init_servers(std::string& str) {
-	int i = 0;
+	size_t i = 0;
 	std::string rst;
 
 	while (1) {
@@ -86,5 +72,13 @@ void WebServ::display() const {
 	for (size_t i = 0; i < _servers.size(); i++) {
 		std::cout << "************************ Server " << i + 1 << " ************************" << std::endl;
 		_servers[i]->display();
+	}
+}
+
+void WebServ::setup() {
+	std::vector<Server *>::const_iterator it;
+	for (it = _servers.begin(); it < _servers.end(); it++) {
+		std::map<int, std::string>::const_iterator m_it = (*it)->getListen().begin();
+		_sockets.push_back(new Socket(m_it->first, m_it->second));
 	}
 }

@@ -6,15 +6,11 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 14:30:57 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/09/26 18:43:10 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/09/27 12:09:11 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Location.hpp"
-
-Location::Location(/* args */) {
-
-}
 
 Location::Location(std::string& location) {
 	_path = get_value(location, "location ", 0);
@@ -27,7 +23,7 @@ Location::Location(std::string& location) {
 	if (_root.find(' ') != std::string::npos)
 		throw std::runtime_error("configFile error, wrong number of arguments for directive 'root'");
 
-	int i = 0;
+	size_t i = 0;
 	while ((i = location.find("\nindex ", i)) != std::string::npos) {
 		std::string index = get_value(location, "\nindex ", 1, i);
 		index = trim(index);
@@ -57,7 +53,7 @@ Location::Location(std::string& location) {
 		std::string path = _error.substr(_error.find_last_of(' ') + 1, _error.length());
 		int newCode = -1;
 		for (std::vector<std::string>::const_iterator it = codes.begin() ; it != codes.end(); it++) {
-			for (int j = 0; j < (*it).length(); j++) {
+			for (size_t j = 0; j < (*it).length(); j++) {
 				if (!std::isdigit((*it)[j])) {
 					if (j != 0 || (*it)[j] != '=' || (it != (codes.end() - 1))){
 						throw std::runtime_error("configFile error, wrong format for directive 'error_page'");
@@ -88,20 +84,11 @@ Location::Location(std::string& location) {
 	if (!tmp.empty()) {
 		_return.second = tmp.substr(tmp.find(' '), tmp.length() - 1);
 		std::string code = tmp.substr(0, tmp.find(' '));
-		for (int j = 0; j < code.length(); j++)
+		for (size_t j = 0; j < code.length(); j++)
 			if (!std::isdigit(code[j]))
 				throw std::runtime_error("configFile error, return value should be a status code");
 		_return.first = std::stoi(code);
 	}
-}
-
-Location::Location(const Location& other) {
-
-}
-
-Location &Location::operator=(const Location& other) {
-
-	return *this;
 }
 
 Location::~Location() {
@@ -119,7 +106,6 @@ void Location::display() const {
 
 	_autoIndex != "" && std::cout << "\tautoindex: " << _autoIndex << std::endl;
 	_uploadPath != "" && std::cout << "\tupload_path: " << _uploadPath << std::endl;
-	_errorPages.size() != 0 && std::cout << "\tErrorPages: " << std::endl;
 	std::map<int, std::string>::const_iterator it ;
 	_errorPages.size() != 0 && std::cout << "\tErrorPages: " << std::endl;
     for (it = _errorPages.begin(); it != _errorPages.end(); it++)

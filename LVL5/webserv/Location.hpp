@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 14:28:19 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/09/26 18:34:31 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/09/27 12:03:21 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,7 @@ class Location
 		std::pair<int, std::string> _return;
 
 	public:
-		Location();
 		Location(std::string& location);
-		Location(const Location& other);
-		Location &operator=(const Location& other);
 		~Location();
 		void display() const;
 };

@@ -6,20 +6,15 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 11:17:50 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/09/26 18:25:22 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/09/30 12:54:52 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-
-Server::Server(/* args */) {
-
-}
-
 Server::Server(std::string& config) {
 	config = init_locations(config);
-	int i = 0;
+	size_t i = 0;
 
 	// listen
 	while ((i = config.find("\nlisten ", i)) != std::string::npos) {
@@ -91,7 +86,7 @@ Server::Server(std::string& config) {
 		std::string path = _error.substr(_error.find_last_of(' ') + 1, _error.length());
 		int newCode = -1;
 		for (std::vector<std::string>::const_iterator it = codes.begin() ; it != codes.end(); it++) {
-			for (int j = 0; j < (*it).length(); j++) {
+			for (size_t j = 0; j < (*it).length(); j++) {
 				if (!std::isdigit((*it)[j])) {
 					if (j != 0 || (*it)[j] != '=' || (it != (codes.end() - 1))){
 						throw std::runtime_error("configFile error, wrong format for directive 'error_page'");
@@ -120,22 +115,13 @@ Server::Server(std::string& config) {
 	_methods = decipherMethods(split_vec(_methods));
 }
 
-Server::Server(const Server& other) {
-
-}
-
-Server &Server::operator=(const Server& other) {
-
-	return *this;
-}
-
 Server::~Server() {
 
 }
 
 std::string Server::init_locations(std::string str) {
-	int i = 0;
-	int j = 0;
+	size_t i = 0;
+	size_t j = 0;
 	std::string rst;
 
 	while (1) {
@@ -151,6 +137,7 @@ std::string Server::init_locations(std::string str) {
 }
 
 void Server::display() const {
+
 	_listen.size() != 0 && std::cout << "listen: " << std::endl;
 	std::map<int, std::string>::const_iterator it ;
     for (it = _listen.begin(); it != _listen.end(); it++)
@@ -180,4 +167,8 @@ void Server::display() const {
 		std::cout << "-------- location " << i + 1 << " --------" << std::endl;
 		_locations[i]->display();
 	}
+}
+
+std::map<int , std::string> Server::getListen() const{
+	return _listen;
 }
