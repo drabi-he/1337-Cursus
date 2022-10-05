@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 11:17:44 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/09/30 12:55:14 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/10/01 13:58:57 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 class Server
 {
-	private:
+	public:
 		std::map<int, std::string> _listen;
 		std::vector<std::string> _serverName;
 		std::string _root;

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 10:48:32 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/09/30 12:12:47 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/10/03 14:07:44 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ int main(int ac, char *av[]) {
 		init_directive();
 		WebServ server = WebServ(configFile);
 		server.setup();
-		server.display();
+		server.run();
+		// server.display();
 	}
 	catch(const std::exception& e)
 	{
