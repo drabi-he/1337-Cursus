@@ -1,37 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Client.hpp                                         :+:      :+:    :+:   */
+/*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/04 13:17:24 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/10/06 12:23:53 by hdrabi           ###   ########.fr       */
+/*   Created: 2022/10/06 11:30:04 by hdrabi            #+#    #+#             */
+/*   Updated: 2022/10/06 17:26:01 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENT_HPP
-#define CLIENT_HPP
+#ifndef REQUEST_HPP
+#define REQUEST_HPP
 
 #include <iostream>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include "Request.hpp"
-#include "utils.hpp"
-#include "utils2.hpp"
+#include <sstream>
+#include <map>
 
-class Client
+class Request
 {
 	public:
-		int _socket;
-		struct sockaddr_in _address;
-		Request *_request;
+		std::map<std::string, std::string> _headers;
+		std::string _type;
+		std::string _path;
+		std::string _body;
 	public:
-		Client(int socket, struct sockaddr_in address);
-		~Client();
+		Request(/* args */);
+		void parse(std::string req);
+		void display();
+		~Request();
 };
+
 
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 11:17:44 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/10/01 13:58:57 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/10/08 11:38:09 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <vector>
 #include <map>
 #include "Location.hpp"
+#include "Socket.hpp"
+#include "Client.hpp"
 
 class Server
 {
@@ -32,6 +34,8 @@ class Server
 		std::map<int, int> _errorCodes;
 		std::string _methods;
 		std::vector<Location *> _locations;
+		std::vector<Socket *> _sockets;
+		std::vector<Client *> _clients;
 		std::string init_locations(std::string str);
 
 	public:

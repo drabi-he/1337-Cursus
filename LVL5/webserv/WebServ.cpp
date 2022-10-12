@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 13:36:01 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/10/04 15:45:01 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/10/12 11:12:05 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void WebServ::setup() {
 		std::map<int, std::string> m = (*it)->getListen();
 		std::map<int, std::string>::const_iterator m_it;
 		for (m_it = m.begin(); m_it != m.end(); m_it++)
-			_sockets.push_back(new Socket(m_it->first, m_it->second));
+			(*it)->_sockets.push_back(new Socket(m_it->first, m_it->second));
 	}
 }
 
@@ -94,18 +94,17 @@ void WebServ::run() {
 	while (1) {
 		nfds = prepare_sets(&read_fds, &write_fds);
 
-		if ((select(nfds + 1, &read_fds, &write_fds, NULL, NULL)) == -1)
+		if ((select(nfds, &read_fds, &write_fds, NULL, NULL)) == -1)
 			throw std::runtime_error("Selection Failed");
 
 		prepare_clients(&read_fds, &write_fds);
 
-		for (size_t i = 0; i <_clients.size(); i++) {
-			int val;
-			char buff[30000];
-
-			if ((val = recv(_clients[i]->_socket, buff, 30000, 0)) > 0) {
-				buff[val] = 0;
-				std::cout << buff << std::endl;
+		for (size_t i = 0; i < _servers.size(); i++) {
+			for (size_t j = 0; j < _servers[i]->_clients.size(); j++) {
+				if (FD_ISSET(_servers[i]->_clients[j]->_socket, &read_fds))
+					Reading_Request(i, j, &read_fds);
+				else if (FD_ISSET(_servers[i]->_clients[j]->_socket, &write_fds))
+					Sending_Response(i, j);
 			}
 		}
 	}
@@ -117,17 +116,21 @@ int WebServ::prepare_sets(fd_set *read, fd_set *write) {
 	FD_ZERO(read);
 	FD_ZERO(write);
 
-	for (size_t i = 0; i < _sockets.size(); i++) {
-		FD_SET(_sockets[i]->_socket, read);
-		// FD_SET(_sockets[i]->_socket, write);
-		if (_sockets[i]->_socket > cp)
-			cp = _sockets[i]->_socket;
+	for (size_t i = 0; i < _servers.size(); i++) {
+		for (size_t j = 0; j < _servers[i]->_sockets.size(); j++) {
+			FD_SET(_servers[i]->_sockets[j]->_socket, read);
+			// FD_SET(_servers[i]->_sockets[j]->_socket, write);
+			if (_servers[i]->_sockets[j]->_socket > cp)
+				cp = _servers[i]->_sockets[j]->_socket;
+		}
 	}
-	for (size_t i = 0; i < _clients.size(); i++) {
-		FD_SET(_clients[i]->_socket, read);
-		FD_SET(_clients[i]->_socket, write);
-		if (_clients[i]->_socket > cp)
-			cp = _clients[i]->_socket;
+	for (size_t i = 0; i < _servers.size(); i++) {
+		for (size_t j = 0; j < _servers[i]->_clients.size(); j++) {
+			FD_SET(_servers[i]->_clients[j]->_socket, read);
+			FD_SET(_servers[i]->_clients[j]->_socket, write);
+			if (_servers[i]->_clients[j]->_socket > cp)
+				cp = _servers[i]->_clients[j]->_socket;
+		}
 	}
 	return cp + 1;
 }
@@ -137,13 +140,32 @@ void WebServ::prepare_clients(fd_set *read, fd_set *write) {
 	struct sockaddr_in newAddress;
 	int len = sizeof(newAddress);
 
-	for (size_t i = 0; i < _sockets.size(); i++) {
-		if (FD_ISSET(_sockets[i]->_socket, read)) {
-			if ((newSocket = accept(_sockets[i]->_socket, (struct sockaddr *)&newAddress, (socklen_t *)&len)) == -1)
-				throw std::runtime_error("Connection Refused");
-			fcntl(newSocket, F_SETFL, O_NONBLOCK);
-			_clients.push_back(new Client(newSocket, newAddress));
-			//std::cout << "[CLIENT] ==> " << inet_ntoa(newAddress.sin_addr) << ":" << ntohs(newAddress.sin_port) << " [PORT] ==> " << _sockets[i]->_port << std::endl;
+	for (size_t i = 0; i < _servers.size(); i++) {
+		for (size_t j = 0; j < _servers[i]->_sockets.size(); j++) {
+			if (FD_ISSET(_servers[i]->_sockets[j]->_socket, read)) {
+				if ((newSocket = accept(_servers[i]->_sockets[j]->_socket, (struct sockaddr *)&newAddress, (socklen_t *)&len)) == -1)
+					throw std::runtime_error("Connection Refused");
+				fcntl(newSocket, F_SETFL, O_NONBLOCK);
+				_servers[i]->_clients.push_back(new Client(newSocket, newAddress));
+				//std::cout << "[CLIENT] ==> " << inet_ntoa(newAddress.sin_addr) << ":" << ntohs(newAddress.sin_port) << " [PORT] ==> " << _sockets[i]->_port << std::endl;
+			}
 		}
 	}
+
+}
+
+void WebServ::Reading_Request(int i, int j, fd_set *read) {
+	int val;
+	char buff[30000];
+
+	if ((val = recv(_servers[i]->_clients[j]->_socket, buff, 30000, 0)) > 0) {
+		buff[val] = 0;
+		_servers[i]->_clients[j]->_request->parse(buff);
+		_servers[i]->_clients[j]->_request->display();
+	}
+}
+
+void WebServ::Sending_Response(int i, int j) {
+	if (send(_servers[i]->_clients[j]->_socket, "HTTP/1.1 200 OK\r, Content-Type: text/html\r\n\r Hello World\r\n", 50, 0) == -1)
+		throw std::runtime_error("Send Failed");
 }

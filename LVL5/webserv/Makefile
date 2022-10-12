@@ -6,7 +6,7 @@
 #    By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 13:36:05 by hdrabi            #+#    #+#              #
-#    Updated: 2022/10/04 13:32:31 by hdrabi           ###   ########.fr        #
+#    Updated: 2022/10/06 12:22:57 by hdrabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ SRC = main.cpp \
 		Location.cpp \
 		Socket.cpp \
 		Client.cpp \
+		Request.cpp \
 		utils.cpp \
 		utils2.cpp \
 
@@ -25,6 +26,7 @@ HDR = main.hpp \
 		Location.hpp \
 		Socket.hpp \
 		Client.hpp \
+		Request.hpp \
 		utils.hpp \
 		utils2.hpp \
 
