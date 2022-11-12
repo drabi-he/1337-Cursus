@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 10:58:40 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/08/04 12:08:16 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/11/12 14:16:25 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ class MutantStack : public ft::stack<T>
 public:
 	MutantStack() {}
 	MutantStack(const MutantStack<T>& src) { *this = src; }
-	MutantStack<T>& operator=(const MutantStack<T>& rhs) 
+	MutantStack<T>& operator=(const MutantStack<T>& rhs)
 	{
 		this->c = rhs.c;
 		return *this;
@@ -99,7 +99,7 @@ int main(int argc, char** argv) {
 	{
 		//NORMAL ! :P
 	}
-	
+
 	for (int i = 0; i < COUNT; ++i)
 	{
 		map_int.insert(ft::make_pair(rand(), rand()));

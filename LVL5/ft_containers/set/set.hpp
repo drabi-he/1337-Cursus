@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 13:30:00 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/23 19:20:54 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/11/12 11:57:31 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 #include "../redBlackTree/RedBlackTree.hpp"
 
 namespace ft {
-    
+
     template < class T, class Compare = std::less<T>, class Alloc = std::allocator<T> > class set
     {
         public :
@@ -57,7 +57,7 @@ namespace ft {
 
             // *************************************** Constructor *************************************** //
             explicit set (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(comp, alloc), _alloc(alloc), _comp(comp) {}
-    
+
             template <class InputIterator>
             set (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(comp, alloc), _alloc(alloc), _comp(comp)
             {
@@ -96,27 +96,27 @@ namespace ft {
             }
 
             iterator end() {
-                return iterator(NULL);
+                return iterator(_tree.end());
             }
 
             const_iterator end() const {
-                return const_iterator(NULL);
+                return const_iterator(_tree.end());
             }
 
             reverse_iterator rbegin() {
-                return reverse_iterator(_tree.end());
+                return reverse_iterator(_tree.rbegin());
             }
 
             const_reverse_iterator rbegin() const {
-                return const_reverse_iterator(_tree.end());
+                return const_reverse_iterator(_tree.rbegin());
             }
 
             reverse_iterator rend() {
-                return reverse_iterator(NULL);
+                return reverse_iterator(_tree.rend());
             }
 
             const_reverse_iterator rend() const {
-                return const_reverse_iterator(NULL);
+                return const_reverse_iterator(_tree.rend());
             }
 
 
@@ -160,9 +160,9 @@ namespace ft {
 
             template <class InputIterator>
             void insert (InputIterator first, InputIterator last) {
-                
+
                 typename RBT::node_pointer node;
-                
+
                 for (; first != last; first++) {
                     node = _tree.find(*first);
                     if (!node)
@@ -212,7 +212,7 @@ namespace ft {
 
             // *************************************** Operations *************************************** //
             iterator find (const value_type& val) const {
-                typename RBT::node_pointer node = _tree.find(val);                
+                typename RBT::node_pointer node = _tree.find(val);
                 if (node)
                     return iterator(node);
                 return end();

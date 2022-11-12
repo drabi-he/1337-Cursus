@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 11:23:27 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/16 10:42:42 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/11/08 10:35:52 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ namespace ft
 			typedef typename ft::iterator_traits<T>::pointer pointer;
 			typedef typename ft::iterator_traits<T>::reference reference;
 			typedef typename ft::iterator_traits<T>::iterator_category iterator_category;
-			
+
 			// * Constructors
 			iterators(){
 				// std::cout << "\e[0;33mDefault Constructor called of iterators\e[0m" << std::endl;
@@ -63,13 +63,13 @@ namespace ft
 				_ptr++;
 				return *this;
 			}
-			
+
 			iterators operator++(int){
 				iterators tmp = *this;
 				_ptr++;
 				return tmp;
 			}
-			
+
 			iterators & operator--(){
 				_ptr--;
 				return *this;
@@ -103,7 +103,7 @@ namespace ft
 			}
 
 			reference operator[](size_type index){
-				return _ptr + index;
+				return *(_ptr + index); // TODO check if it's correct
 			}
 
 			pointer operator->(){
@@ -145,7 +145,7 @@ namespace ft
 			difference_type operator-(const iterators &I){
 				return (_ptr - I._ptr);
 			}
-			
+
 		private:
 			pointer _ptr;
 	};
@@ -167,7 +167,7 @@ namespace ft
 			typedef typename ft::iterator_traits<iterator_type>::pointer pointer;
 			typedef typename ft::iterator_traits<iterator_type>::reference reference;
 			typedef typename ft::iterator_traits<iterator_type>::iterator_category iterator_category;
-			
+
 			// * Constructors
 			reverse_iterator(){
 				// std::cout << "\e[0;33mDefault Constructor called of reverse_iterator\e[0m" << std::endl;
@@ -206,7 +206,7 @@ namespace ft
 				_ptr--;
 				return *this;
 			}
-			
+
 			reverse_iterator operator++(int){
 				reverse_iterator tmp = *this;
 				_ptr--;
@@ -221,12 +221,12 @@ namespace ft
 			reverse_iterator operator- (difference_type n) const {
 				return  reverse_iterator(_ptr.base() + n);
 			}
-			
+
 			reverse_iterator & operator--(){
 				_ptr++;
 				return *this;
 			}
-			
+
 			reverse_iterator operator--(int){
 				reverse_iterator tmp = *this;
 				_ptr++;
@@ -249,11 +249,11 @@ namespace ft
 			pointer operator->(){
 				return &(operator*());
 			}
-			
+
 		private:
 			iterator_type _ptr;
 	};
-	
+
 	template <class Iterator>
 	bool operator== (const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs) {
 		return lhs.base() == rhs.base();

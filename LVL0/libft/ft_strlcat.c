@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdrabi <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 18:35:26 by hdrabi            #+#    #+#             */
-/*   Updated: 2021/11/06 12:59:27 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/10/31 16:55:54 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 	size_t	i;
 	size_t	dest_size;
 
+	if (dstsize == 0 && dst == NULL)
+		return (0);
 	dest_size = ft_strlen(dst);
 	if (dstsize <= dest_size)
 		return (dstsize + ft_strlen(src));

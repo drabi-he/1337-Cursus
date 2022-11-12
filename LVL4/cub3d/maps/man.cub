@@ -1,7 +1,7 @@
 C 104,17,17
 F 84,84,84
 
-NO ./assets/lavawall1.xpm
+NO 					./assets/lavawall1.xpm
 SO ./assets/lavawall4.xpm
 EA ./assets/lavawall2.xpm
 WE ./assets/lavawall3.xpm

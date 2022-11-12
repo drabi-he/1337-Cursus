@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:36:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/08/04 11:31:35 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/11/07 15:48:35 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,26 +24,26 @@
 #include "../xtra/lexicographical_compare.hpp"
 
 namespace ft {
-	
+
 	template < class T, class Alloc = std::allocator<T> >
 	class vector
 	{
 		public:
-		
+
 			typedef T value_type;
 			typedef Alloc allocator_type;
 			typedef typename allocator_type::reference reference;
 			typedef typename allocator_type::const_reference const_reference;
 			typedef typename allocator_type::pointer pointer;
 			typedef typename allocator_type::const_pointer const_pointer;
-			
+
 			typedef iterators<pointer> iterator;
-			typedef iterators<const_pointer> const_iterator;	
+			typedef iterators<const_pointer> const_iterator;
 			typedef reverse_iterator<const_iterator> const_reverse_iterator;
 			typedef reverse_iterator<iterator> reverse_iterator;
 			typedef std::ptrdiff_t difference_type;
 			typedef std::size_t size_type;
-			
+
             // *************************************** Constructors *************************************** //
 			explicit vector (const allocator_type& alloc = allocator_type())
 			{
@@ -71,7 +71,7 @@ namespace ft {
 				for (size_type i = 0; i < _capacity ; i++)
 					_data[i] = val;
 			}
-			
+
 			template <class InputIterator>
 			vector (InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value , InputIterator>::type last,
 					const allocator_type& alloc = allocator_type())
@@ -199,7 +199,7 @@ namespace ft {
 				// 	throw std::range_error("Index out of bound");
 				return _data[n];
 			}
-			
+
 			const_reference operator[] (size_type n) const {
 				// if (n < 0 || n >= _size)
 				// 	throw std::range_error("Index out of bound");
@@ -211,7 +211,7 @@ namespace ft {
 					throw std::out_of_range("vector");
 				return _data[n];
 			}
-			
+
 			const_reference at (size_type n) const {
 				if (n < 0 || n >= _size)
 					throw std::range_error("vector");
@@ -223,7 +223,7 @@ namespace ft {
 				// 	throw std::range_error("Index out of bound");
 				return _data[0];
 			}
-			
+
 			const_reference front() const {
 				// if (_data == nullptr)
 				// 	throw std::range_error("Index out of bound");
@@ -235,7 +235,7 @@ namespace ft {
 				// 	throw std::range_error("Index out of bound");
 				return _data[_size - 1];
 			}
-			
+
 			const_reference back() const {
 				// if (_data == nullptr)
 				// 	throw std::range_error("Index out of bound");
@@ -275,7 +275,7 @@ namespace ft {
 			}
 
 			void push_back (const value_type& val){
-				if (_size < _capacity) 
+				if (_size < _capacity)
 					_data[_size++] = val;
 				else {
 					if (_capacity == 0)
@@ -299,7 +299,7 @@ namespace ft {
 						_data[pos + 1] = _data[pos];
 						pos--;
 					}
-					_data[pos] = val;			
+					_data[pos] = val;
 				} else {
 					value_type* tmp;
 					pos = 0;
@@ -334,7 +334,7 @@ namespace ft {
 						pos--;
 					}
 					for (size_type i = 0 ; i < n ; i++)
-						_data[pos + i] = val;			
+						_data[pos + i] = val;
 				} else {
 					value_type* tmp;
 					pos = 0;
@@ -376,7 +376,7 @@ namespace ft {
 					}
 					iterator it = first;
 					for (size_type i = 0 ; i < n ; i++)
-						_data[pos + i] = *(it++);		
+						_data[pos + i] = *(it++);
 				} else {
 					value_type* tmp;
 					pos = 0;
@@ -401,10 +401,10 @@ namespace ft {
 					_data = tmp;
 				}
 				_size += n;
-			}	
+			}
 
 			iterator erase (iterator position) {
-				for (iterator it = position ; it < end() - 1 ; it++) {	
+				for (iterator it = position ; it < end() - 1 ; it++) {
 					*it = *(it + 1);
 				}
 				_size--;
@@ -454,7 +454,7 @@ namespace ft {
 			allocator_type get_allocator() const {
 				return _alloc;
 			}
-			
+
 		private:
 			value_type* _data;
 			size_type _size;
@@ -474,7 +474,7 @@ namespace ft {
 				_size = n;
 				_data = tmp;
 			}
-			
+
 	};
 
 	template <class T, class Alloc>

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 11:48:19 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/05/31 14:29:49 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/11/07 14:35:45 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ namespace ft {
 			typedef Category  iterator_category;
 	};
 
-	template <class Iterator> 
+	template <class Iterator>
 	class iterator_traits{
 		public :
 		typedef typename Iterator::value_type value_type;
@@ -58,7 +58,7 @@ namespace ft {
 		typedef const T& reference;
 		typedef std::random_access_iterator_tag  iterator_category;
 	};
-	
+
 }
 
 #endif

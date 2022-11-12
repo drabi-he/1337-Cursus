@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 14:03:39 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/03/19 18:10:46 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/11/01 17:15:09 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	ft_input_ouput_ctrl(t_tree *root)
 
 void	ft_exec_cmd(t_tree *root)
 {
+	g_all.status_s = 1;
 	g_all.pid = fork();
 	if (g_all.pid == 0)
 	{

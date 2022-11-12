@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 16:12:21 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/08/04 11:50:27 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/11/12 11:56:48 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 #include "../redBlackTree/RedBlackTree.hpp"
 
 namespace ft {
-    
+
     template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key,T> > > class map
     {
         public :
@@ -53,12 +53,12 @@ namespace ft {
             RBT _tree;
             allocator_type _alloc;
             key_compare _comp;
-            
+
         public :
-        
+
             // *************************************** Iterators *************************************** //
             explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(value_compare(comp), alloc), _alloc(alloc), _comp(comp) {}
-    
+
             template <class InputIterator>
             map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(value_compare(comp), alloc), _alloc(alloc), _comp(comp)
             {
@@ -113,27 +113,27 @@ namespace ft {
             }
 
             iterator end() {
-                return iterator(NULL);
+                return iterator(_tree.end());
             }
 
             const_iterator end() const {
-                return const_iterator(NULL);
+                return const_iterator(_tree.end());
             }
 
             reverse_iterator rbegin() {
-                return reverse_iterator(_tree.end());
+                return reverse_iterator(_tree.rbegin());
             }
 
             const_reverse_iterator rbegin() const {
-                return const_reverse_iterator(_tree.end());
+                return const_reverse_iterator(_tree.rbegin());
             }
 
             reverse_iterator rend() {
-                return reverse_iterator(NULL);
+                return reverse_iterator(_tree.rend());
             }
 
             const_reverse_iterator rend() const {
-                return const_reverse_iterator(NULL);
+                return const_reverse_iterator(_tree.rend());
             }
 
 
@@ -155,7 +155,7 @@ namespace ft {
             mapped_type& operator[] (const key_type& k) {
                 value_type v(k, mapped_type());
                 typename RBT::node_pointer node = _tree.find(v);
-                
+
                 if (!node) {
                     _tree.add(v);
                     node = _tree.find(v);
@@ -180,7 +180,7 @@ namespace ft {
             iterator insert (iterator position, const value_type& val) {
                 (void)position;
                 typename RBT::node_pointer node = _tree.find(val);
-                
+
                 if (!node) {
                     _tree.add(val);
                     node = _tree.find(val);
@@ -190,9 +190,9 @@ namespace ft {
 
             template <class InputIterator>
             void insert (InputIterator first, InputIterator last) {
-                
+
                 typename RBT::node_pointer node;
-                
+
                 for (; first != last; first++) {
                     node = _tree.find(*first);
                     if (!node)
@@ -329,7 +329,7 @@ namespace ft {
             ft::pair<const_iterator,const_iterator> equal_range (const key_type& k) const {
                 return ft::pair<const_iterator,const_iterator>(lower_bound(k), upper_bound(k));
             }
-            
+
             ft::pair<iterator,iterator> equal_range (const key_type& k) {
                 return ft::pair<iterator,iterator>(lower_bound(k), upper_bound(k));
             }

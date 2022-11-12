@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 13:53:40 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/10/06 12:56:47 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/10/18 10:55:45 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ int	sprites(t_ray *ray, char **map)
 	{
 		ray->sprit_order[i] = i;
 		ray->sprit_distance[i] = (float)(pow(ray->pos[X] - ray->sprite[i].x, 2) \
-		- pow(ray->pos[Y] - ray->sprite[i].y, 2));
+		+ pow(ray->pos[Y] - ray->sprite[i].y, 2));
 	}
 	sort_sprites(ray->sprit_order, ray->sprit_distance, ray->amount);
 	i = -1;

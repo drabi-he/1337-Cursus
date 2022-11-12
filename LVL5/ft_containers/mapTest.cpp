@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 12:05:19 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/23 18:01:13 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/11/12 14:10:23 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 
 int main() {
-    
+
     std::cout << "\033[36m" << "************************************ test 0 < constructors , iterators > ************************************ " << "\033[0m" << std::endl;
     {
         std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
@@ -29,7 +29,7 @@ int main() {
             m1["a"] = 2;
             m1["b"] = 3;
             m1["d"] = 4;
-            
+
             std::map<std::string, int> m2(m1.begin(), m1.end());
             std::map<std::string, int> m3(m1);
 
@@ -37,7 +37,7 @@ int main() {
             for (std::map<std::string, int>::iterator it = m1.begin() ; it != m1.end(); it++)
                 std::cout << "\n" << it->first << "\t" << it->second;
             std::cout << std::endl;
-            
+
             std::cout << "*********** m1 < reverse > ************" << std::endl;
             for (std::map<std::string, int>::reverse_iterator it = m1.rbegin() ; it != m1.rend(); it++)
                 std::cout << "\n" << it->first << "\t" << it->second;
@@ -47,7 +47,7 @@ int main() {
             for (std::map<std::string, int>::iterator it = m2.begin() ; it != m2.end(); it++)
                 std::cout << "\n" << it->first << "\t" << it->second;
             std::cout << std::endl;
-            
+
             std::cout << "*********** m2 < reverse > ************" << std::endl;
             for (std::map<std::string, int>::reverse_iterator it = m2.rbegin() ; it != m2.rend(); it++)
                 std::cout << "\n" << it->first << "\t" << it->second;
@@ -57,7 +57,7 @@ int main() {
             for (std::map<std::string, int>::iterator it = m3.begin() ; it != m3.end(); it++)
                 std::cout << "\n" << it->first << "\t" << it->second;
             std::cout << std::endl;
-            
+
             std::cout << "*********** m3 < reverse > ************" << std::endl;
             for (std::map<std::string, int>::reverse_iterator it = m3.rbegin() ; it != m3.rend(); it++)
                 std::cout << "\n" << it->first << "\t" << it->second;
@@ -78,7 +78,7 @@ int main() {
             m1["a"] = 2;
             m1["b"] = 3;
             m1["d"] = 4;
-            
+
             ft::map<std::string, int> m2(m1.begin(), m1.end());
             ft::map<std::string, int> m3(m1);
 
@@ -86,7 +86,7 @@ int main() {
             for (ft::map<std::string, int>::iterator it = m1.begin() ; it != m1.end(); it++)
                 std::cout << "\n" << it->first << "\t" << it->second;
             std::cout << std::endl;
-            
+
             std::cout << "*********** m1 < reverse > ************" << std::endl;
             for (ft::map<std::string, int>::reverse_iterator it = m1.rbegin() ; it != m1.rend(); it++)
                 std::cout << "\n" << it->first << "\t" << it->second;
@@ -96,7 +96,7 @@ int main() {
             for (ft::map<std::string, int>::iterator it = m2.begin() ; it != m2.end(); it++)
                 std::cout << "\n" << it->first << "\t" << it->second;
             std::cout << std::endl;
-            
+
             std::cout << "*********** m2 < reverse > ************" << std::endl;
             for (ft::map<std::string, int>::reverse_iterator it = m2.rbegin() ; it != m2.rend(); it++)
                 std::cout << "\n" << it->first << "\t" << it->second;
@@ -106,7 +106,7 @@ int main() {
             for (ft::map<std::string, int>::iterator it = m3.begin() ; it != m3.end(); it++)
                 std::cout << "\n" << it->first << "\t" << it->second;
             std::cout << std::endl;
-            
+
             std::cout << "*********** m3 < reverse > ************" << std::endl;
             for (ft::map<std::string, int>::reverse_iterator it = m3.rbegin() ; it != m3.rend(); it++)
                 std::cout << "\n" << it->first << "\t" << it->second;
@@ -116,7 +116,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        
+
     }
 
     std::cout << std::endl << "\033[36m" << "************************************ test 1 < empty , size , max_size > ************************************ " << "\033[0m" << std::endl;
@@ -139,7 +139,7 @@ int main() {
             std::cout << "m1 size : " << m1.size() << std::endl;
             m1["d"] = 4;
             std::cout << "m1 size : " << m1.size() << std::endl;
-            
+
             std::cout << "m1 max_size : " << m1.max_size() << std::endl;
             std::cout << "m2 max_size : " << m2.max_size() << std::endl;
             std::cout << "m3 max_size : " << m3.max_size() << std::endl;
@@ -166,7 +166,7 @@ int main() {
             std::cout << "m1 size : " << m1.size() << std::endl;
             m1["d"] = 4;
             std::cout << "m1 size : " << m1.size() << std::endl;
-            
+
             std::cout << "m1 max_size : " << m1.max_size() << std::endl;
             std::cout << "m2 max_size : " << m2.max_size() << std::endl;
             std::cout << "m3 max_size : " << m3.max_size() << std::endl;
@@ -276,14 +276,14 @@ int main() {
                 std::cout << "\n" << it2->first << "\t" << it2->second;
             std::cout << std::endl;
 
-            it = m2.insert(m2.begin(), ft::make_pair("c", 3));            
+            it = m2.insert(m2.begin(), ft::make_pair("c", 3));
             std::cout << "*********** m2 after ************" << std::endl;
             for (ft::map<std::string, int>::iterator it2 = m2.begin() ; it2 != m2.end(); it2++)
                 std::cout << "\n" << it2->first << "\t" << it2->second;
             std::cout << std::endl;
             std::cout << "insert c : " << "[ " << it->first << " , " << it->second << " ]" << std::endl;
             std::cout << "m2 size : " << m2.size() << std::endl;
-            
+
             ft::map<std::string, int> m3;
             m3["a"] = 1;
             m3["b"] = 2;
@@ -344,7 +344,7 @@ int main() {
                 std::cout << "\n" << it2->first << "\t" << it2->second;
             std::cout << std::endl;
             std::cout << "m1 size : " << m1.size() << std::endl;
-            
+
         }
         catch(const std::exception& e)
         {
@@ -423,7 +423,7 @@ int main() {
             for (std::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
                 std::cout << it->first << " => " << it->second << '\n';
             std::cout << "foo size : " << foo.size() << std::endl;
-            
+
             std::cout << "bar contains:\n";
             for (std::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
                 std::cout << it->first << " => " << it->second << '\n';
@@ -462,7 +462,7 @@ int main() {
             for (ft::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
                 std::cout << it->first << " => " << it->second << '\n';
             std::cout << "foo size : " << foo.size() << std::endl;
-            
+
             std::cout << "bar contains:\n";
             for (ft::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
                 std::cout << it->first << " => " << it->second << '\n';
@@ -496,7 +496,7 @@ int main() {
             for (std::map<char,int>::iterator it=m1.begin(); it!=m1.end(); ++it)
                 std::cout << it->first << " => " << it->second << '\n';
             std::cout << "m1 size : " << m1.size() << std::endl;
-            
+
             m1['a']=1101;
             m1['b']=2202;
 
@@ -529,7 +529,7 @@ int main() {
             for (ft::map<char,int>::iterator it=m1.begin(); it!=m1.end(); ++it)
                 std::cout << it->first << " => " << it->second << '\n';
             std::cout << "m1 size : " << m1.size() << std::endl;
-            
+
             m1['a']=1101;
             m1['b']=2202;
 
@@ -712,7 +712,7 @@ int main() {
                 std::cout << c;
                 if (m1.count(c)>0)
                 std::cout << " is an element of m1.\n";
-                else 
+                else
                 std::cout << " is not an element of m1.\n";
             }
 
@@ -736,7 +736,7 @@ int main() {
                 std::cout << c;
                 if (m1.count(c)>0)
                 std::cout << " is an element of m1.\n";
-                else 
+                else
                 std::cout << " is not an element of m1.\n";
             }
 
@@ -761,13 +761,13 @@ int main() {
             m1['d']=80;
             m1['e']=100;
 
-            low=m1.lower_bound ('b');  
-            up=m1.upper_bound ('d');   
+            low=m1.lower_bound ('b');
+            up=m1.upper_bound ('d');
 
             std::cout << "low : " << low->first << '\n';
             std::cout << "up : " << up->first << '\n';
 
-            m1.erase(low,up);        
+            m1.erase(low,up);
 
             for (std::map<char,int>::iterator it=m1.begin(); it!=m1.end(); ++it)
                 std::cout << it->first << " => " << it->second << '\n';
@@ -790,7 +790,7 @@ int main() {
 
             ret = m2.equal_range('c');
 
-            
+
             std::cout << "\tequal_range for non-existing key: " << '\n';
             std::cout << "lower bound points to: ";
             std::cout << ret.first->first << " => " << ret.first->second << '\n';
@@ -815,13 +815,13 @@ int main() {
             m1['d']=80;
             m1['e']=100;
 
-            low=m1.lower_bound ('b');  
-            up=m1.upper_bound ('d');   
+            low=m1.lower_bound ('b');
+            up=m1.upper_bound ('d');
 
             std::cout << "low : " << low->first << '\n';
             std::cout << "up : " << up->first << '\n';
 
-            m1.erase(low,up);        
+            m1.erase(low,up);
 
             for (ft::map<char,int>::iterator it=m1.begin(); it!=m1.end(); ++it)
                 std::cout << it->first << " => " << it->second << '\n';
@@ -835,7 +835,7 @@ int main() {
             ft::pair<ft::map<char,int>::iterator,ft::map<char,int>::iterator> ret;
             ret = m2.equal_range('b');
 
-            
+
             std::cout << "\tequal_range for existing key: " << '\n';
             std::cout << "lower bound points to: ";
             std::cout << ret.first->first << " => " << ret.first->second << '\n';
@@ -845,7 +845,7 @@ int main() {
 
             ret = m2.equal_range('c');
 
-            
+
             std::cout << "\tequal_range for non-existing key: " << '\n';
             std::cout << "lower bound points to: ";
             std::cout << ret.first->first << " => " << ret.first->second << '\n';

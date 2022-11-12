@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 13:46:26 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/23 18:02:43 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/11/12 14:15:11 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int main() {
             s1.insert(2);
             s1.insert(3);
             s1.insert(4);
-            
+
             std::set<int> s2(s1.begin(), s1.end());
             std::set<int> s3(s1);
 
@@ -36,7 +36,7 @@ int main() {
             for (std::set<int>::iterator it = s1.begin() ; it != s1.end(); it++)
                 std::cout << "\t" << *it;
             std::cout << std::endl;
-            
+
             std::cout << "*********** s1 < reverse > ************" << std::endl;
             for (std::set<int>::reverse_iterator it = s1.rbegin() ; it != s1.rend(); it++)
                 std::cout << "\t" << *it;
@@ -46,7 +46,7 @@ int main() {
             for (std::set<int>::iterator it = s2.begin() ; it != s2.end(); it++)
                 std::cout << "\t" << *it;
             std::cout << std::endl;
-            
+
             std::cout << "*********** s2 < reverse > ************" << std::endl;
             for (std::set<int>::reverse_iterator it = s2.rbegin() ; it != s2.rend(); it++)
                 std::cout << "\t" << *it;
@@ -56,7 +56,7 @@ int main() {
             for (std::set<int>::iterator it = s3.begin() ; it != s3.end(); it++)
                 std::cout << "\t" << *it;
             std::cout << std::endl;
-            
+
             std::cout << "*********** s3 < reverse > ************" << std::endl;
             for (std::set<int>::reverse_iterator it = s3.rbegin() ; it != s3.rend(); it++)
                 std::cout << "\t" << *it;
@@ -77,7 +77,7 @@ int main() {
             s1.insert(2);
             s1.insert(3);
             s1.insert(4);
-            
+
             ft::set<int> s2(s1.begin(), s1.end());
             ft::set<int> s3(s1);
 
@@ -85,7 +85,7 @@ int main() {
             for (ft::set<int>::iterator it = s1.begin() ; it != s1.end(); it++)
                 std::cout << "\t" << *it;
             std::cout << std::endl;
-            
+
             std::cout << "*********** s1 < reverse > ************" << std::endl;
             for (ft::set<int>::reverse_iterator it = s1.rbegin() ; it != s1.rend(); it++)
                 std::cout << "\t" << *it;
@@ -95,7 +95,7 @@ int main() {
             for (ft::set<int>::iterator it = s2.begin() ; it != s2.end(); it++)
                 std::cout << "\t" << *it;
             std::cout << std::endl;
-            
+
             std::cout << "*********** s2 < reverse > ************" << std::endl;
             for (ft::set<int>::reverse_iterator it = s2.rbegin() ; it != s2.rend(); it++)
                 std::cout << "\t" << *it;
@@ -105,7 +105,7 @@ int main() {
             for (ft::set<int>::iterator it = s3.begin() ; it != s3.end(); it++)
                 std::cout << "\t" << *it;
             std::cout << std::endl;
-            
+
             std::cout << "*********** s3 < reverse > ************" << std::endl;
             for (ft::set<int>::reverse_iterator it = s3.rbegin() ; it != s3.rend(); it++)
                 std::cout << "\t" << *it;
@@ -115,7 +115,7 @@ int main() {
         {
             std::cerr << e.what() << '\n';
         }
-        
+
     }
 
     std::cout << std::endl << "\033[36m" << "************************************ test 1 < empty , size , max_size > ************************************ " << "\033[0m" << std::endl;
@@ -138,7 +138,7 @@ int main() {
             std::cout << "s1 size : " << s1.size() << std::endl;
             s1.insert(4);
             std::cout << "s1 size : " << s1.size() << std::endl;
-            
+
             std::cout << "s1 max_size : " << s1.max_size() << std::endl;
             std::cout << "s2 max_size : " << s2.max_size() << std::endl;
             std::cout << "s3 max_size : " << s3.max_size() << std::endl;
@@ -165,7 +165,7 @@ int main() {
             std::cout << "s1 size : " << s1.size() << std::endl;
             s1.insert(4);
             std::cout << "s1 size : " << s1.size() << std::endl;
-            
+
             std::cout << "s1 max_size : " << s1.max_size() << std::endl;
             std::cout << "s2 max_size : " << s2.max_size() << std::endl;
             std::cout << "s3 max_size : " << s3.max_size() << std::endl;
@@ -344,7 +344,7 @@ int main() {
                 std::cout << "\t" << *it2;
             std::cout << std::endl;
             std::cout << "s1 size : " << s1.size() << std::endl;
-            
+
         }
         catch(const std::exception& e)
         {
@@ -386,7 +386,7 @@ int main() {
                 std::cout << "\t" << *it2;
             std::cout << std::endl;
             std::cout << "s1 size : " << s1.size() << std::endl;
-            
+
         }
         catch(const std::exception& e)
         {
@@ -424,7 +424,7 @@ int main() {
             for (std::set<int>::iterator it=foo.begin(); it!=foo.end(); ++it)
                 std::cout << *it << '\n';
             std::cout << "foo size : " << foo.size() << std::endl;
-            
+
             std::cout << "bar contains:\n";
             for (std::set<int>::iterator it=bar.begin(); it!=bar.end(); ++it)
                 std::cout << *it << '\n';
@@ -463,7 +463,7 @@ int main() {
             for (ft::set<int>::iterator it=foo.begin(); it!=foo.end(); ++it)
                 std::cout << *it << '\n';
             std::cout << "foo size : " << foo.size() << std::endl;
-            
+
             std::cout << "bar contains:\n";
             for (ft::set<int>::iterator it=bar.begin(); it!=bar.end(); ++it)
                 std::cout << *it << '\n';
@@ -497,7 +497,7 @@ int main() {
             for (std::set<int>::iterator it=m1.begin(); it!=m1.end(); ++it)
                 std::cout << *it << '\n';
             std::cout << "m1 size : " << m1.size() << std::endl;
-            
+
             m1.insert(1101);
             m1.insert(2202);
 
@@ -530,7 +530,7 @@ int main() {
             for (ft::set<int>::iterator it=m1.begin(); it!=m1.end(); ++it)
                 std::cout << *it << '\n';
             std::cout << "m1 size : " << m1.size() << std::endl;
-            
+
             m1.insert(1101);
             m1.insert(2202);
 
@@ -716,7 +716,7 @@ int main() {
                 std::cout << c;
                 if (m1.count(c)>0)
                 std::cout << " is an element of m1.\n";
-                else 
+                else
                 std::cout << " is not an element of m1.\n";
             }
 
@@ -741,7 +741,7 @@ int main() {
                 std::cout << c;
                 if (m1.count(c)>0)
                 std::cout << " is an element of m1.\n";
-                else 
+                else
                 std::cout << " is not an element of m1.\n";
             }
 
@@ -751,7 +751,7 @@ int main() {
             std::cerr << e.what() << '\n';
         }
     }
-    
+
     std::cout << std::endl << "\033[36m" << "************************************ test 9 < lower_bound , upper_bound , equal_range > ************************************ " << "\033[0m" << std::endl;
     {
         std::cout << "\033[32m" << "----------------------- ORIGINAL -----------------------" << "\033[0m" << std::endl;
@@ -765,7 +765,7 @@ int main() {
             low=s1.lower_bound (30);
             up=s1.upper_bound (60);
 
-            s1.erase(low,up);                     
+            s1.erase(low,up);
 
             std::cout << "s1 contains:";
             for (std::set<int>::iterator it=s1.begin(); it!=s1.end(); ++it)
@@ -775,7 +775,7 @@ int main() {
 
             std::set<int> m2;
 
-            for (int i=1; i<=5; i++) m2.insert(i*10);   
+            for (int i=1; i<=5; i++) m2.insert(i*10);
 
             std::pair<std::set<int>::const_iterator,std::set<int>::const_iterator> ret;
             ret = m2.equal_range(20);
@@ -789,7 +789,7 @@ int main() {
 
             ret = m2.equal_range(35);
 
-            
+
             std::cout << "\tequal_range for non-existing key: " << '\n';
             std::cout << "lower bound points to: ";
             std::cout << *ret.first << " => " << *ret.second << '\n';
@@ -837,7 +837,7 @@ int main() {
 
             ret = m2.equal_range(35);
 
-            
+
             std::cout << "\tequal_range for non-existing key: " << '\n';
             std::cout << "lower bound points to: ";
             std::cout << *ret.first << " => " << *ret.second << '\n';
@@ -850,5 +850,4 @@ int main() {
             std::cerr << e.what() << '\n';
         }
     }
-
 }

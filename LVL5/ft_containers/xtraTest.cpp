@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 16:08:47 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/07/23 17:27:45 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/11/09 16:16:01 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include "./iterators/iterator.hpp"
 #include "./vector/vector.hpp"
 #include "./iterators/iterator_traits.hpp"
+#include "./redBlackTree/RedBlackTree.hpp"
 
 template <class T>
 typename ft::enable_if<std::is_integral<T>::value,bool>::type
@@ -37,10 +38,10 @@ bool mycomp (char c1, char c2){
 }
 
 int main (){
-    
+
     std::cout << "\033[36m" << "************************************ test 1 < enable_if > ************************************ " << "\033[0m" << std::endl;
     {
-        int i = 1;    
+        int i = 1;
 
         std::cout << std::boolalpha;
         std::cout << "i is odd: " << is_odd(i) << std::endl;
@@ -54,20 +55,20 @@ int main (){
         std::cout << "char: " << ft::is_integral<char>::value << std::endl;
         std::cout << "int: " << ft::is_integral<int>::value << std::endl;
         std::cout << "float: " << ft::is_integral<float>::value << std::endl;
-        
+
     }
 
     std::cout << std::endl << "\033[36m" << "************************************ test 3 < equal > ************************************ " << "\033[0m" << std::endl;
     {
-        int myints[] = {20,40,60,80,100};               
-        std::vector<int>myvector (myints ,myints+5);     
+        int myints[] = {20,40,60,80,100};
+        std::vector<int>myvector (myints ,myints+5);
 
         if ( ft::equal (myvector.begin(), myvector.end(), myints) )
             std::cout << "The contents of both sequences are equal.\n";
         else
             std::cout << "The contents of both sequences differ.\n";
 
-        myvector[3]=81;                                 
+        myvector[3]=81;
 
         if ( ft::equal (myvector.begin(), myvector.end(), myints, mypredicate) )
             std::cout << "The contents of both sequences are equal.\n";
@@ -99,13 +100,13 @@ int main (){
         ft::pair <int,int> bar;
 
         foo = ft::make_pair (10,20);
-        bar = ft::make_pair (10.5,'A'); 
+        bar = ft::make_pair (10.5,'A');
 
         std::cout << "foo: " << foo.first << ", " << foo.second << '\n';
         std::cout << "bar: " << bar.first << ", " << bar.second << '\n';
     }
-    
-    
+
+
     std::cout << std::endl << "\033[36m" << "************************************ test 5 < reverse_iterators > ************************************ " << "\033[0m" << std::endl;
     {
         {
@@ -163,6 +164,35 @@ int main (){
             std::cout << rit[1] << std::endl;
             std::cout << rit[4] << std::endl;
         }
+    }
+
+	std::cout << std::endl << "\033[36m" << "************************************ test 6 < redBlackTree > ************************************ " << "\033[0m" << std::endl;
+    {
+        ft::RedBlackTree<int> test;
+
+		test.add(22);
+		test.add(42);
+		test.add(83);
+		test.add(55);
+		test.add(34);
+		test.add(31);
+		test.add(73);
+		test.add(64);
+		test.add(67);
+		test.add(63);
+		test.add(29);
+		test.add(87);
+		test.add(9);
+		test.add(8);
+		test.add(4);
+		test.add(62);
+		test.add(11);
+		test.add(59);
+		test.add(1);
+		test.add(90);
+		test.erase(31);
+		// test.erase(8);
+		test.printTree(3);
     }
 
 }

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 16:31:04 by izouf             #+#    #+#             */
-/*   Updated: 2022/03/11 13:50:51 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/11/04 12:12:45 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ int	main(void)
 	int		fd;
 	char	*line ;
 
-	fd = open("out", O_RDONLY | O_CREAT);
+	fd = open("test", O_RDONLY | O_CREAT);
 
+	printf("%s", get_next_line(fd));
 	printf("%s", get_next_line(fd));
 	printf("%s", get_next_line(fd));
 	printf("%s", get_next_line(fd));
