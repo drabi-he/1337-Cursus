@@ -11,4 +11,5 @@ cd LVL3/philosophers/philo && make fclean && cd ../../..
 cd LVL3/philosophers/philo_bonus && make fclean && cd ../../..
 cd LVL4/cub3d && make fclean && cd ../..
 cd LVL5/ft_containers && make fclean && cd ../..
+cd LVL5/webserv && make fclean && cd ../..
 
