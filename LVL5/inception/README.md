@@ -24,7 +24,7 @@
 	CMD [command]
 
 <details>
-<h1><summary>NGINX</summary></h1>
+<summary><h1>NGINX</h1></summary>
 
 ### 1. First update the package list
 
