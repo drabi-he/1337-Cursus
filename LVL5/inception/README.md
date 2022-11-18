@@ -2,9 +2,9 @@
 
 <!-- ## 1. Run a basic Docker container in interactive mode -->
 
-	 docker run -it -p `[host_port]:[container_port]` `[image]:[tag]`
+docker run -it -p `[host_port]:[container_port]` `[image]:[tag]`
 
-	 for this project, either `debian:buster` or `alpine:latest`
+for this project, either `debian:buster` or `alpine:latest`
 
 		 FLAGS:
 			 `-i`: interactive mode (Keep STDIN open even if not attached)
