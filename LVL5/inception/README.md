@@ -7,9 +7,9 @@
 > for this project, either `debian:buster` or `alpine:latest`
 
 **FLAGS:**
-	- `-i`: interactive mode (Keep STDIN open even if not attached)
-	- `-t`: terminal mode (Allocate a pseudo-tty)
-	- `-p`: port mapping
+  - `-i`: interactive mode (Keep STDIN open even if not attached)
+  - `-t`: terminal mode (Allocate a pseudo-tty)
+  - `-p`: port mapping
 
 ### 2. Try to setup the service from scratch
 
