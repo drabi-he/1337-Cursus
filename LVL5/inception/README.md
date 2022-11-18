@@ -1,4 +1,4 @@
-# Basic Tips & Instructions
+<!-- # Basic Tips & Instructions -->
 
 <!-- ## 1. Run a basic Docker container in interactive mode -->
 
