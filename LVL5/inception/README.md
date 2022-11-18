@@ -27,11 +27,11 @@
 
 ### 1. First update the package list
 
-* **debian:buster**
+**debian:buster**
 
 	apt update -y && apt upgrade -y
 
-* **alpine:latest**
+**alpine:latest**
 
 	apk update && apk upgrade
 
