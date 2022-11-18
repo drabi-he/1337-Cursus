@@ -115,8 +115,7 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 		curl -I -v --tlsv1.3 --tls-max 1.3 https://localhost:[host_port] -k
 
-if you get `The plain HTTP request was sent to HTTPS port`
-try sending request to https instead of http
+> :bulb: if you get `The plain HTTP request was sent to HTTPS port` try sending request to https instead of http
 
 </details>
 
