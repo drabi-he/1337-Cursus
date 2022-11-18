@@ -75,14 +75,14 @@
 ### 4. Create a new NGINX configuration file
 
 	vim /etc/nginx/nginx.conf
-+ :arrow_right: (e.g : [here](./alpine/srcs/requirements/nginx/conf/nginx.conf))
++ :arrow_right: [here](./alpine/srcs/requirements/nginx/conf/nginx.conf)
 
 > **:warning: check if the configuration file is valid by running `nginx -t`**
 
 ### 5. Create the files you want to serve
 
 	vim [path]/index.html
-+ :arrow_right: (e.g : [here](./alpine/srcs/requirements/nginx/tools/index.html))
++ :arrow_right: [here](./alpine/srcs/requirements/nginx/tools/index.html)
 
 > **:warning: the path is the same as the one you specified in the NGINX configuration file**
 
@@ -106,7 +106,9 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 	curl -I -v --tlsv1.1 --tls-max 1.1 https://localhost:[host_port] -k
 
+
 	curl -I -v --tlsv1.2 --tls-max 1.2 https://localhost:[host_port] -k
+
 
 	curl -I -v --tlsv1.3 --tls-max 1.3 https://localhost:[host_port] -k
 
