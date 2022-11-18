@@ -23,7 +23,8 @@
 	EXPOSE [port]
 	CMD [command]
 
-<details> # NGINX
+<details>
+<summary>NGINX</summary>
 
 ### 1. First update the package list
 
