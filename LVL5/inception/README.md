@@ -4,7 +4,7 @@
 
 	docker run -it -p `[host_port]:[container_port]` `[image]:[tag]`
 
-> for this project, either `debian:buster` or `alpine:latest`
+> :bulb: for this project, either `debian:buster` or `alpine:latest`
 
 **FLAGS:**
   - `-i`: interactive mode (Keep STDIN open even if not attached)
@@ -23,24 +23,31 @@
 	EXPOSE [port]
 	CMD [command]
 
+---
+
+# NGINX
 <details>
-<summary><h3>NGINX</h3></summary>
+<summary>Show/Hide</summary>
 
 ### 1. First update the package list
 
 **debian:buster**
+
 	apt update -y && apt upgrade -y
 
 **alpine:latest**
+
 	apk update && apk upgrade
 
 
 ### 2. Install NGINX and OpenSSL
 
 **debian:buster**
+
 	apt install -y nginx openssl
 
 **alpine:latest**
+
 	apk add nginx openssl
 
 ### 3. Create a self-signed certificate
@@ -63,28 +70,30 @@
   	- `/OU`: Organizational Unit Name (eg, section)
   	- `/CN`: Common Name (eg, your name or your server's hostname)
 
-> for more detailed information about the `openssl req` command, check [this](https://www.openssl.org/docs/man1.1.1/man1/openssl-req.html)
+> :bulb: for more detailed information about the `openssl req` command, check [this](https://www.openssl.org/docs/man1.1.1/man1/openssl-req.html)
 
 ### 4. Create a new NGINX configuration file
 
 	vim /etc/nginx/nginx.conf
 > (e.g : [here](./alpine/srcs/requirements/nginx/conf/nginx.conf))
 
-important : check if the configuration file is valid by running `nginx -t`
+> **:warning: check if the configuration file is valid by running `nginx -t`**
 
 ### 5. Create the files you want to serve
 
 	vim [path]/index.html
 > (e.g : [here](./alpine/srcs/requirements/nginx/tools/index.html))
 
-> **important : the path is the same as the one you specified in the NGINX configuration file**
+> **:warning: the path is the same as the one you specified in the NGINX configuration file**
 
 ### 6. Start the NGINX service
 
 **debian:buster**
+
 	service nginx start
 
 **alpine:latest**
+
 	nginx
 
 ### 7. Test the service
@@ -94,11 +103,16 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 ### 8. Additional Tips
 
 **check if nginx compatible with TSLv1.2 and TLSv1.3**
- - curl -I -v --tlsv1.1 --tls-max 1.1 `https://localhost:[host_port]` -k // should fail
- - curl -I -v --tlsv1.2 --tls-max 1.2 `https://localhost:[host_port]` -k // should pass if you have TSLv1.2
- - curl -I -v --tlsv1.3 --tls-max 1.3 `https://localhost:[host_port]` -k // should pass if you have TSLv1.3
+
+	curl -I -v --tlsv1.1 --tls-max 1.1 https://localhost:[host_port] -k
+
+	curl -I -v --tlsv1.2 --tls-max 1.2 https://localhost:[host_port] -k
+
+	curl -I -v --tlsv1.3 --tls-max 1.3 https://localhost:[host_port] -k
 
 if you get `The plain HTTP request was sent to HTTPS port`
 try sending request to https instead of http
 
 </details>
+
+---
