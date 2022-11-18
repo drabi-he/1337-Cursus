@@ -1,6 +1,6 @@
 # Basic Tips & Instructions
 
-### 1. Run a basic Docker container in interactive mode
+## 1. Run a basic Docker container in interactive mode
 
 	 docker run -it -p `[host_port]:[container_port]` `[image]:[tag]`
 
