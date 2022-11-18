@@ -103,12 +103,15 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 ### 8. Additional Tips
 
 **check if nginx compatible with TSLv1.2 and TLSv1.3**
+  - for TSLv1.1 `should fail`
 
 	curl -I -v --tlsv1.1 --tls-max 1.1 https://localhost:[host_port] -k
 
+  - for TSLv1.2 `should pass if you have TLSv1.2`
 
 	curl -I -v --tlsv1.2 --tls-max 1.2 https://localhost:[host_port] -k
 
+  - for TSLv1.3 `should pass if you have TLSv1.3`
 
 	curl -I -v --tlsv1.3 --tls-max 1.3 https://localhost:[host_port] -k
 
