@@ -6,7 +6,7 @@
 
 > for this project, either `debian:buster` or `alpine:latest`
 
-* **FLAGS:**
+**FLAGS:**
 	- `-i`: interactive mode (Keep STDIN open even if not attached)
 	- `-t`: terminal mode (Allocate a pseudo-tty)
 	- `-p`: port mapping
