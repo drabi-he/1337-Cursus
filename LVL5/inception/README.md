@@ -2,26 +2,26 @@
 
 ## 1. Run a basic Docker container in interactive mode
 
-docker run -it -p `[host_port]:[container_port]` `[image]:[tag]`
+	docker run -it -p `[host_port]:[container_port]` `[image]:[tag]`
 
-for this project, either `debian:buster` or `alpine:latest`
+> for this project, either `debian:buster` or `alpine:latest`
 
-FLAGS:
-`-i`: interactive mode (Keep STDIN open even if not attached)
-`-t`: terminal mode (Allocate a pseudo-tty)
-`-p`: port mapping
+* **FLAGS:**
+	- `-i`: interactive mode (Keep STDIN open even if not attached)
+	- `-t`: terminal mode (Allocate a pseudo-tty)
+	- `-p`: port mapping
 
 ### 2. Try to setup the service from scratch
 
 ### 3. after you finish the setup successfully, create a Dockerfile
 
-FROM `[image]:[tag]`
-RUN `[command]`
-[...]
-COPY `[source]` `[destination]`
-[...]
-EXPOSE `[port]`
-CMD `[command]`
+	FROM `[image]:[tag]`
+	RUN `[command]`
+	[...]
+	COPY `[source]` `[destination]`
+	[...]
+	EXPOSE `[port]`
+	CMD `[command]`
 
 # NGINX
 
