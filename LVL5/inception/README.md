@@ -75,14 +75,14 @@
 ### 4. Create a new NGINX configuration file
 
 	vim /etc/nginx/nginx.conf
-> (e.g : [here](./alpine/srcs/requirements/nginx/conf/nginx.conf))
++ :arrow_right: (e.g : [here](./alpine/srcs/requirements/nginx/conf/nginx.conf))
 
 > **:warning: check if the configuration file is valid by running `nginx -t`**
 
 ### 5. Create the files you want to serve
 
 	vim [path]/index.html
-> (e.g : [here](./alpine/srcs/requirements/nginx/tools/index.html))
++ :arrow_right: (e.g : [here](./alpine/srcs/requirements/nginx/tools/index.html))
 
 > **:warning: the path is the same as the one you specified in the NGINX configuration file**
 
