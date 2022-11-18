@@ -23,26 +23,23 @@
 	EXPOSE [port]
 	CMD [command]
 
-# NGINX
+<details> # NGINX
 
 ### 1. First update the package list
 
 **debian:buster**
-
 	apt update -y && apt upgrade -y
 
 **alpine:latest**
-
 	apk update && apk upgrade
 
 
 ### 2. Install NGINX and OpenSSL
 
-* **debian:buster**
-
+**debian:buster**
 	apt install -y nginx openssl
-* **alpine:latest**
 
+**alpine:latest**
 	apk add nginx openssl
 
 ### 3. Create a self-signed certificate
@@ -83,11 +80,10 @@ important : check if the configuration file is valid by running `nginx -t`
 
 ### 6. Start the NGINX service
 
-* **debian:buster**
-
+**debian:buster**
 	service nginx start
-* **alpine:latest**
 
+**alpine:latest**
 	nginx
 
 ### 7. Test the service
@@ -96,10 +92,12 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 ### 8. Additional Tips
 
-*check if nginx compatible with TSLv1.2 and TLSv1.3*
- - curl -I -v --tlsv1.1 --tls-max 1.1 https://localhost:3000 -k // should fail
- - curl -I -v --tlsv1.2 --tls-max 1.2 https://localhost:3000 -k // should pass if you have TSLv1.2
- - curl -I -v --tlsv1.3 --tls-max 1.3 https://localhost:3000 -k // should pass if you have TSLv1.3
+**check if nginx compatible with TSLv1.2 and TLSv1.3**
+ - curl -I -v --tlsv1.1 --tls-max 1.1 `https://localhost:[host_port]` -k // should fail
+ - curl -I -v --tlsv1.2 --tls-max 1.2 `https://localhost:[host_port]` -k // should pass if you have TSLv1.2
+ - curl -I -v --tlsv1.3 --tls-max 1.3 `https://localhost:[host_port]` -k // should pass if you have TSLv1.3
 
 if you get `The plain HTTP request was sent to HTTPS port`
 try sending request to https instead of http
+
+</details>
