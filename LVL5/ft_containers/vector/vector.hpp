@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:36:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/11/07 15:48:35 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/11/14 15:51:26 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -469,7 +469,7 @@ namespace ft {
 					tmp[i] = _data[i];
 				for (size_type i = _size; i < n ; i++)
 					tmp[i] = val;
-				if (_size > 0)
+				if (_size >= 0)
 					_alloc.deallocate(_data, _size);
 				_size = n;
 				_data = tmp;

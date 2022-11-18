@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 16:08:47 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/11/09 16:16:01 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/11/14 15:44:01 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,29 +170,40 @@ int main (){
     {
         ft::RedBlackTree<int> test;
 
-		test.add(22);
-		test.add(42);
-		test.add(83);
-		test.add(55);
-		test.add(34);
-		test.add(31);
-		test.add(73);
-		test.add(64);
-		test.add(67);
-		test.add(63);
-		test.add(29);
-		test.add(87);
-		test.add(9);
-		test.add(8);
 		test.add(4);
-		test.add(62);
-		test.add(11);
-		test.add(59);
-		test.add(1);
-		test.add(90);
-		test.erase(31);
-		// test.erase(8);
+		test.add(69);
+		test.add(70);
+		test.add(15);
+		test.add(8);
+		test.add(73);
+		test.add(97);
+		test.add(51);
+		test.add(78);
+		test.add(82);
+		test.add(50);
+		test.add(27);
+		test.add(64);
+		test.add(48);
+		test.add(58);
+		test.add(99);
+		test.add(79);
+		test.add(52);
+		test.add(76);
+		test.add(49);
+
+		test.erase(27);
+		test.erase(69);
+		test.erase(73);
+		test.erase(15);
+		test.erase(82);
+		test.erase(4);
+		test.erase(70);
+		test.erase(97);
+		test.erase(58);
+		test.erase(52);
+		test.erase(50);
+		// test.erase(58);
 		test.printTree(3);
     }
-
 }
+

@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 10:38:28 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/11/12 13:37:06 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/11/14 16:05:38 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,6 +313,10 @@ namespace ft {
                 clear();
                 _node_alloc.destroy(_null);
                 _node_alloc.deallocate(_null, 1);
+				_node_alloc.destroy(_before_begin);
+                _node_alloc.deallocate(_before_begin, 1);
+				_node_alloc.destroy(_past_end);
+                _node_alloc.deallocate(_past_end, 1);
             }
 
             node_pointer getRoot() const {
@@ -566,7 +570,7 @@ namespace ft {
 
 
             void printTree(int count, node_pointer root = nullptr, int space = 0){
-                if (root == _null)
+                if (root == _null || root == _before_begin || root == _past_end)
                     return ;
                 if (_root == nullptr)
                     return;

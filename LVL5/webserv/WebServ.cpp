@@ -6,7 +6,7 @@
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 13:36:01 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/10/12 11:12:05 by hdrabi           ###   ########.fr       */
+/*   Updated: 2022/11/14 16:45:12 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,21 +90,28 @@ void WebServ::run() {
 	fd_set read_fds;
 	fd_set write_fds;
 	int nfds;
+	bool rec = false;
 
 	while (1) {
 		nfds = prepare_sets(&read_fds, &write_fds);
+		// std::cout << "here => 1"<< std::endl;
 
 		if ((select(nfds, &read_fds, &write_fds, NULL, NULL)) == -1)
 			throw std::runtime_error("Selection Failed");
+		// std::cout << "here => 2"<< std::endl;
 
 		prepare_clients(&read_fds, &write_fds);
 
 		for (size_t i = 0; i < _servers.size(); i++) {
 			for (size_t j = 0; j < _servers[i]->_clients.size(); j++) {
-				if (FD_ISSET(_servers[i]->_clients[j]->_socket, &read_fds))
+				if (FD_ISSET(_servers[i]->_clients[j]->_socket, &read_fds) && !rec) {
 					Reading_Request(i, j, &read_fds);
-				else if (FD_ISSET(_servers[i]->_clients[j]->_socket, &write_fds))
+					rec = true;
+				}
+				else if (FD_ISSET(_servers[i]->_clients[j]->_socket, &write_fds) && rec) {
 					Sending_Response(i, j);
+					rec = false;
+				}
 			}
 		}
 	}
@@ -168,4 +175,5 @@ void WebServ::Reading_Request(int i, int j, fd_set *read) {
 void WebServ::Sending_Response(int i, int j) {
 	if (send(_servers[i]->_clients[j]->_socket, "HTTP/1.1 200 OK\r, Content-Type: text/html\r\n\r Hello World\r\n", 50, 0) == -1)
 		throw std::runtime_error("Send Failed");
+	std::cout << "Response Sent" << std::endl;
 }

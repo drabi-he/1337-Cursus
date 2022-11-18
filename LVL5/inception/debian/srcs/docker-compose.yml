@@ -1,0 +1,12 @@
+version: '3.0'
+services:
+  nginx:
+    build: ./requirements/nginx
+    image: nginx_debian # TODO: change to nginx
+    container_name: nginx_debian # TODO: change to nginx
+    restart: always
+    ports:
+      - "3001:443"
+    # volumes:
+    #   - ./requirements/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+    #   - ./requirements/nginx/tools:/var/www/html
