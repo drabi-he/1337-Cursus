@@ -28,15 +28,21 @@
 ### 1. First update the package list
 
 * **debian:buster**
+
 	apt update -y && apt upgrade -y
+
 * **alpine:latest**
+
 	apk update && apk upgrade
+
 
 ### 2. Install NGINX and OpenSSL
 
 * **debian:buster**
+
 	apt install -y nginx openssl
 * **alpine:latest**
+
 	apk add nginx openssl
 
 ### 3. Create a self-signed certificate
@@ -78,8 +84,10 @@ important : check if the configuration file is valid by running `nginx -t`
 ### 6. Start the NGINX service
 
 * **debian:buster**
+
 	service nginx start
 * **alpine:latest**
+
 	nginx
 
 ### 7. Test the service
