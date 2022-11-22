@@ -1,3 +1,8 @@
+# INTRODUCTION
+
+This document describes the process of setting up `inception`
+It assume that you have a little experience with docker and docker-compose
+
 # Basic Tips & Instructions
 
 ## 1. Run a basic Docker container in interactive mode
@@ -22,6 +27,18 @@
 	[...]
 	EXPOSE [port]
 	CMD [command]
+
+
+### 4. ADDITIONAL TIPS & INFORMATION
+
+#### OpenRC
+
+OpenRC is a system initialization framework that provides parallel startup of the various runlevels, starting and stopping of services and other system utilities in a sane and safe order.
+
+**FLAGS:**
+  - `mkdir -p ...` : create a directory and all parent directories if needed
+  - `chown -R ...` : change the owner of a file or directory and all its subdirectories and files
+  - `chmod 777 ...`: give read, write, and execute permissions to all users, including the owner, group, and others
 
 ---
 
@@ -120,3 +137,152 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 </details>
 
 ---
+
+# MARIADB
+<details>
+<summary>Show/Hide</summary>
+
+### 1. First update the package list
+
+**debian:buster**
+
+	apt update -y && apt upgrade -y
+
+**alpine:latest**
+
+	apk update && apk upgrade
+
+### 2. Install MariaDB , MariaDB-client and OpenRC (for alpine)
+
+> :bulb: since alpine can't run `service` command, we need to install `OpenRC` to be able to run `rc-service`
+
+**debian:buster**
+
+	apt install -y mariadb-server mariadb-client
+
+**alpine:latest**
+
+	apk add mariadb mariadb-client openrc
+
+> :warning: since your system didn't boot with OpenRC, you will get an error when you try to start any service, to fix this, you need to run `openrc` and then `touch /run/openrc/softlevel`
+
+	openrc && touch /run/openrc/softlevel
+
+### 3. Create the directory where the `socket` file will be stored
+
+	mkdir -p /var/run/mysqld
+
+### 4. Change the owner of the directory to `mysql`
+
+	chown -R mysql:mysql /var/run/mysqld
+
+### 5. Change the permissions of the directory to avoid any complications
+
+	chmod 777 /var/run/mysqld
+
+### 6. Change in the configuration file
+
+**debian:buster** `change the bind-address to allow connections from any IP`
+
+	sed -i "s|bind-address            = 127.0.0.1|bind-address            = 0.0.0.0|g" /etc/mysql/mariadb.conf.d/50-server.cnf
+
+**alpine:latest** `enable remote access`
+
+	sed -i "s|skip-networking|skip-networking=0|g" /etc/my.cnf.d/mariadb-server.cnf
+
+### 7. Run the `mysql_install_db` command to create the database
+
+**debian:buster** `no option`
+
+	mysql_install_db
+
+**alpine:latest**
+
+	mysql_install_db --user=mysql --datadir=/var/lib/mysql
+
+### 8. Start the MariaDB service
+
+**debian:buster**
+
+	service mysql start
+
+**alpine:latest**
+
+	rc-service mariadb start
+
+### 9. Secure the installation
+
+> :bulb: you can use the `mysql_secure_installation` command to secure the installation, but it will ask you for a password, so you can use the following commands instead
+
+**debian:buster**
+
+	# Change the root password
+	mysql -u root -e "UPDATE mysql.user SET Password=PASSWORD('ROOT_PASSWORD') WHERE User='root'; FLUSH PRIVILEGES;";
+
+	# Remove anonymous users
+	mysql -u root -pROOT_PASSWORD -e "DELETE FROM mysql.user WHERE User=''; FLUSH PRIVILEGES;";
+
+	# Remove all root users except the localhost
+	mysql -u root -pROOT_PASSWORD -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1'); FLUSH PRIVILEGES;";
+
+	# Remove all the test databases
+	mysql -u root -pROOT_PASSWORD -e "DROP DATABASE IF EXISTS test; FLUSH PRIVILEGES;";
+	mysql -u root -pROOT_PASSWORD -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'; FLUSH PRIVILEGES;";
+
+	# Create a root user for remote access
+	mysql -u root -pROOT_PASSWORD -e "CREATE USER 'root'@'%' IDENTIFIED BY 'ROOT_PASSWORD'; FLUSH PRIVILEGES;";
+
+	# Grant all privileges to the remote root user
+	mysql -u root -pROOT_PASSWORD -e "GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY 'ROOT_PASSWORD'; FLUSH PRIVILEGES;";
+
+	# Create a database and a user for remote access
+	mysql -u root -pROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS DB_NAME; GRANT ALL ON DB_NAME.* TO 'DB_USER'@'%' IDENTIFIED BY 'USER_PASSWORD'; FLUSH PRIVILEGES;"
+
+**alpine:latest**
+
+	# Change the root password
+	mysql -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('ROOT_PASSWORD'); FLUSH PRIVILEGES;";
+
+	# Remove anonymous users for localhost and other hosts
+	mysql -u root -pROOT_PASSWORD -e "DROP USER ''@'localhost'; FLUSH PRIVILEGES;";
+	mysql -u root -pROOT_PASSWORD -e "DROP USER ''@'$(hostname)'; FLUSH PRIVILEGES;";
+
+	# Remove the test database
+	mysql -u root -pROOT_PASSWORD -e "DROP DATABASE IF EXISTS test; FLUSH PRIVILEGES;";
+
+	# Create a root user for remote access
+	mysql -u root -pROOT_PASSWORD -e "CREATE USER 'root'@'%' IDENTIFIED BY 'ROOT_PASSWORD'; FLUSH PRIVILEGES;";
+
+	# Grant all privileges to the remote root user
+	mysql -u root -pROOT_PASSWORD -e "GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY 'ROOT_PASSWORD'; FLUSH PRIVILEGES;";
+
+	# Create a database and a user for remote access
+	mysql -u root -pROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS DB_NAME; GRANT ALL ON DB_NAME.* TO 'DB_USER'@'%' IDENTIFIED BY 'USER_PASSWORD'; FLUSH PRIVILEGES;";
+
+**FLAGS:**
+  - `-u .....` : connect to the MySQL server as the given username
+  - `-pXXXX` : use the given password to authenticate the connection
+  - `-e "..."` : execute the given command and quit
+
+> :bulb: **use of environment variables is recommended**
+> :bulb: for more information about the `mysql_secure_installation` command, you can check the [official documentation](https://mariadb.com/kb/en/mysql_secure_installation/)
+> :bulb: for more information about automating `mysql_secure_installation`, you can check [this article](https://fedingo.com/how-to-automate-mysql_secure_installation-script/)
+### 10. Stop the MariaDB service
+
+**debian:buster**
+
+	service mysql stop
+
+**alpine:latest**
+
+	rc-service mariadb stop
+
+### 11. Run the `mysqld` command to start the service
+
+	mysqld --user=mysql
+
+### 12. Connect to the database from the host machine
+
+	mysql -h 127.0.0.1 -P [HOST_PORT] -u [DB_USER / root] -p[USER_PASSWORD/ROOT_PASSWORD]
+
+</details>
