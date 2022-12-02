@@ -47,7 +47,7 @@ In an FTP transaction, the end user's computer is typically called the `local ho
 
 ### Adminer
 
-`Adminer` is a database management tool that can be accessed via your web browser. It's a singular file written in PHP which can be deployed wherever you need it just by moving the file to wherever you need it to be
+`Adminer` is a database management tool that can be accessed via your web browser. It's a singular file written in PHP which can be deployed wherever you need it just by moving the file to wherever you need it to be and accessing it via your web browser. It's a great tool for managing your databases when you don't have access to a GUI like `phpMyAdmin`.
 
 ## 2. COMMANDS AND USAGE
 
@@ -125,9 +125,14 @@ In an FTP transaction, the end user's computer is typically called the `local ho
 
 > :bulb: you can use either openssl or mkcert to generate your certificates and keys for your SSL connection
 
-> :warning: don't forget to add your environment variables to your .env file
+### VSFTPD
 
-> :warning: here is a [script](./setup_inception.sh) to help you setup the whole project
+`vsftpd` (Very Secure FTP Daemon) is a lightweight, stable and secure FTP server for UNIX-like systems.
+
+> ## :warning: don't forget to add your environment variables to your .env file
+
+> ## :warning: here is a [script](./setup_inception.sh) to help you setup the whole project
+
 ---
 
 # NGINX
@@ -244,8 +249,8 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 		server_name [DOMAIN_NAME] www.[DOMAIN_NAME];
 
-		ssl_certificate /etc/nginx/ssl/[CERTIFICATE].crt;
-		ssl_certificate_key /etc/nginx/ssl/[CERTIFICATE].key;
+		ssl_certificate /etc/ssl/private/[CERTIFICATE].crt;
+		ssl_certificate_key /etc/ssl/private/[CERTIFICATE].key;
 
 		ssl_protocols TLSv1.2 TLSv1.3;
 
@@ -351,6 +356,9 @@ from your host machine, open your browser and go to `https://localhost:[host_por
     # Change the root password
     mysql -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('ROOT_PASSWORD'); FLUSH PRIVILEGES;";
 
+	# Force root login with password
+	mysql -u root -pROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'ROOT_PASSWORD' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+
     # Remove anonymous users for localhost and other hosts
     mysql -u root -pROOT_PASSWORD -e "DROP USER ''@'localhost'; FLUSH PRIVILEGES;";
     mysql -u root -pROOT_PASSWORD -e "DROP USER ''@'$(hostname)'; FLUSH PRIVILEGES;";
@@ -442,14 +450,14 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 </details>
 
+> :bulb: since everything else is linked we are going to directly create Dockerfile instead of step by step guide
+
 ---
 
 # WordPress
 
 <details>
 <summary>Show/Hide</summary>
-
-since wordpress needs a database, and a web server, we will go directly to the Dockerfile
 
 ### 1. Create a `Dockerfile`
 
@@ -500,12 +508,212 @@ since wordpress needs a database, and a web server, we will go directly to the D
 	define('FS_METHOD','direct');
 	\$table_prefix = 'wp_';
 	define( 'WP_DEBUG', false );
+	define( 'WP_REDIS_HOST', 'redis' );
+	define( 'WP_REDIS_PORT', 6379 );
+	define( 'WP_CACHE', true )
 	if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . '/' );}
 	require_once ABSPATH . 'wp-settings.php';
 	EOF
 
-> :bulb: we will use the `cat` command to create the `wp-config.php` file, and set the database name, user, password, and host, we will keep the rest of the configuration as it is (you can check the wp-config-sample.php file to see the default configurations)
+> :bulb: we will use the `cat` command to create the `wp-config.php` file, and set the database name, user, password, and host, we also define `redis host`, `port` and we enable `cache`,we will keep the rest of the configuration as it is (you can check the wp-config-sample.php file to see the default configurations)
+
+</details>
+
+
+---
+
+# Redis
+
+<details>
+<summary>Show/Hide</summary>
+
+### 1. Create a `Dockerfile`
+
+	FROM alpine:3.17
+
+	RUN apk update && apk upgrade
+
+	RUN apk add --no-cache redis
+
+	RUN sed -i "s|bind 127.0.0.1 -::1|#bind 127.0.0.1 -::1|g" /etc/redis.conf
+
+	RUN sed -i "s|# maxmemory <bytes>|maxmemory 100mb|g" /etc/redis.conf
+
+	RUN sed -i "s|# maxmemory-policy noeviction|maxmemory-policy allkeys-lru|g" /etc/redis.conf
+
+	CMD ["redis-server", "/etc/redis.conf"]
+
+> :bulb: we will use the `sed` command to change the `bind` directive in the `redis.conf` file, to listen to all the interfaces instead of only the localhost
+
+> :bulb: we will use the `sed` command to change the `maxmemory` directive in the `redis.conf` file, to set the maximum memory to 100mb
+
+> :bulb: we will use the `sed` command to change the `maxmemory-policy` directive in the `redis.conf` file, to set the maximum memory policy to `allkeys-lru`
+
+> :bulb: we will use the `CMD` instruction to run the `redis-server` command
+
+> :bulb: after you finish got to wordpress and install the [wp redis](https://wordpress.org/plugins/wp-redis/) plugin
+
+> :bulb: you can check the [redis.conf](./extra/redis.conf) file to see the default configurations and an explanation for each configuration
+
+### 2. Check if redis is working
+
+	docker exec -it redis redis-cli
+
+> :bulb: you should see the redis prompt `127.0.0.1:6379>`, type `ping` and you should see `PONG` as a response if everything is working correctly.
+
+	docker exec -it redis redis-cli monitor
+
+> :bulb: if everything is working correctly, you should see the `OK` message.
+
+</details>
+
+---
+
+# FTP
+
+<details>
+<summary>Show/Hide</summary>
+
+### 1. Create a `Dockerfile`
+
+	FROM alpine:3.17
+
+	RUN apk update && apk upgrade
+
+	RUN apk add --no-cache vsftpd
+
+	COPY ./conf/vsftpd.conf /etc/vsftpd/vsftpd.conf
+
+	COPY ./tools/script.sh .
+
+	RUN chmod +x script.sh
+
+	EXPOSE 21
+
+	CMD ["./script.sh"]
+
+**script**
+	#!/bin/sh
+
+	adduser -h /var/www -D ${FTP_USER}
+
+	echo ${FTP_USER}:${FTP_PASSWORD} | chpasswd
+
+	adduser ${FTP_USER} root
+
+	exec /usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf
+
+> :bulb: we will use the `adduser` command to create a new user, and set the home directory to `/var/www` , and we will set the password using the `chpasswd` command
+
+> :bulb: the option `-D` will create a system user with default values, and the option `-h` will set the home directory for the user (if the home directory doesn't exist, it will be created automatically, and the owner will be set to the user)
+
+> :bulb: we will use the `adduser` command to add the user to the `root` group
+
+> :bulb: we will use the `exec` command to run the `vsftpd` command
+
+**configuration**
+
+uncomment the following lines in the `vsftpd.conf` file
+
+	line 15: #local_enable=YES => local_enable=YES
+	line 18: #write_enable=YES => write_enable=YES
+	line 98: #chroot_local_user=YES => chroot_local_user=YES
+
+and add the following lines
+
+	allow_writeable_chroot=YES
+	seccomp_sandbox=NO
+	pasv_enable=YES
+
+> :bulb: we will use the `allow_writeable_chroot` directive to allow the user to write to the home directory (this is not recommended, but it's ok for testing)
+
+> :bulb: we will use the `seccomp_sandbox` directive to disable the seccomp sandbox, for more information check [this](https://en.wikipedia.org/wiki/Seccomp)
+
+> :bulb: we will use the `pasv_enable` directive to enable the passive mode, for more information on passive method check [this article](https://www.lifewire.com/definition-of-passive-mode-ftp-816441)
+
+> :bulb: you can check [this document](https://man.linuxreviews.org/man5/vsftpd.conf.5.html) to see all the configurations and an explanation for each of them
+
+> :bulb: you can check the [vsftpd.conf](./extra/vsftpd.conf) file to see the default configurations and an explanation for each configuration
+
+</details>
+
+---
+
+# Adminer
+
+<details>
+<summary>Show/Hide</summary>
+
+### 1. Create a `Dockerfile`
+
+	FROM alpine:3.17
+
+	RUN apk update && apk upgrade
+
+	RUN apk add --no-cache php php-common php-session php-iconv php-json php-gd php-curl php-xml php-mysqli php-imap php-cgi fcgi php-pdo php-pdo_mysql php-soap php-posix php-gettext php-ldap php-ctype php-dom php-simplexml wget
+
+	WORKDIR /var/www
+
+	RUN wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php
+
+	RUN mv adminer-4.8.1.php index.php
+
+	EXPOSE 8080
+
+	CMD [ "php", "-S", "[::]:8080", "-t", "/var/www" ]
+
+> :bulb: if you are wondering about all the php packages, since adminer can be used as a replacement for phpmyadmin, we will install all the php packages that are required for phpmyadmin check, [this](https://wiki.alpinelinux.org/wiki/PhpMyAdmin)
+
+> :bulb: the option `-S` will start the php server and listen to the specified address and port, the option `-t` will set the document root for the php server to the specified directory, for more information check [this](https://www.php.net/manual/en/features.commandline.options.php)
+
+</details>
+
+---
+
+# WebSite
+
+<details>
+<summary>Show/Hide</summary>
+
+### 1. Create a `Dockerfile`
+
+	FROM alpine:3.17
+
+	RUN apk update && apk upgrade
+
+	RUN apk add --no-cache nginx
+
+	COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+
+	COPY ./tools/* /var/www/
+
+	CMD [ "nginx", "-g", "daemon off;" ]
+
+**configuration**
+
+	events {}
+
+	http {
+
+		server {
+
+			listen 80;
+			listen [::]:80;
+
+			server_name server;
+
+			root /var/www/;
+			index index.html;
+
+			location / {
+					root /var/www/;
+					index index.html;
+			}
+		}
+	}
+
+> :bulb: put your website files in the `./tools` directory
 
 </details>
 
@@ -577,6 +785,49 @@ since wordpress needs a database, and a web server, we will go directly to the D
 	    volumes:
 	      - wp-data:/var/www/
 
+	  redis:
+	    build:
+	      context: ./requirements/bonus/redis
+	      dockerfile: Dockerfile
+	    image: redis
+	    container_name: redis
+	    ports:
+	      - "6379:6379"
+	    networks:
+	      - inception
+	    restart: always
+
+	  ftp:
+	    build:
+	      context: ./requirements/bonus/ftp
+	      dockerfile: Dockerfile
+	    image: ftp
+	    container_name: ftp
+	    environment:
+	      FTP_USER: ${FTP_USER}
+	      FTP_PASSWORD: ${FTP_PASSWORD}
+	    ports:
+	      - "21:21"
+	    volumes:
+	      - wp-data:/var/www/
+	    networks:
+	      - inception
+	    restart: always
+
+	  adminer:
+	    build:
+	      context: ./requirements/bonus/adminer
+	      dockerfile: Dockerfile
+	    image: adminer
+	    container_name: adminer
+	    depends_on:
+	      - mariadb
+	    ports:
+	      - "8080:8080"
+	    networks:
+	      - inception
+	    restart: always
+
 	volumes:
 	  wp-data:
 	    driver_opts:
@@ -629,6 +880,12 @@ since wordpress needs a database, and a web server, we will go directly to the D
 		sh ./srcs/requirements/tools/script.sh
 		docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env up -d --build
 
+	start:
+		docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env start
+
+	stop:
+		docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env stop
+
 	down:
 		docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env down
 
@@ -647,3 +904,6 @@ since wordpress needs a database, and a web server, we will go directly to the D
 		sudo rm -rf ~/data
 
 </details>
+
+
+php-common php-session php-iconv php-json php-gd php-curl php-xml php-mysqli php-imap php-cgi fcgi php-pdo php-pdo_mysql php-soap php-xmlrpc php-posix php-mcrypt php-gettext php-ldap php-ctype php-dom php-simplexml

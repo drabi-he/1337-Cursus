@@ -6,20 +6,26 @@ read answer
 
 if [ "$answer" = "y"  ] || [ "$answer" = "Y"  ]
 then
-	apt update -y && apt upgrade -y
-	apt install -y sudo ufw docker docker-compose make openbox xinit kitty firefox-esr wget curl libnss3-tools
-	sed -i "s|#Port 22|Port 42|g" /etc/ssh/sshd_config
-	sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin yes|g" /etc/ssh/sshd_config
-	service ssh restart
-	service sshd restart
-	ufw enable
-	ufw allow 42
-	ufw allow 80
-	ufw allow 443
-	curl -s https://api.github.com/repos/FiloSottile/mkcert/releases/latest| grep browser_download_url | grep linux-amd64 | cut -d '"' -f 4 | wget -qi -
-	mv mkcert-v*-linux-amd64 mkcert
-	chmod a+x mkcert
-	sudo mv mkcert /usr/local/bin/
+
+	if [ "$USER" == "root" ]
+	then
+		apt update -y && apt upgrade -y
+		apt install -y sudo ufw docker docker-compose make openbox xinit kitty firefox-esr wget curl libnss3-tools
+		sed -i "s|#Port 22|Port 42|g" /etc/ssh/sshd_config
+		sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin yes|g" /etc/ssh/sshd_config
+		service ssh restart
+		service sshd restart
+		ufw enable
+		ufw allow 42
+		ufw allow 80
+		ufw allow 443
+		curl -s https://api.github.com/repos/FiloSottile/mkcert/releases/latest| grep browser_download_url | grep linux-amd64 | cut -d '"' -f 4 | wget -qi -
+		mv mkcert-v*-linux-amd64 mkcert
+		chmod a+x mkcert
+		sudo mv mkcert /usr/local/bin/
+	else
+		echo "You need to be root to run the setup"
+	fi
 fi
 
 
@@ -49,12 +55,14 @@ mkdir inception/srcs/requirements/nginx
 touch inception/srcs/requirements/nginx/.dockerignore
 touch inception/srcs/requirements/nginx/Dockerfile
 mkdir inception/srcs/requirements/nginx/tools
+touch inception/srcs/requirements/nginx/tools/.gitkeep
 mkdir inception/srcs/requirements/nginx/conf
 touch inception/srcs/requirements/nginx/conf/nginx.conf
 mkdir inception/srcs/requirements/wordpress
 touch inception/srcs/requirements/wordpress/.dockerignore
 touch inception/srcs/requirements/wordpress/Dockerfile
 mkdir inception/srcs/requirements/wordpress/conf
+touch inception/srcs/requirements/wordpress/conf/.gitkeep
 mkdir inception/srcs/requirements/wordpress/tools
 touch inception/srcs/requirements/wordpress/tools/script.sh
 mkdir inception/srcs/requirements/bonus
@@ -62,12 +70,16 @@ mkdir inception/srcs/requirements/bonus/redis
 touch inception/srcs/requirements/bonus/redis/.dockerignore
 touch inception/srcs/requirements/bonus/redis/Dockerfile
 mkdir inception/srcs/requirements/bonus/redis/conf
+touch inception/srcs/requirements/bonus/redis/conf/.gitkeep
 mkdir inception/srcs/requirements/bonus/redis/tools
+touch inception/srcs/requirements/bonus/redis/tools/.gitkeep
 mkdir inception/srcs/requirements/bonus/ftp
 touch inception/srcs/requirements/bonus/ftp/.dockerignore
 touch inception/srcs/requirements/bonus/ftp/Dockerfile
 mkdir inception/srcs/requirements/bonus/ftp/conf
+touch inception/srcs/requirements/bonus/ftp/conf/vsftpd.conf
 mkdir inception/srcs/requirements/bonus/ftp/tools
+touch inception/srcs/requirements/bonus/ftp/tools/script.sh
 mkdir inception/srcs/requirements/bonus/website
 touch inception/srcs/requirements/bonus/website/.dockerignore
 touch inception/srcs/requirements/bonus/website/Dockerfile
@@ -77,7 +89,9 @@ mkdir inception/srcs/requirements/bonus/adminer
 touch inception/srcs/requirements/bonus/adminer/.dockerignore
 touch inception/srcs/requirements/bonus/adminer/Dockerfile
 mkdir inception/srcs/requirements/bonus/adminer/conf
+touch inception/srcs/requirements/bonus/adminer/conf/.gitkeep
 mkdir inception/srcs/requirements/bonus/adminer/tools
+touch inception/srcs/requirements/bonus/adminer/tools/.gitkeep
 
 _CertName="self-signed"
 _DB_NAME="wordpress"
@@ -85,40 +99,92 @@ _DB_USER="wpuser"
 _DB_PASS="wppass"
 _DB_ROOT_PASS="rootpass"
 _DOMAIN_NAME="localhost"
+_FTP_USER="ftpuser"
+_FTP_PASS="ftppass"
 
 echo "Setup environement variables"
 echo "self-signed certificate name : default ($_CertName)"
 
 read _CertName
 
+if [ "$_CertName" = "" ]
+then
+	_CertName="self-signed"
+fi
+
 echo "Database name : default ($_DB_NAME)"
 
 read _DB_NAME
+
+if [ "$_DB_NAME" = "" ]
+then
+	_DB_NAME="wordpress"
+fi
 
 echo "Database user : default ($_DB_USER)"
 
 read _DB_USER
 
+if [ "$_DB_USER" = "" ]
+then
+	_DB_USER="wpuser"
+fi
+
 echo "Database password : default ($_DB_PASS)"
 
 read _DB_PASS
+
+if [ "$_DB_PASS" = "" ]
+then
+	_DB_PASS="wppass"
+fi
 
 echo "Database root password : default ($_DB_ROOT_PASS)"
 
 read _DB_ROOT_PASS
 
+if [ "$_DB_ROOT_PASS" = "" ]
+then
+	_DB_ROOT_PASS="rootpass"
+fi
+
 echo "Domain name : default ($_DOMAIN_NAME)"
 
 read _DOMAIN_NAME
 
+if [ "$_DOMAIN_NAME" = "" ]
+then
+	_DOMAIN_NAME="localhost"
+fi
+
+echo "FTP user : default ($_FTP_USER)"
+
+read _FTP_USER
+
+if [ "$_FTP_USER" = "" ]
+then
+	_FTP_USER="ftpuser"
+fi
+
+echo "FTP password : default ($_FTP_PASS)"
+
+read _FTP_PASS
+
+if [ "$_FTP_PASS" = "" ]
+then
+	_FTP_PASS="ftppass"
+fi
+
 # Setup environment variables and .dockerignore
-echo "DOMAIN_NAME=$_CertName" > inception/srcs/.env
+echo "DOMAIN_NAME=$_DOMAIN_NAME" > inception/srcs/.env
 echo "_CERT=./requirements/tools/$_CertName.crt" >> inception/srcs/.env
 echo "_KEY=./requirements/tools/$_CertName.key" >> inception/srcs/.env
 echo "MYSQL_DATABASE=$_DB_NAME" >> inception/srcs/.env
 echo "MYSQL_ROOT_PASSWORD=$_DB_ROOT_PASS" >> inception/srcs/.env
 echo "MYSQL_USER=$_DB_USER" >> inception/srcs/.env
 echo "MYSQL_PASSWORD=$_DB_PASS" >> inception/srcs/.env
+echo "FTP_USER=$_FTP_USER" >> inception/srcs/.env
+echo "FTP_PASSWORD=$_FTP_PASS" >> inception/srcs/.env
 echo ".env" > inception/srcs/requirements/mariadb/.dockerignore
 echo ".git" >> inception/srcs/requirements/mariadb/.dockerignore
 echo ".env" > inception/srcs/requirements/nginx/.dockerignore
@@ -144,9 +210,9 @@ cd ../..
 
 # Directory script.sh
 { echo '#!/bin/sh' ;
-echo 'mkdir ~/data' ;
-echo 'mkdir ~/data/mariadb' ;
-echo 'mkdir ~/data/wordpress' ;
+echo 'mkdir -p ~/data' ;
+echo 'mkdir -p ~/data/mariadb' ;
+echo 'mkdir -p ~/data/wordpress' ;
 } > ./requirements/tools/script.sh
 
 chmod +x ./requirements/tools/script.sh
@@ -224,6 +290,8 @@ echo 'mysql -u root -p$MYSQL_ROOT_PASSWORD -e "DROP DATABASE IF EXISTS test;"' ;
 echo 'mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE USER '"'root'@'%' IDENTIFIED BY ""'"'$MYSQL_ROOT_PASSWORD'"'"';"' ;
 echo 'mysql -u root -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL ON *.* TO '"'root'@'%' IDENTIFIED BY '"'$MYSQL_ROOT_PASSWORD'"'"';"' ;
 echo 'mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '"'"'$MYSQL_USER'"'@'%' IDENTIFIED BY '"'$MYSQL_PASSWORD'"'"';"' ;
+echo 'mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO '"'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD' WITH GRANT OPTION;"'"'
+echo 'mysql -u root -p$MYSQL_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"' ;
 echo "fi" ;
 echo "rc-service mariadb stop"
 echo "exec mysqld --user=mysql" ; } > ./requirements/mariadb/tools/script.sh
@@ -251,12 +319,108 @@ echo "define( 'DB_HOST', 'mariadb' );" ;
 echo "define( 'DB_CHARSET', 'utf8' );" ;
 echo "define( 'DB_COLLATE', '' );" ;
 echo "define('FS_METHOD','direct');" ;
-echo '\$table_prefix = '"'wp_'"';' ;
+echo '\\$table_prefix = '"'wp_'"';' ;
 echo "define( 'WP_DEBUG', false );" ;
+echo "define( 'WP_REDIS_HOST', 'redis' );" ;
+echo "define( 'WP_REDIS_PORT', 6379 );" ;
+echo "define( 'WP_CACHE', true );" ;
 echo "if ( ! defined( 'ABSPATH' ) ) {" ;
 echo "define( 'ABSPATH', __DIR__ . '/' );}" ;
 echo "require_once ABSPATH . 'wp-settings.php';" ;
 echo 'EOF' ; } > ./requirements/wordpress/tools/script.sh
+
+# Setup redis
+
+{ echo "FROM alpine:3.17" ;
+echo "RUN apk update && apk upgrade" ;
+echo "RUN apk add --no-cache redis" ;
+echo 'RUN sed -i "s|bind 127.0.0.1 -::1|#bind 127.0.0.1 -::1|g" /etc/redis.conf' ;
+echo 'RUN sed -i "s|# maxmemory <bytes>|maxmemory 100mb|g" /etc/redis.conf' ;
+echo 'RUN sed -i "s|# maxmemory-policy noeviction|maxmemory-policy allkeys-lru|g" /etc/redis.conf' ;
+echo 'CMD ["redis-server", "/etc/redis.conf"]' ; } > ./requirements/bonus/redis/Dockerfile
+
+# Setup ftp
+
+{ echo "FROM alpine:3.17" ;
+echo "RUN apk update && apk upgrade" ;
+echo "RUN apk add --no-cache vsftpd" ;
+echo "COPY ./conf/vsftpd.conf /etc/vsftpd/vsftpd.conf" ;
+echo "COPY ./tools/script.sh ." ;
+echo "RUN chmod +x script.sh" ;
+echo "EXPOSE 21";
+echo 'CMD ["./script.sh"]' ; } > ./requirements/bonus/ftp/Dockerfile
+
+{ echo "#!/bin/sh" ;
+echo 'adduser -h /var/www -D ${FTP_USER}' ;
+echo 'echo ${FTP_USER}:${FTP_PASSWORD} | chpasswd' ;
+echo 'adduser ${FTP_USER} root' ;
+echo "exec /usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf" ; } > ./requirements/bonus/ftp/tools/script.sh
+
+wget -O ./requirements/bonus/ftp/conf/vsftpd.conf https://raw.githubusercontent.com/dagwieers/vsftpd/master/vsftpd.conf
+
+sed -i "s|#local_enable=YES|local_enable=YES|g" ./requirements/bonus/ftp/conf/vsftpd.conf
+sed -i "s|#write_enable=YES|write_enable=YES|g" ./requirements/bonus/ftp/conf/vsftpd.conf
+sed -i "s|#chroot_local_user=YES|chroot_local_user=YES|g" ./requirements/bonus/ftp/conf/vsftpd.conf
+echo "allow_writeable_chroot=YES" >> ./requirements/bonus/ftp/conf/vsftpd.conf
+echo "seccomp_sandbox=NO" >> ./requirements/bonus/ftp/conf/vsftpd.conf
+echo "pasv_enable=YES" >> ./requirements/bonus/ftp/conf/vsftpd.conf
+
+
+# Setup Adminer
+
+{ echo "FROM alpine:3.17" ;
+echo "RUN apk update && apk upgrade" ;
+echo "RUN apk add --no-cache php php-common php-session php-iconv php-json php-gd php-curl php-xml php-mysqli php-imap php-cgi fcgi php-pdo php-pdo_mysql php-soap php-posix php-gettext php-ldap php-ctype php-dom php-simplexml wget" ;
+echo "WORKDIR /var/www" ;
+echo "RUN wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php" ;
+echo "RUN mv adminer-4.8.1.php index.php" ;
+echo "EXPOSE 8080" ;
+echo 'CMD [ "php", "-S", "[::]:8080" , "-t", "/var/www" ]' ; } > ./requirements/bonus/adminer/Dockerfile
+
+# Setup website
+
+{ echo "FROM alpine:3.17" ;
+echo "RUN apk update && apk upgrade" ;
+echo "RUN apk add --no-cache nginx" ;
+echo "COPY ./conf/nginx.conf /etc/nginx/nginx.conf" ;
+echo "COPY ./tools/* /var/www/" ;
+echo 'CMD [ "nginx", "-g", "daemon off;" ]' ; } > ./requirements/bonus/website/Dockerfile
+
+{ echo "events {}" ;
+echo "http {" ;
+echo "	server {" ;
+echo "		listen 80;" ;
+echo "		listen [::]:80;" ;
+echo "		server_name server;" ;
+echo "		root /var/www/;" ;
+echo "		index index.html;" ;
+echo "		location / {" ;
+echo "				root /var/www/;" ;
+echo "				index index.html;" ;
+echo "		}" ;
+echo "	}" ;
+echo "}"; } > ./requirements/bonus/website/conf/nginx.conf
+
+{
+echo '<!DOCTYPE html>' ;
+echo '<html lang="en">' ;
+echo '<head>' ;
+echo '	<meta charset="UTF-8">' ;
+echo '	<meta http-equiv="X-UA-Compatible" content="IE=edge">' ;
+echo '	<meta name="viewport" content="width=device-width, initial-scale=1.0">' ;
+echo '	<title>static website</title>' ;
+echo '</head>' ;
+echo '<body>' ;
+echo '	<h1> this is our static website for this insane project </h1>' ;
+echo '	<h2> this is our static website for this insane project </h2>' ;
+echo '	<h3> this is our static website for this insane project </h3>' ;
+echo '	<h4> this is our static website for this insane project </h4>' ;
+echo '	<h5> this is our static website for this insane project </h5>' ;
+echo '	<h6> this is our static website for this insane project </h6>' ;
+echo '</body>' ;
+echo '</html>' ;
+} > ./requirements/bonus/website/tools/index.html
+
 
 # Setup Docker Compose
 
@@ -267,6 +431,7 @@ echo '  nginx:' ;
 echo '    build:' ;
 echo '      context: ./requirements/nginx' ;
 echo '      dockerfile: Dockerfile' ;
+echo '    image: nginx' ;
 echo '    container_name: nginx' ;
 echo '    depends_on:' ;
 echo '      - wordpress' ;
@@ -284,14 +449,13 @@ echo '  mariadb:' ;
 echo '    build:' ;
 echo '      context: ./requirements/mariadb' ;
 echo '      dockerfile: Dockerfile' ;
+echo '    image: mariadb' ;
 echo '    container_name: mariadb' ;
 echo '    environment:' ;
 echo '      MYSQL_DATABASE: ${MYSQL_DATABASE}' ;
 echo '      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}' ;
 echo '      MYSQL_USER: ${MYSQL_USER}' ;
 echo '      MYSQL_PASSWORD: ${MYSQL_PASSWORD}' ;
-echo '    ports:' ;
-echo '      - "3306:3306"' ;
 echo '    networks:' ;
 echo '      - inception' ;
 echo '    restart: always' ;
@@ -305,6 +469,7 @@ echo '        MYSQL_DATABASE: ${MYSQL_DATABASE}' ;
 echo '        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}' ;
 echo '        MYSQL_USER: ${MYSQL_USER}' ;
 echo '        MYSQL_PASSWORD: ${MYSQL_PASSWORD}' ;
+echo '    image: wordpress' ;
 echo '    container_name: wordpress' ;
 echo '    depends_on:' ;
 echo '      - mariadb' ;
@@ -313,11 +478,66 @@ echo '      MYSQL_DATABASE: ${MYSQL_DATABASE}' ;
 echo '      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}' ;
 echo '      MYSQL_USER: ${MYSQL_USER}' ;
 echo '      MYSQL_PASSWORD: ${MYSQL_PASSWORD}' ;
-echo '    restart: always' ;
-echo '    networks:' ;
-echo '      - inception' ;
 echo '    volumes:' ;
 echo '      - wp-data:/var/www/' ;
+echo '    networks:' ;
+echo '      - inception' ;
+echo '    restart: always' ;
+echo '' ;
+echo '  redis:' ;
+echo '    build:' ;
+echo '      context: ./requirements/bonus/redis' ;
+echo '      dockerfile: Dockerfile' ;
+echo '    image: redis' ;
+echo '    container_name: redis' ;
+echo '    ports:' ;
+echo '      - "6379:6379"' ;
+echo '    networks:' ;
+echo '      - inception' ;
+echo '    restart: always' ;
+echo '' ;
+echo '  ftp:' ;
+echo '    build:' ;
+echo '      context: ./requirements/bonus/ftp' ;
+echo '      dockerfile: Dockerfile' ;
+echo '    image: ftp' ;
+echo '    container_name: ftp' ;
+echo '    environment:' ;
+echo '      FTP_USER: ${FTP_USER}' ;
+echo '      FTP_PASSWORD: ${FTP_PASSWORD}' ;
+echo '    ports:' ;
+echo '      - "21:21"' ;
+echo '    volumes:' ;
+echo '      - wp-data:/var/www/' ;
+echo '    networks:' ;
+echo '      - inception' ;
+echo '    restart: always' ;
+echo '' ;
+echo '  adminer:' ;
+echo '    build:' ;
+echo '      context: ./requirements/bonus/adminer' ;
+echo '      dockerfile: Dockerfile' ;
+echo '    image: adminer' ;
+echo '    container_name: adminer' ;
+echo '    depends_on:' ;
+echo '      - mariadb' ;
+echo '    ports:' ;
+echo '      - "8080:8080"' ;
+echo '    networks:' ;
+echo '      - inception' ;
+echo '    restart: always' ;
+echo '' ;
+echo '  website:' ;
+echo '    build:' ;
+echo '      context: ./requirements/bonus/website' ;
+echo '      dockerfile: Dockerfile' ;
+echo '    image: website' ;
+echo '    container_name: website' ;
+echo '    ports:' ;
+echo '      - "80:80"' ;
+echo '    networks:' ;
+echo '      - inception' ;
+echo '    restart: always' ;
 echo '' ;
 echo 'volumes:' ;
 echo '  wp-data:' ;
@@ -341,30 +561,38 @@ cd ..
 { echo 'NAME = inception' ;
 echo '' ;
 echo 'all:' ;
-echo '	@printf "Starting ${NAME} ..."' ;
+echo '	@printf "Starting ${NAME} ...\\n"' ;
 echo '	@sh ./srcs/requirements/tools/script.sh' ;
 echo '	@docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env up -d' ;
 echo '' ;
 echo 'build:' ;
-echo '	@printf "Building ${NAME} ..."' ;
+echo '	@printf "Building ${NAME} ...\\n"' ;
 echo '	@sh ./srcs/requirements/tools/script.sh' ;
 echo '	@docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env up -d --build' ;
 echo '' ;
+echo 'start:' ;
+echo '	@printf "Starting ${NAME} ...\\n"' ;
+echo '	@docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env start' ;
+echo '' ;
+echo 'stop:' ;
+echo '	@printf "Stopping ${NAME} ...\\n"' ;
+echo '	@docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env stop' ;
+echo '' ;
 echo 'down:' ;
-echo '	@printf "Shuting Down ${NAME} ..."' ;
+echo '	@printf "Shuting Down ${NAME} ...\\n"' ;
 echo '	@docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env down' ;
 echo '' ;
 echo 're: down' ;
-echo '	printf "ReBuilding ${NAME} ..."' ;
+echo '	printf "ReBuilding ${NAME} ...\\n"' ;
 echo '	@docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env up -d --build' ;
 echo '' ;
 echo 'clean: down' ;
-echo '	@printf "Cleaning ${name} ..."' ;
+echo '	@printf "Cleaning ${name} ...\\n"' ;
 echo '	@docker system prune -a' ;
 echo '	@sudo rm -rf ~/data' ;
 echo '' ;
 echo 'fclean:' ;
-echo '	@printf "Total Cleaning ..."' ;
+echo '	@printf "Total Cleaning ...\\n"' ;
 echo '	@docker stop $$(docker ps -aq)' ;
 echo '	@docker system prune --all --force --volumes' ;
 echo '	@docker network prune --force' ;
