@@ -49,6 +49,10 @@ In an FTP transaction, the end user's computer is typically called the `local ho
 
 `Adminer` is a database management tool that can be accessed via your web browser. It's a singular file written in PHP which can be deployed wherever you need it just by moving the file to wherever you need it to be and accessing it via your web browser. It's a great tool for managing your databases when you don't have access to a GUI like `phpMyAdmin`.
 
+### Portainer (you can use other services, the choice is yours)
+
+`Portainer` is a universal container management tool that can work with both Docker and Kubernetes to make the deployment and management of containerized applications and services easier and more efficient.
+
 ## 2. COMMANDS AND USAGE
 
 ### Docker
@@ -132,6 +136,135 @@ In an FTP transaction, the end user's computer is typically called the `local ho
 > ## :warning: don't forget to add your environment variables to your .env file
 
 > ## :warning: here is a [script](./setup_inception.sh) to help you setup the whole project
+
+---
+
+# Virtual machine setup
+
+<details>
+<summary>Show/Hide</summary>
+
+**Select New And Follow The Steps Below**
+![](./pics/1.png)
+![](./pics/2.png)
+![](./pics/3.png)
+![](./pics/4.png)
+![](./pics/5.png)
+![](./pics/6.png)
+![](./pics/7.png)
+
+**Select Your Machine And Choose Settings**
+![](./pics/8.png)
+![](./pics/9.png)
+![](./pics/10.png)
+![](./pics/11.png)
+![](./pics/12.png)
+
+**Now Start Your Machine And Select Your .img File**
+![](./pics/13.png)
+![](./pics/14.png)
+![](./pics/15.png)
+![](./pics/16.png)
+![](./pics/17.png)
+![](./pics/18.png)
+![](./pics/19.png)
+![](./pics/20.png)
+![](./pics/21.png)
+![](./pics/22.png)
+![](./pics/23.png)
+![](./pics/24.png)
+![](./pics/25.png)
+![](./pics/26.png)
+![](./pics/27.png)
+![](./pics/28.png)
+![](./pics/29.png)
+![](./pics/30.png)
+![](./pics/31.png)
+![](./pics/32.png)
+![](./pics/33.png)
+![](./pics/34.png)
+![](./pics/35.png)
+![](./pics/36.png)
+![](./pics/37.png)
+![](./pics/38.png)
+
+**Now Boot Into Your Machine and Install Your Softwares**
+![](./pics/39.png)
+
+then switch to root using the cmd
+
+	su -
+
+![](./pics/40.png)
+
+afterward, update and upgrade your system
+
+	apt update -y && apt upgrade -y
+
+![](./pics/41.png)
+
+these are the packages that we will need
+
+	apt install -y sudo ufw docker docker-compose make wget curl libnss3-tools
+
+![](./pics/42.png)
+
+### setup ssh
+
+	sed -i "s|#Port 22|Port 42|g" /etc/ssh/sshd_config
+	sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin yes|g" /etc/ssh/sshd_config
+	sed -i "s|#PubkeyAuthentication yes|PubkeyAuthentication no|g" /etc/ssh/sshd_config
+	sed -i "s|#PasswordAuthentication yes|PasswordAuthentication yes|g" /etc/ssh/sshd_config
+
+![](./pics/43.png)
+![](./pics/44.png)
+![](./pics/45.png)
+![](./pics/46.png)
+![](./pics/47.png)
+![](./pics/48.png)
+
+### setup ufw
+
+	ufw enable
+	ufw allow 80
+	ufw allow 8080
+	ufw allow 443
+	ufw allow 21
+	ufw allow 42
+	ufw allow 9443
+
+![](./pics/49.png)
+![](./pics/50.png)
+![](./pics/51.png)
+
+now you can reboot your machine and connect using ssh from the host
+
+	ssh [root/user]@localhost -p 42
+
+![](./pics/52.png)
+![](./pics/53.png)
+
+### setup sudo
+
+	nano /etc/sudoers
+
+add your user below root like this
+
+![](./pics/54.png)
+
+now change from root to your user
+
+	su [user]
+	cd ~
+
+**Add User To Docker Group**
+
+	sudo usermod -aG docker [user]
+
+![](./pics/55.png)
+![](./pics/56.png)
+
+</details>
 
 ---
 
@@ -717,6 +850,32 @@ and add the following lines
 
 </details>
 
+
+---
+
+# Portainer
+
+<details>
+<summary>Show/Hide</summary>
+
+### 1. docker-compose.yml
+
+	FROM alpine:3.17
+
+	RUN apk update && apk upgrade
+
+	RUN apk add curl tar
+
+	RUN mkdir -p /var/lib/portainer
+
+	RUN adduser -h /var/lib/portainer -D portainer
+
+	RUN curl -sSL https://github.com/portainer/portainer/releases/download/2.16.2/portainer-2.16.2-linux-amd64.tar.gz | tar -xzo -C /usr/local
+
+	CMD ["/usr/local/portainer/portainer"]
+
+</details>
+
 ---
 
 # Docker Compose and Makefile
@@ -774,11 +933,6 @@ and add the following lines
 	    container_name: wordpress
 	    depends_on:
 	      - mariadb
-	    environment:
-	      MYSQL_DATABASE: ${MYSQL_DATABASE}
-	      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-	      MYSQL_USER: ${MYSQL_USER}
-	      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 	    restart: always
 	    networks:
 	      - inception
@@ -828,6 +982,33 @@ and add the following lines
 	      - inception
 	    restart: always
 
+	  website: ;
+	    build: ;
+	      context: ./requirements/bonus/website ;
+	      dockerfile: Dockerfile ;
+	    image: website ;
+	    container_name: website ;
+	    ports: ;
+	      - "80:80" ;
+	    networks: ;
+	      - inception ;
+	    restart: always ;
+
+	  portainer: ;
+	    build: ;
+	      context: ./requirements/bonus/portainer ;
+	      dockerfile: Dockerfile ;
+	    image: portainer ;
+	    container_name: portainer ;
+	    ports: ;
+	      - "9443:9443" ;
+	    volumes:
+	      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+	      - portainer-data:/data
+	    networks: ;
+	      - inception ;
+	    restart: always ;
+
 	volumes:
 	  wp-data:
 	    driver_opts:
@@ -841,9 +1022,15 @@ and add the following lines
 	      type: none
 	      device: /home/${USER}/data/mariadb
 
+	    portainer-data:
+	      driver_opts:
+	        o: bind
+	        type: none
+	        device: /home/${USER}/data/portainer
+
 	networks:
-	    inception:
-	        driver: bridge
+	  inception:
+	    driver: bridge
 
 **explaination**
   - `version` : the version of the docker-compose file
@@ -904,6 +1091,3 @@ and add the following lines
 		sudo rm -rf ~/data
 
 </details>
-
-
-php-common php-session php-iconv php-json php-gd php-curl php-xml php-mysqli php-imap php-cgi fcgi php-pdo php-pdo_mysql php-soap php-xmlrpc php-posix php-mcrypt php-gettext php-ldap php-ctype php-dom php-simplexml

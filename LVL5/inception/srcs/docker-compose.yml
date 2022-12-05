@@ -25,6 +25,8 @@ services:
       dockerfile: Dockerfile
     image: mariadb
     container_name: mariadb
+    volumes:
+      - db-data:/var/lib/mysql
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -47,11 +49,6 @@ services:
     container_name: wordpress
     depends_on:
       - mariadb
-    environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - wp-data:/var/www/
     networks:
@@ -113,6 +110,21 @@ services:
       - inception
     restart: always
 
+  portainer:
+    build:
+      context: ./requirements/bonus/portainer
+      dockerfile: Dockerfile
+    image: portainer
+    container_name: portainer
+    ports:
+      - "9443:9443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - portainer-data:/data
+    networks:
+      - inception
+    restart: always
+
 volumes:
   wp-data:
     driver_opts:
@@ -126,6 +138,12 @@ volumes:
       type: none
       device: /home/${USER}/data/mariadb
 
+  portainer-data:
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/${USER}/data/portainer
+
 networks:
     inception:
-        driver: bridge 
+        driver: bridge
