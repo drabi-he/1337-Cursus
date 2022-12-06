@@ -186,6 +186,13 @@ In an FTP transaction, the end user's computer is typically called the `local ho
 ![](./pics/35.png)
 ![](./pics/36.png)
 ![](./pics/37.png)
+
+> :bulb: you can use a `Desktop Environment (DE)` like below or you can remove it and install a lighter `DE` like this
+
+	apt install -y openbox xinit kitty firefox-esr
+
+> :bulb: you can access you `DE` with the command `startx` and use the right mouse button to use your `software` or exit to the `tty`
+
 ![](./pics/38.png)
 
 **Now Boot Into Your Machine and Install Your Softwares**
@@ -205,7 +212,7 @@ afterward, update and upgrade your system
 
 these are the packages that we will need
 
-	apt install -y sudo ufw docker docker-compose make wget curl libnss3-tools
+	apt install -y sudo ufw docker docker-compose make wget curl libnss3-tools git
 
 ![](./pics/42.png)
 
@@ -226,7 +233,7 @@ these are the packages that we will need
 ### setup ufw
 
 	ufw enable
-	ufw allow 80
+	ufw allow 3000
 	ufw allow 8080
 	ufw allow 443
 	ufw allow 21
@@ -260,9 +267,15 @@ now change from root to your user
 **Add User To Docker Group**
 
 	sudo usermod -aG docker [user]
+	service docker restart
 
 ![](./pics/55.png)
 ![](./pics/56.png)
+
+
+> :warning: Don't forget to add your `domain name` your host file `/etc/hosts` (eg. [intra-name].42.fr)
+
+> :warning: Don't forget to install either `mkcert` or `openssl` if you want generate your certificate outside of the Dockerfile
 
 </details>
 
@@ -366,7 +379,7 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 	RUN apk update && apk upgrade
 	RUN apk add nginx openssl --no-cache
 
-	RUN openssl req -x509 -new -newkey rsa:2048 -nodes -keyout /etc/nginx/ssl/[anything].key -out /etc/nginx/ssl/[anything].crt -subj "/C=[XX]/ST=[XXXXXXXXX]/L=[XXXXX]/O=[XXXXXXXXXX]/OU=[XXX]/CN=[XXXXX]"
+	RUN openssl req -x509 -new -newkey rsa:2048 -nodes -keyout /etc/ssl/private/[anything].key -out /etc/ssl/private/[anything].crt -subj "/C=[XX]/ST=[XXXXXXXXX]/L=[XXXXX]/O=[XXXXXXXXXX]/OU=[XXX]/CN=[XXXXX]"
 
 	# we copy the local configuration file to the container nginx folder
 	COPY ./conf/nginx.conf /etc/nginx/nginx.conf
@@ -486,27 +499,21 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 **alpine:3.17**
 
-    # Change the root password
-    mysql -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('ROOT_PASSWORD'); FLUSH PRIVILEGES;";
+	# Remove the test database
+    mysql -u root -e "DROP DATABASE IF EXISTS test;"
 
-	# Force root login with password
-	mysql -u root -pROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'ROOT_PASSWORD' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+	# Remove anonymous users for localhost and other hosts
+	mysql -u root -e "DROP USER ''@'localhost';"
+	mysql -u root -e "DROP USER ''@'$(hostname)';"
 
-    # Remove anonymous users for localhost and other hosts
-    mysql -u root -pROOT_PASSWORD -e "DROP USER ''@'localhost'; FLUSH PRIVILEGES;";
-    mysql -u root -pROOT_PASSWORD -e "DROP USER ''@'$(hostname)'; FLUSH PRIVILEGES;";
+	# Create a Database and a user for remote access
+	mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
 
-    # Remove the test database
-    mysql -u root -pROOT_PASSWORD -e "DROP DATABASE IF EXISTS test; FLUSH PRIVILEGES;";
+	# Change the root password
+	mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
 
-    # Create a root user for remote access
-    mysql -u root -pROOT_PASSWORD -e "CREATE USER 'root'@'%' IDENTIFIED BY 'ROOT_PASSWORD'; FLUSH PRIVILEGES;";
-
-    # Grant all privileges to the remote root user
-    mysql -u root -pROOT_PASSWORD -e "GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY 'ROOT_PASSWORD'; FLUSH PRIVILEGES;";
-
-    # Create a database and a user for remote access
-    mysql -u root -pROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS DB_NAME; GRANT ALL ON DB_NAME.* TO 'DB_USER'@'%' IDENTIFIED BY 'USER_PASSWORD'; FLUSH PRIVILEGES;";
+	# Reload privileges
+	mysql -u root -e "FLUSH PRIVILEGES;
 
 > :bulb: **use of environment variables is recommended**
 
@@ -566,13 +573,11 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 	if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ]
 	then
-		mysql -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD');"
-		mysql -u root -p$MYSQL_ROOT_PASSWORD -e "DROP USER ''@'localhost';"
-		mysql -u root -p$MYSQL_ROOT_PASSWORD -e "DROP USER ''@'$(hostname)';"
-		mysql -u root -p$MYSQL_ROOT_PASSWORD -e "DROP DATABASE IF EXISTS test;"
-		mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE USER 'root'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';"
-		mysql -u root -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';"
-		mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON 	$MYSQL_DATABASE.	* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+		mysql -u root -e "DROP DATABASE IF EXISTS test;"
+		mysql -u root -e "DROP USER ''@'localhost';"
+		mysql -u root -e "DROP USER ''@'$(hostname)';"
+		mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+		mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
 		mysql -u root -e "FLUSH PRIVILEGES;"
 	fi
 
@@ -821,6 +826,8 @@ and add the following lines
 
 	COPY ./tools/* /var/www/
 
+	EXPOSE 3000
+
 	CMD [ "nginx", "-g", "daemon off;" ]
 
 **configuration**
@@ -831,8 +838,8 @@ and add the following lines
 
 		server {
 
-			listen 80;
-			listen [::]:80;
+			listen 3000;
+			listen [::]:3000;
 
 			server_name server;
 
@@ -874,6 +881,10 @@ and add the following lines
 
 	CMD ["/usr/local/portainer/portainer"]
 
+> :bulb: you can now access portainer from `127.0.0.1:9443`
+
+> :warning: the request should be sent over `https` not `http`
+
 </details>
 
 ---
@@ -901,7 +912,7 @@ and add the following lines
 	      - inception
 	    volumes:
 	      - ./requirements/nginx/conf/:/etc/nginx/http.d/
-	      - ./requirements/tools:/etc/nginx/ssl/
+	      - ./requirements/tools:/etc/ssl/private
 	      - wp-data:/var/www/
 	    restart: always
 
@@ -989,7 +1000,7 @@ and add the following lines
 	    image: website ;
 	    container_name: website ;
 	    ports: ;
-	      - "80:80" ;
+	      - "3000:3000" ;
 	    networks: ;
 	      - inception ;
 	    restart: always ;
@@ -1022,11 +1033,11 @@ and add the following lines
 	      type: none
 	      device: /home/${USER}/data/mariadb
 
-	    portainer-data:
-	      driver_opts:
-	        o: bind
-	        type: none
-	        device: /home/${USER}/data/portainer
+	  portainer-data:
+	    driver_opts:
+	      o: bind
+	      type: none
+	      device: /home/${USER}/data/portainer
 
 	networks:
 	  inception:

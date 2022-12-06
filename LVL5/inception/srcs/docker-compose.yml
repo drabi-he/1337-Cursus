@@ -105,7 +105,7 @@ services:
     image: website
     container_name: website
     ports:
-      - "80:80"
+      - "3000:3000"
     networks:
       - inception
     restart: always
@@ -145,5 +145,5 @@ volumes:
       device: /home/${USER}/data/portainer
 
 networks:
-    inception:
-        driver: bridge
+  inception:
+    driver: bridge 

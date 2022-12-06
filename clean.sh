@@ -1,6 +1,6 @@
 #!/bin/sh
 find . -type d  -name ".v*" -exec rm -rf {} +
-find . -type f \( -name '.Ds*' -o -name "a.out" \) -print
+find . -type f \( -name '.Ds*' -o -name "a.out" \) -print -exec rm -f {} +
 cd LVL0/libft && make fclean && cd ../..
 cd LVL1/ft_printf && make fclean && cd ../..
 cd LVL2/pipex && make fclean && cd ../..

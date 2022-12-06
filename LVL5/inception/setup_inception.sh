@@ -1,32 +1,5 @@
 #!/bin/sh
 
-# if [ "$USER" == "root" ]
-# then
-# 	echo "Setup you machine ? (y/n)"
-
-# 	read answer
-
-# 	if [ "$answer" = "y"  ] || [ "$answer" = "Y"  ]
-# 	then
-# 		apt update -y && apt upgrade -y
-# 		apt install -y sudo ufw docker docker-compose make openbox xinit kitty firefox-esr wget curl libnss3-tools
-# 		sed -i "s|#Port 22|Port 42|g" /etc/ssh/sshd_config
-# 		sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin yes|g" /etc/ssh/sshd_config
-# 		sed -i "s|#PubkeyAuthentication yes|PubkeyAuthentication no|g" /etc/ssh/sshd_config
-# 		sed -i "s|#PasswordAuthentication yes|PasswordAuthentication yes|g" /etc/ssh/sshd_config
-# 		service ssh restart
-# 		service sshd restart
-# 		ufw enable
-# 		ufw allow 42
-# 		ufw allow 80
-# 		ufw allow 443
-# 		curl -s https://api.github.com/repos/FiloSottile/mkcert/releases/latest| grep browser_download_url | grep linux-amd64 | cut -d '"' -f 4 | wget -qi -
-# 		mv mkcert-v*-linux-amd64 mkcert
-# 		chmod a+x mkcert
-# 		sudo mv mkcert /usr/local/bin/
-# 	fi
-# fi
-
 echo "create inception directories ? (y/n)"
 
 read answer
@@ -82,9 +55,7 @@ then
 	touch inception/srcs/requirements/bonus/website/.dockerignore
 	touch inception/srcs/requirements/bonus/website/Dockerfile
 	mkdir inception/srcs/requirements/bonus/website/conf
-	touch inception/srcs/requirements/bonus/website/conf/.gitkeep
 	mkdir inception/srcs/requirements/bonus/website/tools
-	touch inception/srcs/requirements/bonus/website/tools/.gitkeep
 	mkdir inception/srcs/requirements/bonus/adminer
 	touch inception/srcs/requirements/bonus/adminer/.dockerignore
 	touch inception/srcs/requirements/bonus/adminer/Dockerfile
@@ -297,13 +268,12 @@ then
 	echo "rc-service mariadb start" ;
 	echo 'if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ]' ;
 	echo "then" ;
-	echo 'mysql -u root -e "SET PASSWORD FOR '"'root'@'localhost'"' = PASSWORD('"'"'$MYSQL_ROOT_PASSWORD'"'"');"' ;
-	echo 'mysql -u root -p$MYSQL_ROOT_PASSWORD -e "DROP USER '"''@'localhost'"';"' ;
-	echo 'mysql -u root -p$MYSQL_ROOT_PASSWORD -e "DROP USER '"''@'"'$(hostname)'"'"';"' ;
-	echo 'mysql -u root -p$MYSQL_ROOT_PASSWORD -e "DROP DATABASE IF EXISTS test;"' ;
-	echo 'mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '"'"'$MYSQL_USER'"'@'%' IDENTIFIED BY '"'$MYSQL_PASSWORD'"'"';"' ;
-	echo 'mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO '"'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD' WITH GRANT OPTION;"'"'
-	echo 'mysql -u root -p$MYSQL_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"' ;
+	echo 'mysql -u root -e "DROP DATABASE IF EXISTS test;"' ;
+	echo 'mysql -u root -e "DROP USER '"''@'localhost'"';"' ;
+	echo 'mysql -u root -e "DROP USER '"''@'"'$(hostname)'"'"';"' ;
+	echo 'mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '"'"'$MYSQL_USER'"'@'%' IDENTIFIED BY '"'$MYSQL_PASSWORD'"'"';"' ;
+	echo 'mysql -u root -e "ALTER USER '"'root'@'localhost' IDENTIFIED BY '"'${MYSQL_ROOT_PASSWORD}'"'"';"' ;
+	echo 'mysql -u root -e "FLUSH PRIVILEGES;"' ;
 	echo "fi" ;
 	echo "rc-service mariadb stop"
 	echo "exec mysqld --user=mysql" ; } > ./requirements/mariadb/tools/script.sh
@@ -387,9 +357,9 @@ then
 
 	wget -O ./requirements/bonus/ftp/conf/vsftpd.conf https://raw.githubusercontent.com/drabi-he/1337-Cursus/master/LVL5/inception/extra/vsftpd.conf
 
-	sed -i '' "s|#local_enable=YES|local_enable=YES|g" ./requirements/bonus/ftp/conf/vsftpd.conf
-	sed -i '' "s|#write_enable=YES|write_enable=YES|g" ./requirements/bonus/ftp/conf/vsftpd.conf
-	sed -i '' "s|#chroot_local_user=YES|chroot_local_user=YES|g" ./requirements/bonus/ftp/conf/vsftpd.conf
+	sed -i "s|#local_enable=YES|local_enable=YES|g" ./requirements/bonus/ftp/conf/vsftpd.conf
+	sed -i "s|#write_enable=YES|write_enable=YES|g" ./requirements/bonus/ftp/conf/vsftpd.conf
+	sed -i "s|#chroot_local_user=YES|chroot_local_user=YES|g" ./requirements/bonus/ftp/conf/vsftpd.conf
 	echo "allow_writeable_chroot=YES" >> ./requirements/bonus/ftp/conf/vsftpd.conf
 	echo "seccomp_sandbox=NO" >> ./requirements/bonus/ftp/conf/vsftpd.conf
 	echo "pasv_enable=YES" >> ./requirements/bonus/ftp/conf/vsftpd.conf
@@ -426,13 +396,14 @@ then
 	echo "RUN apk add --no-cache nginx" ;
 	echo "COPY ./conf/nginx.conf /etc/nginx/nginx.conf" ;
 	echo "COPY ./tools/* /var/www/" ;
+	echo "EXPOSE 3000" ;
 	echo 'CMD [ "nginx", "-g", "daemon off;" ]' ; } > ./requirements/bonus/website/Dockerfile
 
 	{ echo "events {}" ;
 	echo "http {" ;
 	echo "	server {" ;
-	echo "		listen 80;" ;
-	echo "		listen [::]:80;" ;
+	echo "		listen 3000;" ;
+	echo "		listen [::]:3000;" ;
 	echo "		server_name server;" ;
 	echo "		root /var/www/;" ;
 	echo "		index index.html;" ;
@@ -595,7 +566,7 @@ then
 	echo '    image: website' ;
 	echo '    container_name: website' ;
 	echo '    ports:' ;
-	echo '      - "80:80"' ;
+	echo '      - "3000:3000"' ;
 	echo '    networks:' ;
 	echo '      - inception' ;
 	echo '    restart: always' ;
