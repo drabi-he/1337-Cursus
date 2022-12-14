@@ -664,45 +664,45 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
   - **debian:stable**
 
-	#!/bin/sh
+		#!/bin/sh
 
-	mysql_install_db
+		mysql_install_db
 
-	service mariadb start
+		service mariadb start
 
-	if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ]
-	then
-		mysql -u root -e "DROP DATABASE IF EXISTS test;"
-		mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO 	'$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
-		mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
-		mysql -u root -e "FLUSH PRIVILEGES;"
-	fi
+		if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ]
+		then
+			mysql -u root -e "DROP DATABASE IF EXISTS test;"
+			mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO 	'$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+			mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
+			mysql -u root -e "FLUSH PRIVILEGES;"
+		fi
 
-	mysqladmin shutdown -p${MYSQL_ROOT_PASSWORD}
+		mysqladmin shutdown -p${MYSQL_ROOT_PASSWORD}
 
-	exec mysqld --user=mysql
+		exec mysqld --user=mysql
 
   - **alpine:3.17**
 
-	#!/bin/sh
+		#!/bin/sh
 
-	mysql_install_db --user=mysql --datadir=/var/lib/mysql
+		mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
-	rc-service mariadb start
+		rc-service mariadb start
 
-	if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ]
-	then
-		mysql -u root -e "DROP DATABASE IF EXISTS test;"
-		mysql -u root -e "DROP USER ''@'localhost';"
-		mysql -u root -e "DROP USER ''@'$(hostname)';"
-		mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
-		mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
-		mysql -u root -e "FLUSH PRIVILEGES;"
-	fi
+		if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ]
+		then
+			mysql -u root -e "DROP DATABASE IF EXISTS test;"
+			mysql -u root -e "DROP USER ''@'localhost';"
+			mysql -u root -e "DROP USER ''@'$(hostname)';"
+			mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+			mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
+			mysql -u root -e "FLUSH PRIVILEGES;"
+		fi
 
-	rc-service mariadb stop
+		rc-service mariadb stop
 
-	exec mysqld --user=mysql
+		exec mysqld --user=mysql
 
 
 </details>
@@ -782,6 +782,7 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 > :bulb: we will use the `CMD` instruction to run the `php-fpm` command
 
 **script**
+
 	#!/bin/sh
 	cat << EOF > /var/www/wp-config.php
 	<?php
@@ -921,27 +922,27 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
   - **debian:stable**
 
-	mkdir -p /var/run/vsftpd/empty
+		mkdir -p /var/run/vsftpd/empty
 
-	adduser --home /var/www ${FTP_USER}
+		adduser --home /var/www ${FTP_USER}
 
-	echo ${FTP_USER}:${FTP_PASSWORD} | chpasswd
+		echo ${FTP_USER}:${FTP_PASSWORD} | chpasswd
 
-	adduser ${FTP_USER} root
+		adduser ${FTP_USER} root
 
-	exec /usr/sbin/vsftpd /etc/vsftpd.conf
+		exec /usr/sbin/vsftpd /etc/vsftpd.conf
 
   - **alpine:3.17**
 
-	#!/bin/sh
+		#!/bin/sh
 
-	adduser -h /var/www -D ${FTP_USER}
+		adduser -h /var/www -D ${FTP_USER}
 
-	echo ${FTP_USER}:${FTP_PASSWORD} | chpasswd
+		echo ${FTP_USER}:${FTP_PASSWORD} | chpasswd
 
-	adduser ${FTP_USER} root
+		adduser ${FTP_USER} root
 
-	exec /usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf
+		exec /usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf
 
 > :bulb: we will use the `adduser` command to create a new user, and set the home directory to `/var/www` , and we will set the password using the `chpasswd` command
 
