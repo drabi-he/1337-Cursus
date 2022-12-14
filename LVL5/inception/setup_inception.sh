@@ -284,7 +284,7 @@ then
 	echo "ARG MYSQL_DATABASE MYSQL_USER MYSQL_PASSWORD" ;
 	echo "WORKDIR /var/www" ;
 	echo "RUN apk update && apk upgrade" ;
-	echo "RUN apk update && apk upgrade && apk add --no-cache php php-fpm php-mysqli php-json php-curl php-dom php-exif php-fileinfo php-mbstring php-openssl php-xml php-zip wget unzip" ;
+	echo "RUN apk add --no-cache php php-fpm php-mysqli php-json php-curl php-dom php-exif php-fileinfo php-mbstring php-openssl php-xml php-zip wget unzip" ;
 	echo 'RUN sed -i "s|listen = 127.0.0.1:9000|listen = 9000|g" /etc/php81/php-fpm.d/www.conf' ;
 	echo "RUN wget https://wordpress.org/latest.zip && unzip latest.zip && cp -rf wordpress/* . && rm -rf wordpress latest.zip && rm -rf wp-config-sample.php && chmod -R 777 wp-content" ;
 	echo "COPY ./tools/script.sh ." ;
@@ -360,6 +360,7 @@ then
 	sed -i "s|#local_enable=YES|local_enable=YES|g" ./requirements/bonus/ftp/conf/vsftpd.conf
 	sed -i "s|#write_enable=YES|write_enable=YES|g" ./requirements/bonus/ftp/conf/vsftpd.conf
 	sed -i "s|#chroot_local_user=YES|chroot_local_user=YES|g" ./requirements/bonus/ftp/conf/vsftpd.conf
+	echo " " >> ./requirements/bonus/ftp/conf/vsftpd.conf
 	echo "allow_writeable_chroot=YES" >> ./requirements/bonus/ftp/conf/vsftpd.conf
 	echo "seccomp_sandbox=NO" >> ./requirements/bonus/ftp/conf/vsftpd.conf
 	echo "pasv_enable=YES" >> ./requirements/bonus/ftp/conf/vsftpd.conf

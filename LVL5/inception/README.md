@@ -212,7 +212,7 @@ afterward, update and upgrade your system
 
 these are the packages that we will need
 
-	apt install -y sudo ufw docker docker-compose make wget curl libnss3-tools git
+	apt install -y sudo ufw docker docker-compose make wget curl libnss3-tools git filezilla
 
 ![](./pics/42.png)
 
@@ -291,11 +291,19 @@ now change from root to your user
 
 ### 1. update the package list
 
+**debian:stable**
+
+    apt update -y && apt upgrade -y
+
 **alpine:3.17**
 
     apk update && apk upgrade
 
 ### 2. Install NGINX and OpenSSL
+
+**debian:stable**
+
+    apt install -y nginx openssl
 
 **alpine:3.17**
 
@@ -346,6 +354,10 @@ now change from root to your user
 
 ### 6. Start the NGINX service
 
+**debian:stable**
+
+    service nginx start
+
 **alpine:3.17**
 
     nginx
@@ -374,9 +386,28 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 ### 9. Dockerfile
 
+**debian:stable**
+
+	FROM debian:stable
+
+	RUN apt update -y && apt upgrade -y
+
+	RUN apt install -y nginx openssl
+
+	RUN openssl req -x509 -new -newkey rsa:2048 -nodes -keyout /etc/ssl/private/[anything].key -out /etc/ssl/private/[anything].crt -subj "/C=[XX]/ST=[XXXXXXXXX]/L=[XXXXX]/O=[XXXXXXXXXX]/OU=[XXX]/CN=[XXXXX]"
+
+	COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+
+	EXPOSE 443
+
+	CMD ["nginx", "-g", "daemon off;"]
+
+**alpine:3.17**
+
 	FROM alpine:3.17
 
 	RUN apk update && apk upgrade
+
 	RUN apk add nginx openssl --no-cache
 
 	RUN openssl req -x509 -new -newkey rsa:2048 -nodes -keyout /etc/ssl/private/[anything].key -out /etc/ssl/private/[anything].crt -subj "/C=[XX]/ST=[XXXXXXXXX]/L=[XXXXX]/O=[XXXXXXXXXX]/OU=[XXX]/CN=[XXXXX]"
@@ -436,6 +467,10 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 ### 1. update the package list
 
+**debian:stable**
+
+    apt update -y && apt upgrade -y
+
 **alpine:3.17**
 
     apk update && apk upgrade
@@ -443,6 +478,10 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 ### 2. Install MariaDB , MariaDB-client and OpenRC (for alpine)
 
 > :bulb: since alpine can't run `service` command, we need to install `OpenRC` to be able to run `rc-service`
+
+**debian:stable**
+
+    apt install -y mariadb-server mariadb-client
 
 **alpine:3.17**
 
@@ -466,6 +505,10 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 ### 6. Change in the configuration file
 
+**debian:stable**
+
+    sed -i "s|bind-address            = 127.0.0.1|bind-address            = 0.0.0.0|g" /etc/mysql/mariadb.conf.d/50-server.cnf
+
 **alpine:3.17** `enable remote access`
 
     sed -i "s|skip-networking|skip-networking=0|g" /etc/my.cnf.d/mariadb-server.cnf
@@ -481,6 +524,10 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 ### 8. Run the `mysql_install_db` command to create the database
 
+**debian:stable**
+
+    mysql_install_db
+
 **alpine:3.17**
 
     mysql_install_db --user=mysql --datadir=/var/lib/mysql
@@ -489,6 +536,10 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 ### 9. Start the MariaDB service
 
+**debian:stable**
+
+    service mariadb start
+
 **alpine:3.17**
 
     rc-service mariadb start
@@ -496,6 +547,20 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 ### 10. Secure the installation
 
 > :bulb: you can use the `mysql_secure_installation` command to secure the installation, but it will ask you for a password, so you can use the following commands instead
+
+**debian:stable**
+
+	# Remove the test database
+    mysql -u root -e "DROP DATABASE IF EXISTS test;"
+
+	# Create a Database and a user for remote access
+	mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+
+	# Change the root password
+	mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
+
+	# Reload privileges
+	mysql -u root -e "FLUSH PRIVILEGES;"
 
 **alpine:3.17**
 
@@ -513,7 +578,7 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 	mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
 
 	# Reload privileges
-	mysql -u root -e "FLUSH PRIVILEGES;
+	mysql -u root -e "FLUSH PRIVILEGES;"
 
 > :bulb: **use of environment variables is recommended**
 
@@ -522,6 +587,12 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 > :bulb: for more information about automating `mysql_secure_installation`, you can check [this article](https://fedingo.com/how-to-automate-mysql_secure_installation-script/)
 
 ### 11. Stop the MariaDB service
+
+**debian:stable**
+
+    mysqladmin shutdown -p${MYSQL_ROOT_PASSWORD}
+
+> sometimes `service mariadb stop` command might fail so we'll use `mysqladmin` instead
 
 **alpine:3.17**
 
@@ -539,9 +610,33 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 ### 14. Dockerfile
 
+**debian:stable**
+
+	FROM debian:stable
+
+	RUN apt update -y && apt upgrade -y
+
+	RUN apt install -y mariadb-server mariadb-client
+
+	RUN mkdir -p /var/run/mysqld
+	RUN chown -R mysql /var/run/mysqld
+	RUN chmod -R 777 /var/run/mysqld
+
+	RUN sed -i "s|bind-address            = 127.0.0.1|bind-address            = 0.0.0.0|g" /etc/mysql/mariadb.conf.d/
+	50-server.cnf
+
+	COPY ./tools/script.sh .
+
+	RUN chmod +x script.sh
+
+	CMD ["sh", "script.sh"]
+
+**alpine:3.17**
+
 	FROM alpine:3.17
 
 	RUN apk update && apk upgrade
+
 	RUN apk add mariadb mariadb-client openrc --no-cache
 
 	RUN openrc && touch /run/openrc/softlevel
@@ -560,10 +655,34 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 	} > /etc/my.cnf.d/docker.cnf
 
 	COPY ./tools/script.sh .
+
 	RUN chmod +x script.sh
+
 	CMD ["./script.sh"]
 
 **script**
+
+  - **debian:stable**
+
+	#!/bin/sh
+
+	mysql_install_db
+
+	service mariadb start
+
+	if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ]
+	then
+		mysql -u root -e "DROP DATABASE IF EXISTS test;"
+		mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO 	'$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+		mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
+		mysql -u root -e "FLUSH PRIVILEGES;"
+	fi
+
+	mysqladmin shutdown -p${MYSQL_ROOT_PASSWORD}
+
+	exec mysqld --user=mysql
+
+  - **alpine:3.17**
 
 	#!/bin/sh
 
@@ -598,6 +717,35 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 <summary>Show/Hide</summary>
 
 ### 1. Create a `Dockerfile`
+
+**debian:stable**
+
+	FROM debian:stable
+
+	ARG MYSQL_DATABASE MYSQL_USER MYSQL_PASSWORD VERSION=7.4
+
+	WORKDIR /var/www
+
+	RUN apt update -y && apt upgrade -y
+
+	RUN apt install -y php${VERSION} php${VERSION}-fpm php${VERSION}-mysqli php${VERSION}-json php${VERSION}-curl php$
+	{VERSION}-dom php${VERSION}-exif php${VERSION}-fileinfo php${VERSION}-mbstring php${VERSION}-xml php${VERSION}-zip
+	wget unzip
+
+	RUN sed -i "s|listen = /run/php/php${VERSION}-fpm.sock|listen = 9000|g" /etc/php/${VERSION}/fpm/pool.d/www.conf
+
+	RUN wget https://wordpress.org/latest.zip && unzip latest.zip && cp -rf wordpress/* . && rm -rf wordpress latest.
+	zip && rm -rf wp-config-sample.php && chmod -R 777 wp-content
+
+	RUN mkdir -p /run/php/
+
+	COPY ./tools/script.sh .
+
+	RUN chmod +x script.sh && ./script.sh
+
+	CMD ["/usr/sbin/php-fpm7.4", "-F"]
+
+**alpine:3.17**
 
 	FROM alpine:3.17
 
@@ -668,6 +816,24 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 ### 1. Create a `Dockerfile`
 
+**debian:stable**
+
+	FROM debian:stable
+
+	RUN apt update -y && apt upgrade -y
+
+	RUN apt install -y redis
+
+	RUN sed -i "s|bind 127.0.0.1 ::1|#bind 127.0.0.1 ::1|g" /etc/redis/redis.conf
+
+	RUN sed -i "s|# maxmemory <bytes>|maxmemory 100mb|g" /etc/redis/redis.conf
+
+	RUN sed -i "s|# maxmemory-policy noeviction|maxmemory-policy allkeys-lru|g" /etc/redis/redis.conf
+
+	CMD ["redis-server"]
+
+**alpine:3.17**
+
 	FROM alpine:3.17
 
 	RUN apk update && apk upgrade
@@ -715,6 +881,26 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 ### 1. Create a `Dockerfile`
 
+**debian:stable**
+
+	FROM debian:stable
+
+	RUN apt update -y && apt upgrade -y
+
+	RUN apt install -y vsftpd
+
+	COPY ./conf/vsftpd.conf /etc/vsftpd.conf
+
+	COPY ./tools/script.sh .
+
+	RUN chmod +x script.sh
+
+	EXPOSE 21
+
+	CMD ["./script.sh"]
+
+**alpine:3.17**
+
 	FROM alpine:3.17
 
 	RUN apk update && apk upgrade
@@ -732,6 +918,21 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 	CMD ["./script.sh"]
 
 **script**
+
+  - **debian:stable**
+
+	mkdir -p /var/run/vsftpd/empty
+
+	adduser --home /var/www ${FTP_USER}
+
+	echo ${FTP_USER}:${FTP_PASSWORD} | chpasswd
+
+	adduser ${FTP_USER} root
+
+	exec /usr/sbin/vsftpd /etc/vsftpd.conf
+
+  - **alpine:3.17**
+
 	#!/bin/sh
 
 	adduser -h /var/www -D ${FTP_USER}
@@ -785,6 +986,28 @@ and add the following lines
 
 ### 1. Create a `Dockerfile`
 
+**debian:stable**
+
+	FROM debian:stable
+
+	RUN apt update -y && apt upgrade -y
+
+	RUN apt install -y php php-common php-iconv php-json php-gd php-curl php-xml php-mysqli php-imap php-cgi php-pdo
+	php-soap php-posix php-ldap php-ctype php-dom php-simplexml wget
+
+	WORKDIR /var/www
+
+	RUN wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php
+
+	RUN mv adminer-4.8.1.php index.php
+
+	EXPOSE 8080
+
+	CMD [ "php", "-S", "[::]:8080" , "-t", "/var/www" ]
+
+**alpine:3.17**
+
+
 	FROM alpine:3.17
 
 	RUN apk update && apk upgrade
@@ -815,6 +1038,24 @@ and add the following lines
 <summary>Show/Hide</summary>
 
 ### 1. Create a `Dockerfile`
+
+**debian:stable**
+
+	FROM debian:stable
+
+	RUN apt update -y && apt upgrade -y
+
+	RUN apt install -y nginx
+
+	COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+
+	COPY ./tools/* /var/www/
+
+	EXPOSE 3000
+
+	CMD [ "nginx", "-g", "daemon off;" ]
+
+**alpine:3.17**
 
 	FROM alpine:3.17
 
@@ -867,6 +1108,25 @@ and add the following lines
 
 ### 1. docker-compose.yml
 
+**debian:stable**
+
+	FROM debian:stable
+
+	RUN apt update -y && apt upgrade -y
+
+	RUN apt install -y curl tar
+
+	RUN mkdir -p /var/lib/portainer
+
+	RUN adduser --home /var/lib/portainer portainer
+
+	RUN curl -sSL https://github.com/portainer/portainer/releases/download/2.16.2/portainer-2.16.2-linux-amd64.tar.gz |
+	tar -xzo -C /usr/local
+
+	CMD ["/usr/local/portainer/portainer"]
+
+**alpine:3.17**
+
 	FROM alpine:3.17
 
 	RUN apk update && apk upgrade
@@ -911,7 +1171,8 @@ and add the following lines
 	    networks:
 	      - inception
 	    volumes:
-	      - ./requirements/nginx/conf/:/etc/nginx/http.d/
+	      - ./requirements/nginx/conf/:/etc/nginx/http.d/ # for alpine
+	      - ./requirements/nginx/conf/nginx.conf:/etc/nginx/sites-available/default # for debian
 	      - ./requirements/tools:/etc/ssl/private
 	      - wp-data:/var/www/
 	    restart: always
