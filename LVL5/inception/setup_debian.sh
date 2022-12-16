@@ -182,7 +182,7 @@ then
 	# Setup Certificates
 	sudo apt update -y && sudo apt upgrade -y
 	sudo apt install -y curl docker docker-compose make wget libnss3-tools
-	curl -s https://api.github.com/repos/FiloSottile/mkcert/releases/latest| grep browser_download_url | grep linux-amd64 | cut -d '"' -f 4 | wget -qi -
+	wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-linux-amd64
 	mv mkcert-v*-linux-amd64 mkcert
 	chmod a+x mkcert
 	sudo mv mkcert /usr/local/bin/
@@ -204,6 +204,8 @@ then
 
 fi
 
+
+
 echo "Setup inception mandatory ? (y/n)"
 
 read answer
@@ -213,9 +215,9 @@ then
 
 	# Setup NGINX
 
-	{ echo "FROM alpine:3.17" ;
-	echo "RUN apk update && apk upgrade" ;
-	echo "RUN apk add --no-cache nginx" ;
+	{ echo "FROM debian:stable" ;
+	echo "RUN apt update -y && apt upgrade -y" ;
+	echo "RUN apt install -y nginx" ;
 	echo "EXPOSE 443" ;
 	echo 'CMD ["nginx", "-g", "daemon off;"]' ; } > ./requirements/nginx/Dockerfile
 
@@ -247,49 +249,41 @@ then
 
 	# Setup MariaDB
 
-	{ echo "FROM alpine:3.17" ;
-	echo "RUN apk update && apk upgrade" ;
-	echo "RUN apk add --no-cache mariadb mariadb-client openrc && openrc" ;
-	echo "RUN mkdir -p /run/openrc && touch /run/openrc/softlevel" ;
+	{ echo "FROM debian:stable" ;
+	echo "RUN apt update -y && apt upgrade -y" ;
+	echo "RUN apt install -y mariadb-server mariadb-client" ;
 	echo "RUN mkdir -p /var/run/mysqld && chown -R mysql /var/run/mysqld && chmod -R 777 /var/run/mysqld" ;
-	echo 'RUN sed -i "s|skip-networking|skip-networking=0|g" /etc/my.cnf.d/mariadb-server.cnf' ;
-	echo "COPY ./conf/docker.cnf /etc/my.cnf.d/" ;
+	echo 'RUN  sed -i "s|bind-address            = 127.0.0.1|bind-address            = 0.0.0.0|g" /etc/mysql/mariadb.conf.d/50-server.cnf' ;
 	echo "COPY ./tools/script.sh ." ;
 	echo "RUN chmod +x script.sh" ;
 	echo 'CMD ["sh", "script.sh"]' ; } > ./requirements/mariadb/Dockerfile
 
-	{ echo "[mysqld]" ;
-	echo "skip-host-cache" ;
-	echo "skip-name-resolve" ;
-	echo "bind-address=0.0.0.0" ; } > ./requirements/mariadb/conf/docker.cnf
-
 	{ echo "#!/bin/sh" ;
-	echo "mysql_install_db --user=mysql --datadir=/var/lib/mysql" ;
-	echo "rc-service mariadb start" ;
+	echo "mysql_install_db" ;
+	echo "service mariadb start" ;
 	echo 'if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ]' ;
 	echo "then" ;
 	echo 'mysql -u root -e "DROP DATABASE IF EXISTS test;"' ;
-	echo 'mysql -u root -e "DROP USER '"''@'localhost'"';"' ;
-	echo 'mysql -u root -e "DROP USER '"''@'"'$(hostname)'"'"';"' ;
 	echo 'mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '"'"'$MYSQL_USER'"'@'%' IDENTIFIED BY '"'$MYSQL_PASSWORD'"'"';"' ;
 	echo 'mysql -u root -e "ALTER USER '"'root'@'localhost' IDENTIFIED BY '"'${MYSQL_ROOT_PASSWORD}'"'"';"' ;
 	echo 'mysql -u root -e "FLUSH PRIVILEGES;"' ;
 	echo "fi" ;
-	echo "rc-service mariadb stop"
+	echo 'mysqladmin shutdown -p${MYSQL_ROOT_PASSWORD}'
 	echo "exec mysqld --user=mysql" ; } > ./requirements/mariadb/tools/script.sh
 
 	# Setup Wordpress
 
-	{ echo "FROM alpine:3.17" ;
-	echo "ARG MYSQL_DATABASE MYSQL_USER MYSQL_PASSWORD" ;
+	{ echo "FROM debian:stable" ;
+	echo "ARG MYSQL_DATABASE MYSQL_USER MYSQL_PASSWORD VERSION=7.4" ;
 	echo "WORKDIR /var/www" ;
-	echo "RUN apk update && apk upgrade" ;
-	echo "RUN apk add --no-cache php php-fpm php-mysqli php-json php-curl php-dom php-exif php-fileinfo php-mbstring php-openssl php-xml php-zip wget unzip" ;
-	echo 'RUN sed -i "s|listen = 127.0.0.1:9000|listen = 9000|g" /etc/php81/php-fpm.d/www.conf' ;
+	echo "RUN apt update -y && apt upgrade -y" ;
+	echo 'RUN apt install -y php${VERSION} php${VERSION}-fpm php${VERSION}-mysqli php${VERSION}-json php${VERSION}-curl php${VERSION}-dom php${VERSION}-exif php${VERSION}-fileinfo php${VERSION}-mbstring php${VERSION}-xml php${VERSION}-zip php${VERSION}-redis wget unzip' ;
+	echo 'RUN sed -i "s|listen = /run/php/php${VERSION}-fpm.sock|listen = 9000|g" /etc/php/${VERSION}/fpm/pool.d/www.conf' ;
 	echo "RUN wget https://wordpress.org/latest.zip && unzip latest.zip && cp -rf wordpress/* . && rm -rf wordpress latest.zip && rm -rf wp-config-sample.php && chmod -R 777 wp-content" ;
+	echo "RUN mkdir -p /run/php/" ;
 	echo "COPY ./tools/script.sh ." ;
 	echo "RUN chmod +x script.sh && ./script.sh" ;
-	echo 'CMD ["/usr/sbin/php-fpm81", "-F"]' ; } > ./requirements/wordpress/Dockerfile
+	echo 'CMD ["/usr/sbin/php-fpm7.4", "-F"]' ; } > ./requirements/wordpress/Dockerfile
 
 	{ echo "#!/bin/sh" ;
 	echo "cat << EOF > /var/www/wp-config.php" ;
@@ -322,13 +316,13 @@ if [ "$answer" = "y"  ] || [ "$answer" = "Y"  ]
 then
 	# Setup redis
 
-	{ echo "FROM alpine:3.17" ;
-	echo "RUN apk update && apk upgrade" ;
-	echo "RUN apk add --no-cache redis" ;
-	echo 'RUN sed -i "s|bind 127.0.0.1 -::1|#bind 127.0.0.1 -::1|g" /etc/redis.conf' ;
-	echo 'RUN sed -i "s|# maxmemory <bytes>|maxmemory 100mb|g" /etc/redis.conf' ;
-	echo 'RUN sed -i "s|# maxmemory-policy noeviction|maxmemory-policy allkeys-lru|g" /etc/redis.conf' ;
-	echo 'CMD ["redis-server", "/etc/redis.conf"]' ; } > ./requirements/bonus/redis/Dockerfile
+	{ echo "FROM debian:stable" ;
+	echo "RUN apt update -y && apt upgrade -y" ;
+	echo "RUN apt install -y redis redis-server" ;
+	echo 'RUN sed -i "s|bind 127.0.0.1 -::1|#bind 127.0.0.1 -::1|g" /etc/redis/redis.conf' ;
+	echo 'RUN sed -i "s|# maxmemory <bytes>|maxmemory 100mb|g" /etc/redis/redis.conf' ;
+	echo 'RUN sed -i "s|# maxmemory-policy noeviction|maxmemory-policy allkeys-lru|g" /etc/redis/redis.conf' ;
+	echo 'CMD ["redis-server", "--protected-mode no" ]' ; } > ./requirements/bonus/redis/Dockerfile
 fi
 
 
@@ -340,20 +334,21 @@ if [ "$answer" = "y"  ] || [ "$answer" = "Y"  ]
 then
 	# Setup ftp
 
-	{ echo "FROM alpine:3.17" ;
-	echo "RUN apk update && apk upgrade" ;
-	echo "RUN apk add --no-cache vsftpd" ;
-	echo "COPY ./conf/vsftpd.conf /etc/vsftpd/vsftpd.conf" ;
+	{ echo "FROM debian:stable" ;
+	echo "RUN apt update -y && apt upgrade -y" ;
+	echo "RUN apt install -y vsftpd" ;
+	echo "COPY ./conf/vsftpd.conf /etc/vsftpd.conf" ;
 	echo "COPY ./tools/script.sh ." ;
 	echo "RUN chmod +x script.sh" ;
 	echo "EXPOSE 21";
 	echo 'CMD ["./script.sh"]' ; } > ./requirements/bonus/ftp/Dockerfile
 
 	{ echo "#!/bin/sh" ;
-	echo 'adduser -h /var/www -D ${FTP_USER}' ;
+	echo 'mkdir -p /var/run/vsftpd/empty' ;
+	echo 'adduser --home /var/www ${FTP_USER}' ;
 	echo 'echo ${FTP_USER}:${FTP_PASSWORD} | chpasswd' ;
 	echo 'adduser ${FTP_USER} root' ;
-	echo "exec /usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf" ; } > ./requirements/bonus/ftp/tools/script.sh
+	echo "exec /usr/sbin/vsftpd /etc/vsftpd.conf" ; } > ./requirements/bonus/ftp/tools/script.sh
 
 	wget -O ./requirements/bonus/ftp/conf/vsftpd.conf https://raw.githubusercontent.com/drabi-he/1337-Cursus/master/LVL5/inception/extra/vsftpd.conf
 
@@ -374,9 +369,9 @@ if [ "$answer" = "y"  ] || [ "$answer" = "Y"  ]
 then
 	# Setup Adminer
 
-	{ echo "FROM alpine:3.17" ;
-	echo "RUN apk update && apk upgrade" ;
-	echo "RUN apk add --no-cache php php-common php-session php-iconv php-json php-gd php-curl php-xml php-mysqli php-imap php-cgi fcgi php-pdo php-pdo_mysql php-soap php-posix php-gettext php-ldap php-ctype php-dom php-simplexml wget" ;
+	{ echo "FROM debian:stable" ;
+	echo "RUN apt update -y && apt upgrade -y" ;
+	echo "RUN apt install -y php php-common php-iconv php-json php-gd php-curl php-xml php-mysqli php-imap php-cgi php-pdo php-soap php-posix php-ldap php-ctype php-dom php-simplexml wget" ;
 	echo "WORKDIR /var/www" ;
 	echo "RUN wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php" ;
 	echo "RUN mv adminer-4.8.1.php index.php" ;
@@ -392,9 +387,9 @@ if [ "$answer" = "y"  ] || [ "$answer" = "Y"  ]
 then
 	# Setup website
 
-	{ echo "FROM alpine:3.17" ;
-	echo "RUN apk update && apk upgrade" ;
-	echo "RUN apk add --no-cache nginx" ;
+	{ echo "FROM debian:stable" ;
+	echo "RUN apt update -y && apt upgrade -y" ;
+	echo "RUN apt install -y nginx" ;
 	echo "COPY ./conf/nginx.conf /etc/nginx/nginx.conf" ;
 	echo "COPY ./tools/* /var/www/" ;
 	echo "EXPOSE 3000" ;
@@ -442,11 +437,11 @@ read answer
 
 if [ "$answer" = "y"  ] || [ "$answer" = "Y"  ]
 then
-	{ echo 'FROM alpine:3.17'
-	echo 'RUN apk update && apk upgrade'
-	echo 'RUN apk add curl tar'
+	{ echo 'FROM debian:stable'
+	echo 'RUN apt update -y && apt upgrade -y'
+	echo 'RUN apt install -y curl tar'
 	echo 'RUN mkdir -p /var/lib/portainer'
-	echo 'RUN adduser -h /var/lib/portainer -D portainer'
+	echo 'RUN adduser --home /var/lib/portainer portainer'
 	echo 'RUN curl -sSL https://github.com/portainer/portainer/releases/download/2.16.2/portainer-2.16.2-linux-amd64.tar.gz | tar -xzo -C /usr/local'
 	echo 'CMD ["/usr/local/portainer/portainer"]'
 	} > ./requirements/bonus/portainer/Dockerfile
@@ -476,7 +471,7 @@ then
 	echo '    networks:' ;
 	echo '      - inception' ;
 	echo '    volumes:' ;
-	echo '      - ./requirements/nginx/conf/:/etc/nginx/http.d/' ;
+	echo '      - ./requirements/nginx/conf/nginx.conf:/etc/nginx/sites-available/default' ;
 	echo '      - ./requirements/tools:/etc/nginx/ssl/' ;
 	echo '      - wp-data:/var/www/' ;
 	echo '    restart: always' ;
@@ -525,6 +520,8 @@ then
 	echo '    container_name: redis' ;
 	echo '    ports:' ;
 	echo '      - "6379:6379"' ;
+	echo '    volumes:' ;
+	echo '      - wp-data:/var/www/' ;
 	echo '    networks:' ;
 	echo '      - inception' ;
 	echo '    restart: always' ;

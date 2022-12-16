@@ -24,7 +24,6 @@ down:
 
 re: down
 	printf "ReBuilding ${NAME} ...\n"
-	@sh ./srcs/requirements/tools/script.sh
 	@docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env up -d --build
 
 clean: down
@@ -38,5 +37,4 @@ fclean:
 	@docker system prune --all --force --volumes
 	@docker network prune --force
 	@docker volume prune --force
-	@docker volume rm $$(docker volume ls -q)
 	@sudo rm -rf ~/data

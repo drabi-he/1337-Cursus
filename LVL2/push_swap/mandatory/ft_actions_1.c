@@ -17,7 +17,7 @@ void	ft_swap_a(t_stack **a, int print)
 	t_stack	*tmp1;
 	t_stack	*tmp2;
 
-	ft_affiche(a[0]);
+	ft_affiche(a[0], 0);
 	if (ft_lstcount(a[0]) < 2)
 		return ;
 	tmp1 = a[0];
@@ -31,6 +31,8 @@ void	ft_swap_a(t_stack **a, int print)
 		tmp1->next->prev = tmp1;
 	if (print)
 		write(1, "sa\n", 3);
+	ft_affiche(a[0], 0);
+
 }
 
 void	ft_swap_b(t_stack **b, int print)
@@ -38,7 +40,7 @@ void	ft_swap_b(t_stack **b, int print)
 	t_stack	*tmp1;
 	t_stack	*tmp2;
 
-	ft_affiche(b[0]);
+	ft_affiche(b[0] , 0);
 	if (ft_lstcount(b[0]) < 2)
 		return ;
 	tmp1 = b[0];
@@ -58,8 +60,8 @@ void	ft_push_a(t_stack **b, t_stack **a, int print)
 {
 	t_stack	*tmp1;
 
-	ft_affiche(a[0]);
-	ft_affiche(b[0]);
+	ft_affiche(a[0] , 0);
+	ft_affiche(b[0], 0);
 	if (!b[0])
 		return ;
 	tmp1 = b[0]->next;
@@ -75,8 +77,8 @@ void	ft_push_b(t_stack **a, t_stack **b, int print)
 {
 	t_stack	*tmp1;
 
-	ft_affiche(a[0]);
-	ft_affiche(b[0]);
+	ft_affiche(a[0], 0);
+	ft_affiche(b[0], 0);
 	if (!a[0])
 		return ;
 	tmp1 = a[0]->next;

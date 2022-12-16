@@ -27,8 +27,8 @@ int	main(int ac, char *av[])
 		exit(0);
 	ft_index_stack(a);
 	ft_sort(&a, &b);
-	ft_affiche(a);
-	ft_affiche(b);
+	ft_affiche(a, 0);
+	ft_affiche(b, 0);
 	free_list(a);
 	return (0);
 }

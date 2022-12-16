@@ -19,9 +19,10 @@ int	ft_abs(int n)
 	return (n);
 }
 
-void	ft_affiche(t_stack *lst)
+void	ft_affiche(t_stack *lst, int print)
 {
-	return ;
+	if (!print)
+		return ;
 	if (!lst)
 		return ;
 	while (lst)

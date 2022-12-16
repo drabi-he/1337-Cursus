@@ -135,7 +135,7 @@ In an FTP transaction, the end user's computer is typically called the `local ho
 
 > ## :warning: don't forget to add your environment variables to your .env file
 
-> ## :warning: here is a [script](./setup_inception.sh) to help you setup the whole project
+> ## :warning: here is a [script](./setup_alpine.sh) to help you setup the whole project
 
 ---
 
@@ -831,7 +831,7 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 	RUN sed -i "s|# maxmemory-policy noeviction|maxmemory-policy allkeys-lru|g" /etc/redis/redis.conf
 
-	CMD ["redis-server"]
+	CMD ["redis-server", "--protected-mode no"]
 
 **alpine:3.17**
 
@@ -847,7 +847,7 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 	RUN sed -i "s|# maxmemory-policy noeviction|maxmemory-policy allkeys-lru|g" /etc/redis.conf
 
-	CMD ["redis-server", "/etc/redis.conf"]
+	CMD ["redis-server", "/etc/redis.conf", "--protected-mode no"]
 
 > :bulb: we will use the `sed` command to change the `bind` directive in the `redis.conf` file, to listen to all the interfaces instead of only the localhost
 
@@ -857,7 +857,7 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 > :bulb: we will use the `CMD` instruction to run the `redis-server` command
 
-> :bulb: after you finish got to wordpress and install the [wp redis](https://wordpress.org/plugins/wp-redis/) plugin
+> :bulb: after you finish got to wordpress and install the [Redis Object Cache](https://wordpress.org/plugins/redis-cache/) plugin
 
 > :bulb: you can check the [redis.conf](./extra/redis.conf) file to see the default configurations and an explanation for each configuration
 
@@ -869,7 +869,7 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 	docker exec -it redis redis-cli monitor
 
-> :bulb: if everything is working correctly, you should see the `OK` message.
+> :bulb: if everything is working correctly, you should see the `OK` message. and any activity in your `wordpress website` should send some logs
 
 </details>
 
@@ -1206,11 +1206,11 @@ and add the following lines
 	    container_name: wordpress
 	    depends_on:
 	      - mariadb
-	    restart: always
-	    networks:
-	      - inception
 	    volumes:
 	      - wp-data:/var/www/
+	    networks:
+	      - inception
+	    restart: always
 
 	  redis:
 	    build:
@@ -1220,6 +1220,8 @@ and add the following lines
 	    container_name: redis
 	    ports:
 	      - "6379:6379"
+	    volumes:
+	      - wp-data:/var/www/
 	    networks:
 	      - inception
 	    restart: always

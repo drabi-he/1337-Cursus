@@ -46,7 +46,7 @@ int		ft_abs(int n);
 long	ft_atoi(char *str);
 char	*ft_strjoin(int size, char **strs, char *sep);
 char	**ft_split(char *s, char c);
-void	ft_affiche(t_stack *lst);
+void	ft_affiche(t_stack *lst, int print);
 void	free_tab(char **t);
 
 //lists utils
