@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/20 14:28:19 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/10/04 15:36:31 by hdrabi           ###   ########.fr       */
+/*   Created: 2022/10/22 14:22:00 by hdrabi            #+#    #+#             */
+/*   Updated: 2022/10/27 15:50:24 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,29 @@
 #define LOCATION_HPP
 
 #include <iostream>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <string>
 #include <vector>
 #include <map>
-#include <unistd.h>
+#include <fstream>
+#include "WebServ.hpp"
+#include "Server.hpp"
+#include "Client.hpp"
+#include "Request.hpp"
+#include "Response.hpp"
+#include "Socket.hpp"
 #include "utils.hpp"
-#include "utils2.hpp"
 
-#define GET 0
-#define POST 1
-#define PUT 2
-#define DELETE 3
+class WebServ;
+class Server;
+class Client;
+class Request;
+class Response;
+class Socket;
 
 class Location
 {
@@ -33,13 +46,16 @@ class Location
 		std::vector<std::string> _index;
 		std::string _autoIndex;
 		std::string _uploadPath;
-		std::map<int, std::string> _errorPages;
-		std::map<int, int> _errorCodes;
+		std::map<int , std::string> _errorPages;
+		std::map<int , int> _errorCodes;
 		std::string _methods;
 		std::pair<int, std::string> _return;
+		std::vector< std::pair <std::string, std::string> > _cgi;
+		std::string _cgiBin;
 
 	public:
-		Location(std::string& location);
+		Location();
+		Location(std::string config);
 		~Location();
 		void display() const;
 };

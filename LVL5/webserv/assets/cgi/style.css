@@ -1,0 +1,25 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: white;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  background-color: #170f32;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+a:hover , h1:hover {
+  color: red;
+  cursor: pointer;
+}
+
+a , h1, p {
+  margin: 5px;
+}

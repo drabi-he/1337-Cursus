@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdrabi <hdrabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/30 10:49:59 by hdrabi            #+#    #+#             */
-/*   Updated: 2022/10/04 15:36:23 by hdrabi           ###   ########.fr       */
+/*   Created: 2022/10/27 15:25:33 by hdrabi            #+#    #+#             */
+/*   Updated: 2022/10/27 15:32:09 by hdrabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,38 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <fcntl.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <string>
+#include <vector>
+#include <fstream>
+#include "WebServ.hpp"
+#include "Server.hpp"
+#include "Location.hpp"
+#include "Client.hpp"
+#include "Request.hpp"
+#include "Response.hpp"
 #include "utils.hpp"
+
+class WebServ;
+class Server;
+class Location;
+class Client;
+class Request;
+class Response;
 
 class Socket
 {
 	public:
-		int _port;
 		int _socket;
+		int _port;
+		std::string _host;
 		struct sockaddr_in _address;
+
 	public:
 		Socket(int port, std::string host);
 		~Socket();
 };
 
-
 #endif
+

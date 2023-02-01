@@ -1,0 +1,138 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: white;
+}
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: green;
+}
+
+.header,
+.tests {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header p {
+  margin-bottom: 10px;
+}
+
+.header_img {
+  width: 500px;
+  height: 300px;
+}
+
+.header_img img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.post {
+  width: 250px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid white;
+  margin: 10px 0px;
+  padding: 5px;
+  border-radius: 15px;
+}
+
+.post form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 5px 0px;
+}
+
+.post input[type="text"] {
+  width: 100%;
+  padding: 2px 5px;
+  margin: 5px 0;
+  border: 2px solid #ccc;
+  transition: 1s;
+  outline: none;
+  background-color: #170f32;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.post input[type="text"]:focus {
+  border: 2px solid #cd0404;
+}
+
+.post input[type="submit"] {
+  background-color: #03c988;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-decoration: none;
+  margin: 5px 0px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.5s;
+}
+
+.post input[type="submit"]:hover {
+  background-color: #038c5c;
+}
+
+.post input[type="file"] {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.post label {
+  font-size: 1.25em;
+  font-weight: 700;
+  color: white;
+  padding: 5px 10px;
+  background-color: #cd0404;
+  display: inline-block;
+  transition: 0.5s;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.post label:hover {
+  background-color: #7a0202;
+}
+
+hr {
+  border: 1px solid white;
+  width: 100%;
+  margin: 5px 0px;
+}
+
+.cookie .post {
+  height: 150px;
+}
+
+.Python .post {
+  height: 150px;
+}
+
+a:hover {
+  color: red;
+  cursor: pointer;
+}

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>WebServ</h1>
+        <p>WebServ is a simple web server written in C++.</p>
+        <div class="header_img">
+          <img src="./images/header.jpg" alt="" />
+        </div>
+      </div>
+      <div class="tests">
+        <h1>Available tests</h1>
+        <a href="./on">autoindex on</a>
+        <a href="./off">autoindex off</a>
+        <a href="./methods">allowed methods</a>
+        <a href="./internal_redirect">internal redirect</a>
+        <a href="./external_redirect">external redirect</a>
+        <a href="./Siege">Siege</a>
+        <div class="post">
+          <h4>Test Upload</h4>
+          <form enctype="multipart/form-data" action="./" method="post">
+            <input type="file" name="file" id="file" />
+            <label for="file">Choose a file</label>
+            <input type="submit" value="submit" />
+          </form>
+        </div>
+        <h2>Test CGI</h2>
+        <div class="cgi">
+          <div class="post">
+            <h4>Test GET</h4>
+            <form action="./cgi/test_get.php" method="GET">
+              <input
+                type="text"
+                id="fgname"
+                name="fgname"
+                placeholder="First Name"
+              />
+              <input
+                type="text"
+                id="lgname"
+                name="lgname"
+                placeholder="Last Name"
+              />
+              <input type="submit" value="Envoyer" />
+            </form>
+            <h4>Test POST</h4>
+            <form action="./cgi/test_post.php" method="POST">
+              <input
+                type="text"
+                id="fpname"
+                name="fpname"
+                placeholder="First Name"
+              />
+              <input type="text" id="page" name="page" placeholder="Age" />
+              <input type="submit" value="Envoyer" />
+            </form>
+          </div>
+        </div>
+        <h2>Test Extra</h2>
+        <div class="cookie">
+          <div class="post">
+            <h4>Set Cookie</h4>
+            <form action="./cgi/set_cookie.php" method="GET">
+              <input
+                type="text"
+                id="cookie"
+                name="cookie"
+                placeholder="Your Cookie"
+              />
+              <input type="submit" value="Envoyer" />
+            </form>
+            <a href="./cgi/get_cookie.php">Get Cookie</a>
+          </div>
+        </div>
+        <div class="session">
+          <div class="post">
+            <a href="./cgi/start_session.php">Start Session</a>
+            <h4>Set Session</h4>
+            <form action="./cgi/set_session.php" method="POST">
+              <input type="text" id="key" name="key" placeholder="Your key" />
+              <input
+                type="text"
+                id="value"
+                name="value"
+                placeholder="Your value"
+              />
+              <input type="submit" value="Envoyer" />
+            </form>
+            <a href="./cgi/get_session.php">Get Session</a>
+            <a href="./cgi/close_session.php">Close Session</a>
+          </div>
+        </div>
+        <div class="Python">
+          <div class="post">
+            <h4>Python CGI</h4>
+            <form action="./cgi/test.py" method="GET">
+              <input
+                type="text"
+                id="your_name"
+                name="your_name"
+                placeholder="Your Name"
+              />
+              <input
+                type="text"
+                id="company_name"
+                name="company_name"
+                placeholder="Your Company Name"
+              />
+              <input type="submit" value="Envoyer" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
