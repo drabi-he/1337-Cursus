@@ -57,55 +57,58 @@ In an FTP transaction, the end user's computer is typically called the `local ho
 
 ### Docker
 
--   `docker ps` : list all running containers
--   `docker ps -a` : list all containers
--   `docker images` : list all images
--   `docker volume ls` : list all volumes
--   `docker network ls` : list all networks
--   `docker exec -it <container_name>/<ID> /bin/bash or /bin/sh` : access a container
--   `docker run -p [host_port]:[container_port] --env [key]=[value] -it [image]:[tag]` : run a container with a specific port and environment variables and access it.
--   `docker stop <container_name>/<ID>` : stop a container
--   `docker rm <container_name>/<ID>` : remove a container
--   `docker rm $(docker ps -aq)` : remove all containers
--   `docker rmi <image_name>/<ID>` : remove an image
--   `docker rmi $(docker images -q)` : remove all images
--   `docker rmi $(docker  images --filter "dangling=true" -q)` : remove all dangling images (<none> images that are not used by any container)
--   `docker volume rm $(docker volume ls -q)` : remove all volumes
--   `docker network rm $(docker network ls -q)` : remove all networks
--   `docker-compose up -d` : start all containers in background mode
--   `docker-compose down` : stop all containers
--   `docker-compose down --rmi all` : stop all containers and remove all images
--   `docker system prune -a` : remove all unused containers, networks, images (both dangling and unreferenced), and optionally, volumes
+- `docker ps` : list all running containers
+- `docker ps -a` : list all containers
+- `docker images` : list all images
+- `docker volume ls` : list all volumes
+- `docker network ls` : list all networks
+- `docker exec -it <container_name>/<ID> /bin/bash or /bin/sh` : access a container
+- `docker run -p [host_port]:[container_port] --env [key]=[value] -it [image]:[tag]` : run a container with a specific port and environment variables and access it.
+- `docker stop <container_name>/<ID>` : stop a container
+- `docker rm <container_name>/<ID>` : remove a container
+- `docker rm $(docker ps -aq)` : remove all containers
+- `docker rmi <image_name>/<ID>` : remove an image
+- `docker rmi $(docker images -q)` : remove all images
+- `docker rmi $(docker  images --filter "dangling=true" -q)` : remove all dangling images (<none> images that are not used by any container)
+- `docker volume rm $(docker volume ls -q)` : remove all volumes
+- `docker network rm $(docker network ls -q)` : remove all networks
+- `docker-compose up -d` : start all containers in background mode
+- `docker-compose down` : stop all containers
+- `docker-compose down --rmi all` : stop all containers and remove all images
+- `docker system prune -a` : remove all unused containers, networks, images (both dangling and unreferenced), and optionally, volumes
 
 > :bulb: docker run -p 3000:80 -p 3001:443 -p 3306:3306 --env USER=foo --env PASSWORD=bar -it debian:buster
 
 **FLAGS**
-  -  `-p` : port mapping (host_port:container_port)
-  -  `--env` : set environment variables (key=value)
-  -  `-it` : interactive mode (access the container)
-  -  `-d` : detached mode (run containers in the background)
-  -  `--rmi` : remove images (all)
-  -  `-a` : all (containers, images, volumes, networks)
-  -  `-q` : quiet mode (only display numeric IDs)
+
+- `-p` : port mapping (host_port:container_port)
+- `--env` : set environment variables (key=value)
+- `-it` : interactive mode (access the container)
+- `-d` : detached mode (run containers in the background)
+- `--rmi` : remove images (all)
+- `-a` : all (containers, images, volumes, networks)
+- `-q` : quiet mode (only display numeric IDs)
 
 ### MariaDB
 
 **QUERIES**
-  -   `CREATE DATABASE [database_name];` : create a database with the name [database_name]
-  -   `CREATE USER '[username]'@'[hostname]' IDENTIFIED BY '[password]';` : create a user with the name [username] and password [password]
-  -    `GRANT ALL PRIVILEGES ON [database_name].* TO '[username]'@'[hostname]';` : grant all privileges to the user [username] on the database [database_name]
-  -   `DROP DATABASE [database_name];` : drop a database with the name [database_name]
-  -   `DROP USER [username]@'[hostname]';` : drop a user with the name [username]
-  -   `FLUSH PRIVILEGES;` : reload the privilege tables
 
--   `mysql -u [user] -p[password] -e "[QUERY]"` : access the database with a specific user and password and execute a query
+- `CREATE DATABASE [database_name];` : create a database with the name [database_name]
+- `CREATE USER '[username]'@'[hostname]' IDENTIFIED BY '[password]';` : create a user with the name [username] and password [password]
+- `GRANT ALL PRIVILEGES ON [database_name].* TO '[username]'@'[hostname]';` : grant all privileges to the user [username] on the database [database_name]
+- `DROP DATABASE [database_name];` : drop a database with the name [database_name]
+- `DROP USER [username]@'[hostname]';` : drop a user with the name [username]
+- `FLUSH PRIVILEGES;` : reload the privilege tables
+
+- `mysql -u [user] -p[password] -e "[QUERY]"` : access the database with a specific user and password and execute a query
 
 > :bulb: mysql -u user -pPASSWORD -e "CREATE DATABASE test;"
 
 **FLAGS**
-  -  `-u` : user
-  -  `-p` : password
-  -  `-e` : execute
+
+- `-u` : user
+- `-p` : password
+- `-e` : execute
 
 ## . ADDITIONAL TOOLS AND INFORMATIONS
 
@@ -115,9 +118,9 @@ In an FTP transaction, the end user's computer is typically called the `local ho
 
 **FLAGS:**
 
--   `mkdir -p ...` : create a directory and all parent directories if needed
--   `chown -R ...` : change the owner of a file or directory and all its subdirectories and files
--   `chmod 777 ...`: give read, write, and execute permissions to all users, including the owner, group, and others
+- `mkdir -p ...` : create a directory and all parent directories if needed
+- `chown -R ...` : change the owner of a file or directory and all its subdirectories and files
+- `chmod 777 ...`: give read, write, and execute permissions to all users, including the owner, group, and others
 
 ### MKCERT
 
@@ -189,7 +192,7 @@ In an FTP transaction, the end user's computer is typically called the `local ho
 
 > :bulb: you can use a `Desktop Environment (DE)` like below or you can remove it and install a lighter `DE` like this
 
-	apt install -y openbox xinit kitty firefox-esr
+    apt install -y openbox xinit kitty firefox-esr
 
 > :bulb: you can access you `DE` with the command `startx` and use the right mouse button to use your `software` or exit to the `tty`
 
@@ -200,28 +203,28 @@ In an FTP transaction, the end user's computer is typically called the `local ho
 
 then switch to root using the cmd
 
-	su -
+    su -
 
 ![](./pics/40.png)
 
 afterward, update and upgrade your system
 
-	apt update -y && apt upgrade -y
+    apt update -y && apt upgrade -y
 
 ![](./pics/41.png)
 
 these are the packages that we will need
 
-	apt install -y sudo ufw docker docker-compose make wget curl libnss3-tools git filezilla
+    apt install -y sudo ufw docker docker-compose make wget curl libnss3-tools git filezilla
 
 ![](./pics/42.png)
 
 ### setup ssh
 
-	sed -i "s|#Port 22|Port 42|g" /etc/ssh/sshd_config
-	sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin yes|g" /etc/ssh/sshd_config
-	sed -i "s|#PubkeyAuthentication yes|PubkeyAuthentication no|g" /etc/ssh/sshd_config
-	sed -i "s|#PasswordAuthentication yes|PasswordAuthentication yes|g" /etc/ssh/sshd_config
+    sed -i "s|#Port 22|Port 42|g" /etc/ssh/sshd_config
+    sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin yes|g" /etc/ssh/sshd_config
+    sed -i "s|#PubkeyAuthentication yes|PubkeyAuthentication no|g" /etc/ssh/sshd_config
+    sed -i "s|#PasswordAuthentication yes|PasswordAuthentication yes|g" /etc/ssh/sshd_config
 
 ![](./pics/43.png)
 ![](./pics/44.png)
@@ -232,13 +235,13 @@ these are the packages that we will need
 
 ### setup ufw
 
-	ufw enable
-	ufw allow 3000
-	ufw allow 8080
-	ufw allow 443
-	ufw allow 21
-	ufw allow 42
-	ufw allow 9443
+    ufw enable
+    ufw allow 3000
+    ufw allow 8080
+    ufw allow 443
+    ufw allow 21
+    ufw allow 42
+    ufw allow 9443
 
 ![](./pics/49.png)
 ![](./pics/50.png)
@@ -246,14 +249,14 @@ these are the packages that we will need
 
 now you can reboot your machine and connect using ssh from the host
 
-	ssh [root/user]@localhost -p 42
+    ssh [root/user]@localhost -p 42
 
 ![](./pics/52.png)
 ![](./pics/53.png)
 
 ### setup sudo
 
-	nano /etc/sudoers
+    nano /etc/sudoers
 
 add your user below root like this
 
@@ -261,17 +264,16 @@ add your user below root like this
 
 now change from root to your user
 
-	su [user]
-	cd ~
+    su [user]
+    cd ~
 
 **Add User To Docker Group**
 
-	sudo usermod -aG docker [user]
-	service docker restart
+    sudo usermod -aG docker [user]
+    service docker restart
 
 ![](./pics/55.png)
 ![](./pics/56.png)
-
 
 > :warning: Don't forget to add your `domain name` your host file `/etc/hosts` (eg. [intra-name].42.fr)
 
@@ -286,8 +288,7 @@ now change from root to your user
 <details>
 <summary>Show/Hide</summary>
 
-	docker run -p 443:443 -it alpine:3.17
-
+    docker run -p 443:443 -it alpine:3.17
 
 ### 1. update the package list
 
@@ -309,26 +310,30 @@ now change from root to your user
 
     apk add nginx openssl --no-cache
 
+**extra**
+
+    mkdir -p /etc/nginx/ssl
+
 ### 3. Create a self-signed certificate
 
     openssl req -x509 -new -newkey rsa:2048 -nodes -keyout /etc/nginx/ssl/[anything].key -out /etc/nginx/ssl/[anything].crt -subj "/C=[XX]/ST=[XXXXXXXXX]/L=[XXXXX]/O=[XXXXXXXXXX]/OU=[XXX]/CN=[XXXXX]"
 
 **FLAGS**
 
--   `req`: creates and processes certificate requests
--   `-x509`: generate a self-signed certificate
--   `-new`: create a new certificate request
--   `-newkey rsa:2048`: create a new private key using RSA and 2048 bit
--   `-nodes`: no passphrase/password (not encrypted)
--   `-keyout`: output the private key to a file
--   `-out`: generate the certificate to a file (*.crt / *.csr)
--   `-subj`: provide the certificate information
-    -   `/C`: Country Name (2 letter code eg. US)
-    -   `/ST`: State or Province Name (full name)
-    -   `/L`: Locality Name (eg, city)
-    -   `/O`: Organization Name (eg, company)
-    -   `/OU`: Organizational Unit Name (eg, section)
-    -   `/CN`: Common Name (eg, your name or your server's hostname)
+- `req`: creates and processes certificate requests
+- `-x509`: generate a self-signed certificate
+- `-new`: create a new certificate request
+- `-newkey rsa:2048`: create a new private key using RSA and 2048 bit
+- `-nodes`: no passphrase/password (not encrypted)
+- `-keyout`: output the private key to a file
+- `-out`: generate the certificate to a file (_.crt / _.csr)
+- `-subj`: provide the certificate information
+  - `/C`: Country Name (2 letter code eg. US)
+  - `/ST`: State or Province Name (full name)
+  - `/L`: Locality Name (eg, city)
+  - `/O`: Organization Name (eg, company)
+  - `/OU`: Organizational Unit Name (eg, section)
+  - `/CN`: Common Name (eg, your name or your server's hostname)
 
 > :bulb: for more detailed information about the `openssl req` command, check [this](https://www.openssl.org/docs/man1.1.1/man1/openssl-req.html)
 
@@ -338,8 +343,9 @@ now change from root to your user
 
     vim /etc/nginx/nginx.conf
 
--  :arrow_right: [here](./extra/nginx.conf)
+- :arrow_right: [here](./extra/nginx.conf)
 
+> :bulb: don't forget to replace the certificate name and key in the config file with the one you choose in the openssl cmd
 > :bulb: you can skip this step and just link the configuration file through volumes in the docker-compose.yml file
 
 > **:warning: check if the configuration file is valid by running `nginx -t`**
@@ -348,7 +354,7 @@ now change from root to your user
 
     vim [path]/index.html
 
--   :arrow_right: [here](./extra/index.html)
+- :arrow_right: [here](./extra/index.html)
 
 > **:warning: the path is the same as the one you specified in the NGINX configuration file as root/location**
 
@@ -370,17 +376,17 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 **check if nginx compatible with TSLv1.2 and TLSv1.3**
 
--   for TSLv1.1 `should fail`
+- for TSLv1.1 `should fail`
 
-        curl -I -v --tlsv1.1 --tls-max 1.1 https://localhost:[host_port] -k
+      curl -I -v --tlsv1.1 --tls-max 1.1 https://localhost:[host_port] -k
 
--   for TSLv1.2 `should pass if you have TLSv1.2 enabled`
+- for TSLv1.2 `should pass if you have TLSv1.2 enabled`
 
-        curl -I -v --tlsv1.2 --tls-max 1.2 https://localhost:[host_port] -k
+      curl -I -v --tlsv1.2 --tls-max 1.2 https://localhost:[host_port] -k
 
--   for TSLv1.3 `should pass if you have TLSv1.3 enabled`
+- for TSLv1.3 `should pass if you have TLSv1.3 enabled`
 
-        curl -I -v --tlsv1.3 --tls-max 1.3 https://localhost:[host_port] -k
+      curl -I -v --tlsv1.3 --tls-max 1.3 https://localhost:[host_port] -k
 
 > :bulb: if you get `The plain HTTP request was sent to HTTPS port` try sending request to https instead of http
 
@@ -388,71 +394,71 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 **debian:stable**
 
-	FROM debian:stable
+    FROM debian:stable
 
-	RUN apt update -y && apt upgrade -y
+    RUN apt update -y && apt upgrade -y
 
-	RUN apt install -y nginx openssl
+    RUN apt install -y nginx openssl
 
-	RUN openssl req -x509 -new -newkey rsa:2048 -nodes -keyout /etc/ssl/private/[anything].key -out /etc/ssl/private/[anything].crt -subj "/C=[XX]/ST=[XXXXXXXXX]/L=[XXXXX]/O=[XXXXXXXXXX]/OU=[XXX]/CN=[XXXXX]"
+    RUN openssl req -x509 -new -newkey rsa:2048 -nodes -keyout /etc/ssl/private/[anything].key -out /etc/ssl/private/[anything].crt -subj "/C=[XX]/ST=[XXXXXXXXX]/L=[XXXXX]/O=[XXXXXXXXXX]/OU=[XXX]/CN=[XXXXX]"
 
-	COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+    COPY ./conf/nginx.conf:/etc/nginx/sites-available/default
 
-	EXPOSE 443
+    EXPOSE 443
 
-	CMD ["nginx", "-g", "daemon off;"]
+    CMD ["nginx", "-g", "daemon off;"]
 
 **alpine:3.17**
 
-	FROM alpine:3.17
+    FROM alpine:3.17
 
-	RUN apk update && apk upgrade
+    RUN apk update && apk upgrade
 
-	RUN apk add nginx openssl --no-cache
+    RUN apk add nginx openssl --no-cache
 
-	RUN openssl req -x509 -new -newkey rsa:2048 -nodes -keyout /etc/ssl/private/[anything].key -out /etc/ssl/private/[anything].crt -subj "/C=[XX]/ST=[XXXXXXXXX]/L=[XXXXX]/O=[XXXXXXXXXX]/OU=[XXX]/CN=[XXXXX]"
+    RUN openssl req -x509 -new -newkey rsa:2048 -nodes -keyout /etc/ssl/private/[anything].key -out /etc/ssl/private/[anything].crt -subj "/C=[XX]/ST=[XXXXXXXXX]/L=[XXXXX]/O=[XXXXXXXXXX]/OU=[XXX]/CN=[XXXXX]"
 
-	# we copy the local configuration file to the container nginx folder
-	COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+    # we copy the local configuration file to the container nginx folder
+    COPY ./conf/* /etc/nginx/http.d/
 
-	EXPOSE 443
+    EXPOSE 443
 
-	CMD ["nginx", "-g", "daemon off;"]
+    CMD ["nginx", "-g", "daemon off;"]
 
 **configuration file for wordpress**
 
-	server {
-		listen 443 ssl;
+    server {
+    	listen 443 ssl;
 
-		server_name [DOMAIN_NAME] www.[DOMAIN_NAME];
+    	server_name [DOMAIN_NAME] www.[DOMAIN_NAME];
 
-		ssl_certificate /etc/ssl/private/[CERTIFICATE].crt;
-		ssl_certificate_key /etc/ssl/private/[CERTIFICATE].key;
+    	ssl_certificate /etc/ssl/private/[CERTIFICATE].crt;
+    	ssl_certificate_key /etc/ssl/private/[CERTIFICATE].key;
 
-		ssl_protocols TLSv1.2 TLSv1.3;
+    	ssl_protocols TLSv1.2 TLSv1.3;
 
-		root /var/www/;
+    	root /var/www/;
 
-		index index.php index.html;
+    	index index.php index.html;
 
-		location / {
-			try_files $uri /index.php?$args;
-			add_header Last-Modified $date_gmt;
-			add_header Cache-Control 'no-store, no-cache';
-			if_modified_since off;
-			expires off;
-			etag off;
-		}
+    	location / {
+    		try_files $uri /index.php?$args;
+    		add_header Last-Modified $date_gmt;
+    		add_header Cache-Control 'no-store, no-cache';
+    		if_modified_since off;
+    		expires off;
+    		etag off;
+    	}
 
-		location ~ \.php$ {
-			fastcgi_split_path_info ^(.+\.php)(/.+)$;
-			fastcgi_pass wordpress:9000;
-			fastcgi_index index.php;
-			include fastcgi_params;
-			fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-			fastcgi_param PATH_INFO $fastcgi_path_info;
-		}
-	}
+    	location ~ \.php$ {
+    		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    		fastcgi_pass wordpress:9000;
+    		fastcgi_index index.php;
+    		include fastcgi_params;
+    		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    		fastcgi_param PATH_INFO $fastcgi_path_info;
+    	}
+    }
 
 </details>
 
@@ -463,7 +469,7 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 <details>
 <summary>Show/Hide</summary>
 
-	docker run -p 3306:3306 -it alpine:3.17
+    docker run -p 3306:3306 -it alpine:3.17
 
 ### 1. update the package list
 
@@ -515,12 +521,12 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 ### 7. Create a config file for mysqld
 
-	{
-		echo "[mysqld]";
-		echo "skip-host-cache";
-		echo "skip-name-resolve";
-		echo "bind-address=0.0.0.0";
-	} > /etc/my.cnf.d/docker.cnf
+    {
+    	echo "[mysqld]";
+    	echo "skip-host-cache";
+    	echo "skip-name-resolve";
+    	echo "bind-address=0.0.0.0";
+    } > /etc/my.cnf.d/docker.cnf
 
 ### 8. Run the `mysql_install_db` command to create the database
 
@@ -550,35 +556,35 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 **debian:stable**
 
-	# Remove the test database
+    # Remove the test database
     mysql -u root -e "DROP DATABASE IF EXISTS test;"
 
-	# Create a Database and a user for remote access
-	mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+    # Create a Database and a user for remote access
+    mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
 
-	# Change the root password
-	mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
+    # Change the root password
+    mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
 
-	# Reload privileges
-	mysql -u root -e "FLUSH PRIVILEGES;"
+    # Reload privileges
+    mysql -u root -e "FLUSH PRIVILEGES;"
 
 **alpine:3.17**
 
-	# Remove the test database
+    # Remove the test database
     mysql -u root -e "DROP DATABASE IF EXISTS test;"
 
-	# Remove anonymous users for localhost and other hosts
-	mysql -u root -e "DROP USER ''@'localhost';"
-	mysql -u root -e "DROP USER ''@'$(hostname)';"
+    # Remove anonymous users for localhost and other hosts
+    mysql -u root -e "DROP USER ''@'localhost';"
+    mysql -u root -e "DROP USER ''@'$(hostname)';"
 
-	# Create a Database and a user for remote access
-	mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+    # Create a Database and a user for remote access
+    mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
 
-	# Change the root password
-	mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
+    # Change the root password
+    mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
 
-	# Reload privileges
-	mysql -u root -e "FLUSH PRIVILEGES;"
+    # Reload privileges
+    mysql -u root -e "FLUSH PRIVILEGES;"
 
 > :bulb: **use of environment variables is recommended**
 
@@ -605,105 +611,104 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 ### 13. Connect to the database from the host machine
 
     mysql -h 127.0.0.1 -P [HOST_PORT] -u [DB_USER/root] -p[USER_PASSWORD/ROOT_PASSWORD]
-	# or
-	docker exec -it [CONTAINER_ID] mysql -u [DB_USER/root] -p[USER_PASSWORD/ROOT_PASSWORD]
+    # or
+    docker exec -it [CONTAINER_ID] mysql -u [DB_USER/root] -p[USER_PASSWORD/ROOT_PASSWORD]
 
 ### 14. Dockerfile
 
 **debian:stable**
 
-	FROM debian:stable
+    FROM debian:stable
 
-	RUN apt update -y && apt upgrade -y
+    RUN apt update -y && apt upgrade -y
 
-	RUN apt install -y mariadb-server mariadb-client
+    RUN apt install -y mariadb-server mariadb-client
 
-	RUN mkdir -p /var/run/mysqld
-	RUN chown -R mysql /var/run/mysqld
-	RUN chmod -R 777 /var/run/mysqld
+    RUN mkdir -p /var/run/mysqld
+    RUN chown -R mysql /var/run/mysqld
+    RUN chmod -R 777 /var/run/mysqld
 
-	RUN sed -i "s|bind-address            = 127.0.0.1|bind-address            = 0.0.0.0|g" /etc/mysql/mariadb.conf.d/
-	50-server.cnf
+    RUN sed -i "s|bind-address            = 127.0.0.1|bind-address            = 0.0.0.0|g" /etc/mysql/mariadb.conf.d/
+    50-server.cnf
 
-	COPY ./tools/script.sh .
+    COPY ./tools/script.sh .
 
-	RUN chmod +x script.sh
+    RUN chmod +x script.sh
 
-	CMD ["sh", "script.sh"]
+    CMD ["sh", "script.sh"]
 
 **alpine:3.17**
 
-	FROM alpine:3.17
+    FROM alpine:3.17
 
-	RUN apk update && apk upgrade
+    RUN apk update && apk upgrade
 
-	RUN apk add mariadb mariadb-client openrc --no-cache
+    RUN apk add mariadb mariadb-client openrc --no-cache
 
-	RUN openrc && touch /run/openrc/softlevel
+    RUN openrc && touch /run/openrc/softlevel
 
-	RUN mkdir -p /var/run/mysqld
-	RUN chown -R mysql:mysql /var/run/mysqld
-	RUN chmod 777 /var/run/mysqld
+    RUN mkdir -p /var/run/mysqld
+    RUN chown -R mysql:mysql /var/run/mysqld
+    RUN chmod 777 /var/run/mysqld
 
-	RUN sed -i "s|skip-networking|skip-networking=0|g" /etc/my.cnf.d/mariadb-server.cnf
+    RUN sed -i "s|skip-networking|skip-networking=0|g" /etc/my.cnf.d/mariadb-server.cnf
 
-	RUN {
-		echo "[mysqld]";
-		echo "skip-host-cache";
-		echo "skip-name-resolve";
-		echo "bind-address=0.0.0.0";
-	} > /etc/my.cnf.d/docker.cnf
+    RUN {
+    	echo "[mysqld]";
+    	echo "skip-host-cache";
+    	echo "skip-name-resolve";
+    	echo "bind-address=0.0.0.0";
+    } > /etc/my.cnf.d/docker.cnf
 
-	COPY ./tools/script.sh .
+    COPY ./tools/script.sh .
 
-	RUN chmod +x script.sh
+    RUN chmod +x script.sh
 
-	CMD ["./script.sh"]
+    CMD ["./script.sh"]
 
 **script**
 
-  - **debian:stable**
+- **debian:stable**
 
-		#!/bin/sh
+      #!/bin/sh
 
-		mysql_install_db
+      mysql_install_db
 
-		service mariadb start
+      service mariadb start
 
-		if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ]
-		then
-			mysql -u root -e "DROP DATABASE IF EXISTS test;"
-			mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO 	'$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
-			mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
-			mysql -u root -e "FLUSH PRIVILEGES;"
-		fi
+      if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ]
+      then
+      	mysql -u root -e "DROP DATABASE IF EXISTS test;"
+      	mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO 	'$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+      	mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
+      	mysql -u root -e "FLUSH PRIVILEGES;"
+      fi
 
-		mysqladmin shutdown -p${MYSQL_ROOT_PASSWORD}
+      mysqladmin shutdown -p${MYSQL_ROOT_PASSWORD}
 
-		exec mysqld --user=mysql
+      exec mysqld --user=mysql
 
-  - **alpine:3.17**
+- **alpine:3.17**
 
-		#!/bin/sh
+      #!/bin/sh
 
-		mysql_install_db --user=mysql --datadir=/var/lib/mysql
+      mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
-		rc-service mariadb start
+      rc-service mariadb start
 
-		if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ]
-		then
-			mysql -u root -e "DROP DATABASE IF EXISTS test;"
-			mysql -u root -e "DROP USER ''@'localhost';"
-			mysql -u root -e "DROP USER ''@'$(hostname)';"
-			mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
-			mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
-			mysql -u root -e "FLUSH PRIVILEGES;"
-		fi
+      if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ]
+      then
+      	mysql -u root -e "DROP DATABASE IF EXISTS test;"
+      	mysql -u root -e "DROP USER ''@'localhost';"
+      	mysql -u root -e "DROP USER ''@'$(hostname)';"
+      	mysql -u root -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE; GRANT ALL ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+      	mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
+      	mysql -u root -e "FLUSH PRIVILEGES;"
+      fi
 
-		rc-service mariadb stop
+      rc-service mariadb stop
 
-		exec mysqld --user=mysql
-
+      exec mysqld --user=mysql
 
 </details>
 
@@ -720,52 +725,52 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 **debian:stable**
 
-	FROM debian:stable
+    FROM debian:stable
 
-	ARG MYSQL_DATABASE MYSQL_USER MYSQL_PASSWORD VERSION=7.4
+    ARG MYSQL_DATABASE MYSQL_USER MYSQL_PASSWORD VERSION=7.4
 
-	WORKDIR /var/www
+    WORKDIR /var/www
 
-	RUN apt update -y && apt upgrade -y
+    RUN apt update -y && apt upgrade -y
 
-	RUN apt install -y php${VERSION} php${VERSION}-fpm php${VERSION}-mysqli php${VERSION}-json php${VERSION}-curl php$
-	{VERSION}-dom php${VERSION}-exif php${VERSION}-fileinfo php${VERSION}-mbstring php${VERSION}-xml php${VERSION}-zip
-	wget unzip
+    RUN apt install -y php${VERSION} php${VERSION}-fpm php${VERSION}-mysqli php${VERSION}-json php${VERSION}-curl php$
+    {VERSION}-dom php${VERSION}-exif php${VERSION}-fileinfo php${VERSION}-mbstring php${VERSION}-xml php${VERSION}-zip
+    wget unzip
 
-	RUN sed -i "s|listen = /run/php/php${VERSION}-fpm.sock|listen = 9000|g" /etc/php/${VERSION}/fpm/pool.d/www.conf
+    RUN sed -i "s|listen = /run/php/php${VERSION}-fpm.sock|listen = 9000|g" /etc/php/${VERSION}/fpm/pool.d/www.conf
 
-	RUN wget https://wordpress.org/latest.zip && unzip latest.zip && cp -rf wordpress/* . && rm -rf wordpress latest.
-	zip && rm -rf wp-config-sample.php && chmod -R 777 wp-content
+    RUN wget https://wordpress.org/latest.zip && unzip latest.zip && cp -rf wordpress/* . && rm -rf wordpress latest.
+    zip && rm -rf wp-config-sample.php && chmod -R 777 wp-content
 
-	RUN mkdir -p /run/php/
+    RUN mkdir -p /run/php/
 
-	COPY ./tools/script.sh .
+    COPY ./tools/script.sh .
 
-	RUN chmod +x script.sh && ./script.sh
+    RUN chmod +x script.sh && ./script.sh
 
-	CMD ["/usr/sbin/php-fpm7.4", "-F"]
+    CMD ["/usr/sbin/php-fpm7.4", "-F"]
 
 **alpine:3.17**
 
-	FROM alpine:3.17
+    FROM alpine:3.17
 
-	ARG MYSQL_DATABASE MYSQL_USER MYSQL_PASSWORD
+    ARG MYSQL_DATABASE MYSQL_USER MYSQL_PASSWORD
 
-	WORKDIR /var/www
+    WORKDIR /var/www
 
-	RUN apk update && apk upgrade
+    RUN apk update && apk upgrade
 
-	RUN apk update && apk upgrade && apk add --no-cache php php-fpm php-mysqli php-json php-curl php-dom php-exif 	php-fileinfo php-mbstring php-openssl php-xml php-zip wget unzip
+    RUN apk update && apk upgrade && apk add --no-cache php php-fpm php-mysqli php-json php-curl php-dom php-exif 	php-fileinfo php-mbstring php-openssl php-xml php-zip wget unzip
 
-	RUN sed -i "s|listen = 127.0.0.1:9000|listen = 9000|g" /etc/php81/php-fpm.d/www.conf
+    RUN sed -i "s|listen = 127.0.0.1:9000|listen = 9000|g" /etc/php81/php-fpm.d/www.conf
 
-	RUN wget https://wordpress.org/latest.zip && unzip latest.zip && cp -rf wordpress/* . && rm -rf wordpress latest.	zip && rm -rf wp-config-sample.php && chmod -R 777 wp-content
+    RUN wget https://wordpress.org/latest.zip && unzip latest.zip && cp -rf wordpress/* . && rm -rf wordpress latest.	zip && rm -rf wp-config-sample.php && chmod -R 777 wp-content
 
-	COPY ./tools/script.sh .
+    COPY ./tools/script.sh .
 
-	RUN chmod +x script.sh && ./script.sh
+    RUN chmod +x script.sh && ./script.sh
 
-	CMD ["/usr/sbin/php-fpm81", "-F"]
+    CMD ["/usr/sbin/php-fpm81", "-F"]
 
 > :bulb: since we need environment variables to connect to the database, we will use the `ARG` instruction to pass the variables to the build process
 
@@ -783,30 +788,29 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 **script**
 
-	#!/bin/sh
-	cat << EOF > /var/www/wp-config.php
-	<?php
-	define( 'DB_NAME', '$MYSQL_DATABASE' );
-	define( 'DB_USER', '$MYSQL_USER' );
-	define( 'DB_PASSWORD', '$MYSQL_PASSWORD' );
-	define( 'DB_HOST', 'mariadb' );
-	define( 'DB_CHARSET', 'utf8' );
-	define( 'DB_COLLATE', '' );
-	define('FS_METHOD','direct');
-	\$table_prefix = 'wp_';
-	define( 'WP_DEBUG', false );
-	define( 'WP_REDIS_HOST', 'redis' );
-	define( 'WP_REDIS_PORT', 6379 );
-	define( 'WP_CACHE', true )
-	if ( ! defined( 'ABSPATH' ) ) {
-	define( 'ABSPATH', __DIR__ . '/' );}
-	require_once ABSPATH . 'wp-settings.php';
-	EOF
+    #!/bin/sh
+    cat << EOF > /var/www/wp-config.php
+    <?php
+    define( 'DB_NAME', '$MYSQL_DATABASE' );
+    define( 'DB_USER', '$MYSQL_USER' );
+    define( 'DB_PASSWORD', '$MYSQL_PASSWORD' );
+    define( 'DB_HOST', 'mariadb' );
+    define( 'DB_CHARSET', 'utf8' );
+    define( 'DB_COLLATE', '' );
+    define('FS_METHOD','direct');
+    \$table_prefix = 'wp_';
+    define( 'WP_DEBUG', false );
+    define( 'WP_REDIS_HOST', 'redis' );
+    define( 'WP_REDIS_PORT', 6379 );
+    define( 'WP_CACHE', true )
+    if ( ! defined( 'ABSPATH' ) ) {
+    define( 'ABSPATH', __DIR__ . '/' );}
+    require_once ABSPATH . 'wp-settings.php';
+    EOF
 
 > :bulb: we will use the `cat` command to create the `wp-config.php` file, and set the database name, user, password, and host, we also define `redis host`, `port` and we enable `cache`,we will keep the rest of the configuration as it is (you can check the wp-config-sample.php file to see the default configurations)
 
 </details>
-
 
 ---
 
@@ -819,35 +823,35 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 **debian:stable**
 
-	FROM debian:stable
+    FROM debian:stable
 
-	RUN apt update -y && apt upgrade -y
+    RUN apt update -y && apt upgrade -y
 
-	RUN apt install -y redis
+    RUN apt install -y redis
 
-	RUN sed -i "s|bind 127.0.0.1 ::1|#bind 127.0.0.1 ::1|g" /etc/redis/redis.conf
+    RUN sed -i "s|bind 127.0.0.1 ::1|#bind 127.0.0.1 ::1|g" /etc/redis/redis.conf
 
-	RUN sed -i "s|# maxmemory <bytes>|maxmemory 100mb|g" /etc/redis/redis.conf
+    RUN sed -i "s|# maxmemory <bytes>|maxmemory 100mb|g" /etc/redis/redis.conf
 
-	RUN sed -i "s|# maxmemory-policy noeviction|maxmemory-policy allkeys-lru|g" /etc/redis/redis.conf
+    RUN sed -i "s|# maxmemory-policy noeviction|maxmemory-policy allkeys-lru|g" /etc/redis/redis.conf
 
-	CMD ["redis-server", "--protected-mode no"]
+    CMD ["redis-server", "--protected-mode no"]
 
 **alpine:3.17**
 
-	FROM alpine:3.17
+    FROM alpine:3.17
 
-	RUN apk update && apk upgrade
+    RUN apk update && apk upgrade
 
-	RUN apk add --no-cache redis
+    RUN apk add --no-cache redis
 
-	RUN sed -i "s|bind 127.0.0.1 -::1|#bind 127.0.0.1 -::1|g" /etc/redis.conf
+    RUN sed -i "s|bind 127.0.0.1 -::1|#bind 127.0.0.1 -::1|g" /etc/redis.conf
 
-	RUN sed -i "s|# maxmemory <bytes>|maxmemory 100mb|g" /etc/redis.conf
+    RUN sed -i "s|# maxmemory <bytes>|maxmemory 100mb|g" /etc/redis.conf
 
-	RUN sed -i "s|# maxmemory-policy noeviction|maxmemory-policy allkeys-lru|g" /etc/redis.conf
+    RUN sed -i "s|# maxmemory-policy noeviction|maxmemory-policy allkeys-lru|g" /etc/redis.conf
 
-	CMD ["redis-server", "/etc/redis.conf", "--protected-mode no"]
+    CMD ["redis-server", "/etc/redis.conf", "--protected-mode no"]
 
 > :bulb: we will use the `sed` command to change the `bind` directive in the `redis.conf` file, to listen to all the interfaces instead of only the localhost
 
@@ -863,11 +867,11 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 ### 2. Check if redis is working
 
-	docker exec -it redis redis-cli
+    docker exec -it redis redis-cli
 
 > :bulb: you should see the redis prompt `127.0.0.1:6379>`, type `ping` and you should see `PONG` as a response if everything is working correctly.
 
-	docker exec -it redis redis-cli monitor
+    docker exec -it redis redis-cli monitor
 
 > :bulb: if everything is working correctly, you should see the `OK` message. and any activity in your `wordpress website` should send some logs
 
@@ -884,65 +888,65 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 **debian:stable**
 
-	FROM debian:stable
+    FROM debian:stable
 
-	RUN apt update -y && apt upgrade -y
+    RUN apt update -y && apt upgrade -y
 
-	RUN apt install -y vsftpd
+    RUN apt install -y vsftpd
 
-	COPY ./conf/vsftpd.conf /etc/vsftpd.conf
+    COPY ./conf/vsftpd.conf /etc/vsftpd.conf
 
-	COPY ./tools/script.sh .
+    COPY ./tools/script.sh .
 
-	RUN chmod +x script.sh
+    RUN chmod +x script.sh
 
-	EXPOSE 21
+    EXPOSE 21
 
-	CMD ["./script.sh"]
+    CMD ["./script.sh"]
 
 **alpine:3.17**
 
-	FROM alpine:3.17
+    FROM alpine:3.17
 
-	RUN apk update && apk upgrade
+    RUN apk update && apk upgrade
 
-	RUN apk add --no-cache vsftpd
+    RUN apk add --no-cache vsftpd
 
-	COPY ./conf/vsftpd.conf /etc/vsftpd/vsftpd.conf
+    COPY ./conf/vsftpd.conf /etc/vsftpd/vsftpd.conf
 
-	COPY ./tools/script.sh .
+    COPY ./tools/script.sh .
 
-	RUN chmod +x script.sh
+    RUN chmod +x script.sh
 
-	EXPOSE 21
+    EXPOSE 21
 
-	CMD ["./script.sh"]
+    CMD ["./script.sh"]
 
 **script**
 
-  - **debian:stable**
+- **debian:stable**
 
-		mkdir -p /var/run/vsftpd/empty
+      mkdir -p /var/run/vsftpd/empty
 
-		adduser --home /var/www ${FTP_USER}
+      adduser --home /var/www ${FTP_USER}
 
-		echo ${FTP_USER}:${FTP_PASSWORD} | chpasswd
+      echo ${FTP_USER}:${FTP_PASSWORD} | chpasswd
 
-		adduser ${FTP_USER} root
+      adduser ${FTP_USER} root
 
-		exec /usr/sbin/vsftpd /etc/vsftpd.conf
+      exec /usr/sbin/vsftpd /etc/vsftpd.conf
 
-  - **alpine:3.17**
+- **alpine:3.17**
 
-		#!/bin/sh
+      #!/bin/sh
 
-		adduser -h /var/www -D ${FTP_USER}
+      adduser -h /var/www -D ${FTP_USER}
 
-		echo ${FTP_USER}:${FTP_PASSWORD} | chpasswd
+      echo ${FTP_USER}:${FTP_PASSWORD} | chpasswd
 
-		adduser ${FTP_USER} root
+      adduser ${FTP_USER} root
 
-		exec /usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf
+      exec /usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf
 
 > :bulb: we will use the `adduser` command to create a new user, and set the home directory to `/var/www` , and we will set the password using the `chpasswd` command
 
@@ -956,15 +960,15 @@ from your host machine, open your browser and go to `https://localhost:[host_por
 
 uncomment the following lines in the `vsftpd.conf` file
 
-	line 15: #local_enable=YES => local_enable=YES
-	line 18: #write_enable=YES => write_enable=YES
-	line 98: #chroot_local_user=YES => chroot_local_user=YES
+    line 15: #local_enable=YES => local_enable=YES
+    line 18: #write_enable=YES => write_enable=YES
+    line 98: #chroot_local_user=YES => chroot_local_user=YES
 
 and add the following lines
 
-	allow_writeable_chroot=YES
-	seccomp_sandbox=NO
-	pasv_enable=YES
+    allow_writeable_chroot=YES
+    seccomp_sandbox=NO
+    pasv_enable=YES
 
 > :bulb: we will use the `allow_writeable_chroot` directive to allow the user to write to the home directory (this is not recommended, but it's ok for testing)
 
@@ -989,41 +993,40 @@ and add the following lines
 
 **debian:stable**
 
-	FROM debian:stable
+    FROM debian:stable
 
-	RUN apt update -y && apt upgrade -y
+    RUN apt update -y && apt upgrade -y
 
-	RUN apt install -y php php-common php-iconv php-json php-gd php-curl php-xml php-mysqli php-imap php-cgi php-pdo
-	php-soap php-posix php-ldap php-ctype php-dom php-simplexml wget
+    RUN apt install -y php php-common php-iconv php-json php-gd php-curl php-xml php-mysqli php-imap php-cgi php-pdo
+    php-soap php-posix php-ldap php-ctype php-dom php-simplexml wget
 
-	WORKDIR /var/www
+    WORKDIR /var/www
 
-	RUN wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php
+    RUN wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php
 
-	RUN mv adminer-4.8.1.php index.php
+    RUN mv adminer-4.8.1.php index.php
 
-	EXPOSE 8080
+    EXPOSE 8080
 
-	CMD [ "php", "-S", "[::]:8080" , "-t", "/var/www" ]
+    CMD [ "php", "-S", "[::]:8080" , "-t", "/var/www" ]
 
 **alpine:3.17**
 
+    FROM alpine:3.17
 
-	FROM alpine:3.17
+    RUN apk update && apk upgrade
 
-	RUN apk update && apk upgrade
+    RUN apk add --no-cache php php-common php-session php-iconv php-json php-gd php-curl php-xml php-mysqli php-imap php-cgi fcgi php-pdo php-pdo_mysql php-soap php-posix php-gettext php-ldap php-ctype php-dom php-simplexml wget
 
-	RUN apk add --no-cache php php-common php-session php-iconv php-json php-gd php-curl php-xml php-mysqli php-imap php-cgi fcgi php-pdo php-pdo_mysql php-soap php-posix php-gettext php-ldap php-ctype php-dom php-simplexml wget
+    WORKDIR /var/www
 
-	WORKDIR /var/www
+    RUN wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php
 
-	RUN wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php
+    RUN mv adminer-4.8.1.php index.php
 
-	RUN mv adminer-4.8.1.php index.php
+    EXPOSE 8080
 
-	EXPOSE 8080
-
-	CMD [ "php", "-S", "[::]:8080", "-t", "/var/www" ]
+    CMD [ "php", "-S", "[::]:8080", "-t", "/var/www" ]
 
 > :bulb: if you are wondering about all the php packages, since adminer can be used as a replacement for phpmyadmin, we will install all the php packages that are required for phpmyadmin check, [this](https://wiki.alpinelinux.org/wiki/PhpMyAdmin)
 
@@ -1042,63 +1045,62 @@ and add the following lines
 
 **debian:stable**
 
-	FROM debian:stable
+    FROM debian:stable
 
-	RUN apt update -y && apt upgrade -y
+    RUN apt update -y && apt upgrade -y
 
-	RUN apt install -y nginx
+    RUN apt install -y nginx
 
-	COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+    COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 
-	COPY ./tools/* /var/www/
+    COPY ./tools/* /var/www/
 
-	EXPOSE 3000
+    EXPOSE 3000
 
-	CMD [ "nginx", "-g", "daemon off;" ]
+    CMD [ "nginx", "-g", "daemon off;" ]
 
 **alpine:3.17**
 
-	FROM alpine:3.17
+    FROM alpine:3.17
 
-	RUN apk update && apk upgrade
+    RUN apk update && apk upgrade
 
-	RUN apk add --no-cache nginx
+    RUN apk add --no-cache nginx
 
-	COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+    COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 
-	COPY ./tools/* /var/www/
+    COPY ./tools/* /var/www/
 
-	EXPOSE 3000
+    EXPOSE 3000
 
-	CMD [ "nginx", "-g", "daemon off;" ]
+    CMD [ "nginx", "-g", "daemon off;" ]
 
 **configuration**
 
-	events {}
+    events {}
 
-	http {
+    http {
 
-		server {
+    	server {
 
-			listen 3000;
-			listen [::]:3000;
+    		listen 3000;
+    		listen [::]:3000;
 
-			server_name server;
+    		server_name server;
 
-			root /var/www/;
-			index index.html;
+    		root /var/www/;
+    		index index.html;
 
-			location / {
-					root /var/www/;
-					index index.html;
-			}
-		}
-	}
+    		location / {
+    				root /var/www/;
+    				index index.html;
+    		}
+    	}
+    }
 
 > :bulb: put your website files in the `./tools` directory
 
 </details>
-
 
 ---
 
@@ -1111,36 +1113,36 @@ and add the following lines
 
 **debian:stable**
 
-	FROM debian:stable
+    FROM debian:stable
 
-	RUN apt update -y && apt upgrade -y
+    RUN apt update -y && apt upgrade -y
 
-	RUN apt install -y curl tar
+    RUN apt install -y curl tar
 
-	RUN mkdir -p /var/lib/portainer
+    RUN mkdir -p /var/lib/portainer
 
-	RUN adduser --home /var/lib/portainer portainer
+    RUN adduser --home /var/lib/portainer portainer
 
-	RUN curl -sSL https://github.com/portainer/portainer/releases/download/2.16.2/portainer-2.16.2-linux-amd64.tar.gz |
-	tar -xzo -C /usr/local
+    RUN curl -sSL https://github.com/portainer/portainer/releases/download/2.16.2/portainer-2.16.2-linux-amd64.tar.gz |
+    tar -xzo -C /usr/local
 
-	CMD ["/usr/local/portainer/portainer"]
+    CMD ["/usr/local/portainer/portainer"]
 
 **alpine:3.17**
 
-	FROM alpine:3.17
+    FROM alpine:3.17
 
-	RUN apk update && apk upgrade
+    RUN apk update && apk upgrade
 
-	RUN apk add curl tar
+    RUN apk add curl tar
 
-	RUN mkdir -p /var/lib/portainer
+    RUN mkdir -p /var/lib/portainer
 
-	RUN adduser -h /var/lib/portainer -D portainer
+    RUN adduser -h /var/lib/portainer -D portainer
 
-	RUN curl -sSL https://github.com/portainer/portainer/releases/download/2.16.2/portainer-2.16.2-linux-amd64.tar.gz | tar -xzo -C /usr/local
+    RUN curl -sSL https://github.com/portainer/portainer/releases/download/2.16.2/portainer-2.16.2-linux-amd64.tar.gz | tar -xzo -C /usr/local
 
-	CMD ["/usr/local/portainer/portainer"]
+    CMD ["/usr/local/portainer/portainer"]
 
 > :bulb: you can now access portainer from `127.0.0.1:9443`
 
@@ -1157,212 +1159,216 @@ and add the following lines
 
 ### 1. docker-compose.yml
 
-	version: '3'
+    version: '3'
 
-	services:
-	  nginx:
-	    build:
-	      context: ./requirements/nginx
-	      dockerfile: Dockerfile
-	    container_name: nginx
-	    depends_on:
-	      - wordpress
-	    ports:
-	      - "443:443"
-	    networks:
-	      - inception
-	    volumes:
-	      - ./requirements/nginx/conf/:/etc/nginx/http.d/ # for alpine
-	      - ./requirements/nginx/conf/nginx.conf:/etc/nginx/sites-available/default # for debian
-	      - ./requirements/tools:/etc/ssl/private
-	      - wp-data:/var/www/
-	    restart: always
+    services:
+      nginx:
+        build:
+          context: ./requirements/nginx
+          dockerfile: Dockerfile
+        image: nginx
+        container_name: nginx
+        depends_on:
+          - wordpress
+        ports:
+          - "443:443"
+        networks:
+          - inception
+        volumes:
+          - ./requirements/nginx/conf/:/etc/nginx/http.d/ # for alpine
+            - ./requirements/nginx/conf/nginx.conf:/etc/nginx/sites-available/default # for debian
+          - ./requirements/tools:/etc/nginx/ssl/
+          - wp-data:/var/www/
+        restart: always
 
-	  mariadb:
-	    build:
-	      context: ./requirements/mariadb
-	      dockerfile: Dockerfile
-	    container_name: mariadb
-	    environment:
-	      MYSQL_DATABASE: ${MYSQL_DATABASE}
-	      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-	      MYSQL_USER: ${MYSQL_USER}
-	      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-	    ports:
-	      - "3306:3306"
-	    networks:
-	      - inception
-	    restart: always
+      mariadb:
+        build:
+          context: ./requirements/mariadb
+          dockerfile: Dockerfile
+        image: mariadb
+        container_name: mariadb
+        volumes:
+          - db-data:/var/lib/mysql
+        environment:
+          MYSQL_DATABASE: ${MYSQL_DATABASE}
+          MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+          MYSQL_USER: ${MYSQL_USER}
+          MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        networks:
+          - inception
+        restart: always
 
-	  wordpress:
-	    build:
-	      context: ./requirements/wordpress
-	      dockerfile: Dockerfile
-	      args:
-	        MYSQL_DATABASE: ${MYSQL_DATABASE}
-	        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-	        MYSQL_USER: ${MYSQL_USER}
-	        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-	    container_name: wordpress
-	    depends_on:
-	      - mariadb
-	    volumes:
-	      - wp-data:/var/www/
-	    networks:
-	      - inception
-	    restart: always
+      wordpress:
+        build:
+          context: ./requirements/wordpress
+          dockerfile: Dockerfile
+          args:
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        image: wordpress
+        container_name: wordpress
+        depends_on:
+          - mariadb
+        volumes:
+          - wp-data:/var/www/
+        networks:
+          - inception
+        restart: always
 
-	  redis:
-	    build:
-	      context: ./requirements/bonus/redis
-	      dockerfile: Dockerfile
-	    image: redis
-	    container_name: redis
-	    ports:
-	      - "6379:6379"
-	    volumes:
-	      - wp-data:/var/www/
-	    networks:
-	      - inception
-	    restart: always
+      redis:
+        build:
+          context: ./requirements/bonus/redis
+          dockerfile: Dockerfile
+        image: redis
+        container_name: redis
+        ports:
+          - "6379:6379"
+        volumes:
+          - wp-data:/var/www/
+        networks:
+          - inception
+        restart: always
 
-	  ftp:
-	    build:
-	      context: ./requirements/bonus/ftp
-	      dockerfile: Dockerfile
-	    image: ftp
-	    container_name: ftp
-	    environment:
-	      FTP_USER: ${FTP_USER}
-	      FTP_PASSWORD: ${FTP_PASSWORD}
-	    ports:
-	      - "21:21"
-	    volumes:
-	      - wp-data:/var/www/
-	    networks:
-	      - inception
-	    restart: always
+      ftp:
+        build:
+          context: ./requirements/bonus/ftp
+          dockerfile: Dockerfile
+        image: ftp
+        container_name: ftp
+        environment:
+          FTP_USER: ${FTP_USER}
+          FTP_PASSWORD: ${FTP_PASSWORD}
+        ports:
+          - "21:21"
+        volumes:
+          - wp-data:/var/www/
+        networks:
+          - inception
+        restart: always
 
-	  adminer:
-	    build:
-	      context: ./requirements/bonus/adminer
-	      dockerfile: Dockerfile
-	    image: adminer
-	    container_name: adminer
-	    depends_on:
-	      - mariadb
-	    ports:
-	      - "8080:8080"
-	    networks:
-	      - inception
-	    restart: always
+      adminer:
+        build:
+          context: ./requirements/bonus/adminer
+          dockerfile: Dockerfile
+        image: adminer
+        container_name: adminer
+        depends_on:
+          - mariadb
+        ports:
+          - "8080:8080"
+        networks:
+          - inception
+        restart: always
 
-	  website: ;
-	    build: ;
-	      context: ./requirements/bonus/website ;
-	      dockerfile: Dockerfile ;
-	    image: website ;
-	    container_name: website ;
-	    ports: ;
-	      - "3000:3000" ;
-	    networks: ;
-	      - inception ;
-	    restart: always ;
+      website:
+        build:
+          context: ./requirements/bonus/website
+          dockerfile: Dockerfile
+        image: website
+        container_name: website
+        ports:
+          - "3000:3000"
+        networks:
+          - inception
+        restart: always
 
-	  portainer: ;
-	    build: ;
-	      context: ./requirements/bonus/portainer ;
-	      dockerfile: Dockerfile ;
-	    image: portainer ;
-	    container_name: portainer ;
-	    ports: ;
-	      - "9443:9443" ;
-	    volumes:
-	      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-	      - portainer-data:/data
-	    networks: ;
-	      - inception ;
-	    restart: always ;
+      portainer:
+        build:
+          context: ./requirements/bonus/portainer
+          dockerfile: Dockerfile
+        image: portainer
+        container_name: portainer
+        ports:
+          - "9443:9443"
+        volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock:ro"
+          - portainer-data:/data
+        networks:
+          - inception
+        restart: always
 
-	volumes:
-	  wp-data:
-	    driver_opts:
-	      o: bind
-	      type: none
-	      device: /home/${USER}/data/wordpress
+    volumes:
+      wp-data:
+        driver_opts:
+          o: bind
+          type: none
+          device: /home/${USER}/data/wordpress
 
-	  db-data:
-	    driver_opts:
-	      o: bind
-	      type: none
-	      device: /home/${USER}/data/mariadb
+      db-data:
+        driver_opts:
+          o: bind
+          type: none
+          device: /home/${USER}/data/mariadb
 
-	  portainer-data:
-	    driver_opts:
-	      o: bind
-	      type: none
-	      device: /home/${USER}/data/portainer
+      portainer-data:
+        driver_opts:
+          o: bind
+          type: none
+          device: /home/${USER}/data/portainer
 
-	networks:
-	  inception:
-	    driver: bridge
+    networks:
+      inception:
+        driver: bridge
 
 **explaination**
-  - `version` : the version of the docker-compose file
-  - `sevices` : all the containers you need to run
-    - `[service_name]`: the name of the service
-      - `build` : all files , directories and instructions needed to build the image
-        - `context` : the directory that contains the Dockerfile
-        - `dockerfile` : the name of the Dockerfile
-        - `args` : the arguments that will be passed to the Dockerfile
-      - `image` : the name of the image (if no build is specified, the image will be pulled from docker hub)
-      - `container_name` : the name of the container
-      - `depends_on` : the services that this service depends on (the container will start after the depended services are up)
-      - `ports` : the ports that will be exposed to the host
-      - `networks` : the networks that the container will be connected to
-      - `volumes` : the volumes that will be mounted to the container (file or directory can be shared between the host and the container)
-      - `restart` : the restart policy
-      - `environment` : the environment variables
-  - `volumes` : the volumes that will be created
-    - `[volume_name]` : the name of the volume
-      - `driver_opts` : the options of the volume
-        - `o` : the type of the volume
-        - `type` : the type of the volume
-        - `device` : the path of the volume
+
+- `version` : the version of the docker-compose file
+- `sevices` : all the containers you need to run
+  - `[service_name]`: the name of the service
+    - `build` : all files , directories and instructions needed to build the image
+      - `context` : the directory that contains the Dockerfile
+      - `dockerfile` : the name of the Dockerfile
+      - `args` : the arguments that will be passed to the Dockerfile
+    - `image` : the name of the image (if no build is specified, the image will be pulled from docker hub)
+    - `container_name` : the name of the container
+    - `depends_on` : the services that this service depends on (the container will start after the depended services are up)
+    - `ports` : the ports that will be exposed to the host
+    - `networks` : the networks that the container will be connected to
+    - `volumes` : the volumes that will be mounted to the container (file or directory can be shared between the host and the container)
+    - `restart` : the restart policy
+    - `environment` : the environment variables
+- `volumes` : the volumes that will be created
+  - `[volume_name]` : the name of the volume
+    - `driver_opts` : the options of the volume
+      - `o` : the type of the volume
+      - `type` : the type of the volume
+      - `device` : the path of the volume
 
 ### 2. Makefile
 
-	NAME = inception
+    NAME = inception
 
-	all:
-		sh ./srcs/requirements/tools/script.sh # create the volume folders
-		docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env up -d
+    all:
+    	sh ./srcs/requirements/tools/script.sh # create the volume folders
+    	docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env up -d
 
-	build:
-		sh ./srcs/requirements/tools/script.sh
-		docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env up -d --build
+    build:
+    	sh ./srcs/requirements/tools/script.sh
+    	docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env up -d --build
 
-	start:
-		docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env start
+    start:
+    	docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env start
 
-	stop:
-		docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env stop
+    stop:
+    	docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env stop
 
-	down:
-		docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env down
+    down:
+    	docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env down
 
-	re: down
-		docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env up -d --build
+    re: down
+    	docker-compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env up -d --build
 
-	clean: down
-		docker system prune -a
-		sudo rm -rf ~/data
+    clean: down
+    	docker system prune -a
+    	sudo rm -rf ~/data
 
-	fclean:
-		docker stop $$(docker ps -aq)
-		docker system prune --all --force --volumes
-		docker network prune --force
-		docker volume prune --force
-		sudo rm -rf ~/data
+    fclean:
+    	docker stop $$(docker ps -aq)
+    	docker system prune --all --force --volumes
+    	docker network prune --force
+    	docker volume prune --force
+    	sudo rm -rf ~/data
 
 </details>
